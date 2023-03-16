@@ -4,15 +4,17 @@
       <div class="container py-5 h-100">
         <div class="d-flex flex-row justify-content-center h-100">
 
+
           <div class="container d-flex flex-column align-items-center pt-5">
             <div class="container py-5"></div>
             <div class="text-center d-flex flex-column">
               <h1 style="text-shadow:2px 2px 8px grey; ;">Record your Spendings!</h1>
-              <img src="money.avif" width="370px" height="auto" style="padding-left: 110px;">
+              <img src="src/assets/images/money.avif" width="370px" height="auto" style="padding-left: 110px;">
               <br>
               <p>Just fill in your spending details and it will be saved!</p>
             </div>
           </div>
+
 
           <div class="container">
             <div class="card shadow-2-strong" style="border-radius: 1rem; background-color: rgb(179, 214, 214);">
@@ -31,36 +33,24 @@
                 </div>
 
                 <div class="d-flex flex-row">
-                <!-- <div class="form-outline mb-4 "> -->
-                  <!-- <div class="bfh-selectbox bfh-currencies"  data-currency="EUR" data-flags="true">
-                    <label for="cars">Currency:</label>
-                    <select>
-                      <option data-country="us" value="USD">United States Dollar</option>
-                      <option data-country="gb" value="GBP">British Pound Sterling</option>
-                      <option data-country="jp" value="JPY">Japanese Yen</option>
-                      Add more options for other currencies as desired
-                    </select>
-                  </div> -->
-
-                <!-- </div> -->
-                <div class="form-outline mb-4 px-3">
-                  <div class="bfh-selectbox bfh-currencies"  data-currency="EUR" data-flags="true">
-                    <label for="cars">Category:</label>
-                    <select v-model="Category">
-                      <option data-country="us" value="USD">Shopping</option>
-                      <option data-country="gb" value="GBP">Food</option>
-                      <option data-country="jp" value="JPY">Leisure</option>
-                      <option data-country="jp" value="JPY">Travel</option>
-                      <option data-country="jp" value="JPY">Accomodation</option>
-                      <!-- Add more options for other currencies as desired -->
-                    </select>
+                  <div class="form-outline mb-4 px-3">
+                    <div class="bfh-selectbox bfh-currencies"  data-currency="EUR" data-flags="true">
+                      <label for="cars">Category:</label>
+                      <select v-model="Category">
+                        <option data-country="us" value="USD">Shopping</option>
+                        <option data-country="gb" value="GBP">Food</option>
+                        <option data-country="jp" value="JPY">Leisure</option>
+                        <option data-country="jp" value="JPY">Travel</option>
+                        <option data-country="jp" value="JPY">Accomodation</option>
+                        <!-- Add more options for other currencies as desired -->
+                      </select>
+                    </div>
                   </div>
-                </div>
 
-                <div class="form-outline mb-4" style="padding-left: 60px;">
-                  <label for="date">Date: </label>
-                  <input type="date" id="date" name="date" v-model="Date">
-                </div>
+                  <div class="form-outline mb-4" style="padding-left: 60px;">
+                    <label for="date">Date: </label>
+                    <input type="date" id="datePicker" v-model="Date">
+                  </div>
                 </div>
 
 
@@ -95,13 +85,15 @@
                   </div>
                 </div>
 
+
                 <div class="form-outline mb-4" >
                   <label for="cars">Choose a Trip:</label>
-                  <select name="cars" id="cars" v-model="Trip">
-                    <option value="japan">Japan</option>
-                    <option value="korea">Korea</option>
+                  <select name="cars" id="cars" v-model="Trip" >
+                    <!-- <option :value="tripName" v-for="num in tripName.length()">{{ num }}</option> -->
+                    <option :value="tripName" v-for="tripName in tripsArray">{{ tripName }}</option>
                   </select>
                 </div>
+
 
                 <button class="btn btn-lg btn-block shadow text-light" type="submit" style="background-color: #2196F3;" @click="savetofs">Save</button>
 
@@ -117,13 +109,12 @@
 
 
 <script>
-  import app from '../firebase.js';
-  import { getFirestore } from "firebase/firestore";
-  import { doc, setDoc } from "firebase/firestore";
-  const db = getFirestore(app);
+  import db from '../firebase.js';
+  import { collection, doc, getDocs, addDoc, updateDoc, arrayUnion, Timestamp } from "firebase/firestore";
 
   export default {
     name: "InputPage",
+
     data() {
       return {
           Description:"",
@@ -131,23 +122,30 @@
           Category:"",
           Date:"",
           SpendingType:"",
-          Trip:""
+          Trip:"",
+          tripsArray: []
       }
     },
+
     computed: {
       isGroup() {
         return this.SpendingType == "Group"; //CHECK EQUALITY SYMBOL
-      }
+      },
     },
+
     methods: {
       async savetofs(){
-        console.log("IN AC")
-        alert("Saving your data for coin :" + coin)
+        alert("Saving your data for Spending")
+
+        // const date = document.getElementById('datePicker').value;
+        // const timestamp = new Date(date).getTime();
+        // const firestoreTimestamp = new Timestamp.fromMillis(timestamp);
 
         try{
-          //get expense doc
+          //add expense, get expenseDocRef
           const expenseDocRef = await addDoc(collection(db, "Expense"), {
-            Description : this.Description, Amount : this.Amount, Category : this.Category, Date : this.Date,
+            Description : this.Description, Amount : this.Amount, Category : this.Category,
+            // Date : firestoreTimestamp,
             SpendingType : this.SpendingType
           })
           console.log(expenseDocRef);
@@ -155,18 +153,27 @@
           //add expenseDocRef into array in Trip doc
           const tripDocRef = doc(db, "Trip", this.Trip);
           await updateDoc(tripDocRef, {
-            expenseIds : FieldValue.arrayUnion(expenseDocRef)
+            expenseIds : arrayUnion(expenseDocRef)
           });
-
           // document.getElementById('myform').reset();
           // this.$emit ("added")
         }
         catch(error) {
           console.error("Error adding document: ", error);
         }
+      },
+
+      async populateTripsArray() {
+        const allTripDocuments = await getDocs(collection(db, "Trip"));
+        allTripDocuments.forEach(doc => this.tripsArray.push(doc.id))
       }
+    },
+
+    mounted() {
+     this.populateTripsArray();
     }
   }
+
 </script>
 
 
@@ -174,8 +181,6 @@
 <style>
   body {
     background-image: url('picture/input1.jpg');
-    /* background-repeat: no-repeat;
-    background-size: cover; */
     background-color: floralwhite;
   }
   table {
