@@ -1,5 +1,5 @@
 <template>
-
+  <!-- <Navbar /> -->
   <section class="vh-100" >
       <div class="container py-5 h-100">
         <div class="d-flex flex-row justify-content-center h-100">
@@ -111,9 +111,13 @@
 <script>
   import db from '../firebase.js';
   import { collection, doc, getDocs, addDoc, updateDoc, arrayUnion, Timestamp } from "firebase/firestore";
+  import Navbar from '@/components/Navbar.vue';
 
   export default {
     name: "InputPage",
+    components: {
+      Navbar
+    },
 
     data() {
       return {

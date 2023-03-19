@@ -1,15 +1,21 @@
 <template>
-  <div id ="nav">
-   <router-link to = "/InputPage"> InputPage </router-link> |
-   <!-- <router-link to = "profit"> Profits </router-link> -->
+  <div id ="app">
+    <Navbar />
+    <router-view/>
   </div>
-  <router-view/>
 </template>
 
 <script>
   import { RouterLink, RouterView } from 'vue-router' //need this line???
+  import Navbar from '@/components/Navbar.vue'
+  // import Trips from '@/views/Trips.vue'
+  //import InputPage from '@/views/InputPage.vue'
+
   export default{
-   name: 'App'
+   name: 'App',
+   components: {
+      Navbar
+   }
   }
 </script>
 
