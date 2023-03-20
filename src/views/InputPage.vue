@@ -90,7 +90,8 @@
                   <label for="cars">Choose a Trip:</label>
                   <select name="cars" id="cars" v-model="Trip" >
                     <!-- <option :value="tripName" v-for="num in tripName.length()">{{ num }}</option> -->
-                    <option :value="tripName" v-for="tripName in tripsArray">{{ tripName }}</option>
+                    <!-- <option :value="tripName" v-for="tripName in tripsArray">{{ tripName }}</option> -->
+                    <option v-for="trip in tripsArray" :key="trip.id" :value="trip.id">{{ trip.name }}</option>
                   </select>
                 </div>
 
@@ -169,7 +170,10 @@
 
       async populateTripsArray() {
         const allTripDocuments = await getDocs(collection(db, "Trip"));
-        allTripDocuments.forEach(doc => this.tripsArray.push(doc.id))
+        allTripDocuments.forEach(doc => this.tripsArray.push({
+          id: doc.id,
+          name: doc.data().name
+        }));
       }
     },
 
