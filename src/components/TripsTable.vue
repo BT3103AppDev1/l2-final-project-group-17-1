@@ -6,25 +6,25 @@
                   <div id="tripName" class="card-body px-5 d-flex flex-row">
                       <h1 style = "text-shadow: 2px 2px 7px grey">
                         Your Trips
-                        <img src="planecropped.PNG" width="100px" style="object-position: right; margin-left: 20px; height: 100px;">
-                      </h1> 
+                        <img src="src/assets/images/planecropped.PNG" width="100px" style="object-position: right; margin-left: 20px; height: 100px;">
+                      </h1>
 
                   </div>
               </div>
           </div>
       </div>
   </section>
-  
-  <section class="container py-3" id="fullTableSection"> 
+
+  <section class="container py-3" id="fullTableSection">
       <div class="d-flex justify-content-between px-3" style="text-align:justify;">
 
         <div class="d-flex flex-row">
           <div class = "dropdown px-3">
             <div class = "currencyButton" style="padding-left: 1140px;">
               <button class = "btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: rgb(52, 146, 175); margin-bottom: 5px;">
-                  Currency 
+                  Currency
               </button>
-            
+
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   <a class="dropdown-item" href="#">SGD</a>
                   <a class="dropdown-item" href="#">Original</a>
@@ -58,7 +58,7 @@
             <th>Options</th>
             </tr>
         </thead>
-        
+
         <!-- Data -->
         <!-- <tbody>
             <tr>
@@ -87,7 +87,7 @@
         </table>
         </div>
     </section>
-  
+
 </template>
 
 <script>
@@ -101,12 +101,12 @@
         name: 'Trips',
         components: {
             Navbar
-        }, 
+        },
         mounted() {
           async function displayTrips(){
             let allTrips = await getDocs(collection(db, "Trip"))
             let index = 1
-            
+
             allTrips.forEach((docs) => {
               let tripData = docs.data()
               let tripName = tripData.name
@@ -115,8 +115,8 @@
               let endDate = tripData.End_Date
               let people = tripData.userIds  //array
               let currency = tripData.Currency
-              // let tripCode = 
-                
+              // let tripCode =
+
               // let tripCode = tripData.Trip_Code
 
 
@@ -126,10 +126,10 @@
               let cell1 = row.insertCell(0);
               let cell2 = row.insertCell(1);
               let cell3 = row.insertCell(2);
-              let cell4 = row.insertCell(3); 
-              let cell5 = row.insertCell(4); 
+              let cell4 = row.insertCell(3);
+              let cell5 = row.insertCell(4);
               let cell6 = row.insertCell(5);
-              let cell7 = row.insertCell(6); 
+              let cell7 = row.insertCell(6);
               let cell8 = row.insertCell(7);
               let cell9 = row.insertCell(8);
 
@@ -161,7 +161,7 @@
                 } catch(e) {
                   console.error(e.message)
                 }
-                
+
               }
               index +=1
 
@@ -172,11 +172,11 @@
           async function deleteTrip(tripName){
             alert("You are going to delete " + tripName)
 
-          
+
               await deleteDoc(doc(db, "Trip", tripName))
               // await db.collection("Trip").doc(tripNme).delete()
-            
-            
+
+
             console.log("Trip successfully deleted!", tripName)
             let tb = document.getElementById("fullTable")
             while (tb.rows.length>1){
@@ -202,7 +202,7 @@
                 border-bottom-right-radius: 20px;
                 border-bottom-left-radius: 20px;
             }
-    
+
             th,
             td {
                 padding: 15px;
@@ -210,7 +210,7 @@
                 color: black;
                 font-family: Arial, Helvetica, sans-serif;
             }
-    
+
             thead th {
                 background-color: #55608f;
                 color: black;
@@ -218,20 +218,16 @@
 
             #fullTableSection h1 {
                     color: #111;
-                    font-family: 'Helvetica Neue', sans-serif; 
-                    font-size: 50px; 
+                    font-family: 'Helvetica Neue', sans-serif;
+                    font-size: 50px;
                     /* font-weight: bold;  */
-                    letter-spacing: -1px; 
-                    line-height: 1; 
-                    text-align: left; 
+                    letter-spacing: -1px;
+                    line-height: 1;
+                    text-align: left;
                 }
-    
+
             th {
                 text-align: center;
                 color:white;
             }
 </style>
-
-  
-
-
