@@ -1,15 +1,20 @@
 <template>
-   <h1>HELLO TRIPS PAGE </h1>
+  <TripsTable/>
+  <CreateTrip/>
 </template>
 
 <script>
-    export default {
-        name: 'Trips',
-        components: {
-            
-        }
+import TripsTable  from '@/components/TripsTable.vue'
+import CreateTrip from '@/components/CreateTrip.vue'
+
+export default {
+  name: "App",
+  components:{
+    TripsTable,
+    CreateTrip
   }
-</script>
+}
+</script> 
 
 <style scoped>
 
