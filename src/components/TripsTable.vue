@@ -178,17 +178,23 @@
               await deleteDoc(doc(db, "Trip", tripCode))
               // await db.collection("Trip").doc(tripNme).delete()
 
-
             console.log("Trip successfully deleted!", tripCode)
             let tb = document.getElementById("fullTable")
-
+            for (var i = 0; i < tb.rows.length; i++) {
+              var row = tb.rows[i];
+              var value = row.cells[7].innerHTML;
+              if (value == tripCode) {
+                tb.deleteRow(i);
+              }
+            }
             // while (tb.rows.length>1){
             //   //tb.deleteRow(1)
             // }
             //displayTrips()
           }
-        }
-  }
+
+          }
+    }
 </script>
 
 <style scoped>
