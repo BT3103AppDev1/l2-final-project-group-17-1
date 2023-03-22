@@ -99,7 +99,7 @@
                 end_date: this.endDate,
               })
               console.log(docRef)
-              // document.getElementById("createtripform").reset();
+              //document.getElementById("createtripform").reset();
               // this.$emit("added");
             }
 

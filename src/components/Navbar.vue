@@ -32,6 +32,7 @@
     height: 100%;
     position: relative;
     z-index: 1;
+    width: 1500px
   }
 
   #input {
@@ -56,5 +57,6 @@
 
   #signout{
     margin-left: 720px;
+    position: relative;
   }
 </style>
