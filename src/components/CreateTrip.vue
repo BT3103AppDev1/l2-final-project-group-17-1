@@ -16,34 +16,30 @@
               <div class="card-body p-4 text-center">
 
                 <div class="form-outline mb-4">
-                  <input type="email" id="typeEmail" class="form-control form-control-lg" />
+                  <input type="email" id="typeEmail" class="form-control form-control-lg" v-model = "tripName"/>
                   <label class="form-label" for="typeEmail">Trip Name</label>
                 </div>
                 <div class="form-outline mb-4">
-                  <input type="email" id="typeEmail" class="form-control form-control-lg" />
+                  <input type="email" id="typeEmail" class="form-control form-control-lg" v-model = "budget"/>
                   <label class="form-label" for="typeEmail">Budget</label>
                 </div>
 
                 <div class="form-outline mb-4">
                   <div class="bfh-selectbox bfh-currencies" data-currency="EUR" data-flags="true">
                     <label for="cars">Currency:</label>
-                    <select v-model="currency" @input="currency">
-                      <option v-for="currency in currencies"></option>
-                      <!-- <option data-country="us" value="USD">United States Dollar</option>
-                      <option data-country="gb" value="GBP">British Pound Sterling</option>
-                      <option data-country="jp" value="JPY">Japanese Yen</option> -->
-                      <!-- Add more options for other currencies as desired -->
+                    <select v-model="currency" id = "currency">
+                      <option v-for="currency in currencies" :key = "currency" :value = "currency">{{ currency }}</option>
                     </select>
                   </div>
                 </div>
 
                 <div class="form-outline mb-4">
                   <label for="date">Start Date: </label>
-                  <input type="date" id="startdate" name="date">
+                  <input type="date" id="startdate" name="date" v-model = "startDate">
                 </div>
                 <div class="form-outline mb-4">
                   <label for="date">End Date: </label>
-                  <input type="date" id="enddate" name="date">
+                  <input type="date" id="enddate" name="date" v-model = "endDate">
                 </div>
                 <button class="btn btn-lg btn-block shadow text-light" type="submit" v-on:click="createTrip" style="background-color: #3d6d9e;">Save</button>
 
@@ -74,38 +70,43 @@
         }, 
         data() {
           return {
+            tripName: "",
+            budget: "",
+            startDate: "",
+            endDate: "",
             currency: "",
-            currencies: ["USD", "JPY", "GBP", "SGD"]
+            currencies: ["USD", "JPY", "GBP", "EUR", "SGD"]
           }
         },
-        mounted() {
-          async function createTrip(){
+        methods: {
+          async createTrip(){
 
-            let tripName = document.getElementById("typeEmail").value
-            let startDate = document.getElementById("startdate").value
-            let endDate = document.getElementById("enddate").value
+            // let tripName = document.getElementById("typeEmail").value
+            // let startDate = document.getElementById("startdate").value
+            // let endDate = document.getElementById("enddate").value
+            // let currency = document.getElementById("currency").value
             //currency = currency
             //let people = tripData.userIds  //array
             //let currency = this.currency
             //alert("Saving your new trip details!");
+        
 
             try {
-              const docRef = await addDoc(collection(db, "Trip", tripName), {
-                name: tripName,
-                Currency: this.currency,
-                start_date: startDate, 
-                end_date: endDate,
+              const docRef = await addDoc(collection(db, "Trip"), {
+                name: this.tripName,
+                currency: this.currency,
+                start_date: this.startDate, 
+                end_date: this.endDate,
               })
               console.log(docRef)
-              document.getElementById("createtripform").reset();
-              this.$emit("added");
+              // document.getElementById("createtripform").reset();
+              // this.$emit("added");
             }
 
             catch(error) {
               console.error("Error adding document: ", error);
             }
           }
-          createTrip()
         }
   }
 </script>
