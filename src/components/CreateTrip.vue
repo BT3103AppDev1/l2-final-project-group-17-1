@@ -93,10 +93,11 @@
 
             try {
               const docRef = await addDoc(collection(db, "Trip"), {
-                name: this.tripName,
-                currency: this.currency,
-                start_date: this.startDate, 
-                end_date: this.endDate,
+                Name: this.tripName,
+                Currency: this.currency,
+                Budget: this.budget,
+                Start_Date: this.startDate, 
+                End_Date: this.endDate,
               })
               console.log(docRef)
               //document.getElementById("createtripform").reset();

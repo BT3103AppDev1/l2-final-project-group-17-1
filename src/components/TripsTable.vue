@@ -15,12 +15,12 @@
       </div>
   </section>
 
-  <section class="container py-3" id="fullTableSection">
+  <section style = "background-color: floralwhite;">
       <div class="d-flex justify-content-between px-3" style="text-align:justify;">
 
         <div class="d-flex flex-row">
           <div class = "dropdown px-3">
-            <div class = "currencyButton" style="padding-left: 1140px;">
+            <div class = "currencyButton" style="padding-left: 1250px;">
               <button class = "btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: rgb(52, 146, 175); margin-bottom: 5px;">
                   Currency
               </button>
@@ -36,7 +36,7 @@
 
       <div class="scrollable">
         <table id="fullTable" class="table table-bordered  table-scroll text-center" cellspacing="0"
-        width="100%" style="background-color: white;">
+        width="100%" style="background-color: floralwhite; margin-left: 100px;">
         <thead style="background-color: rgb(156, 201, 215); ">
             <tr>
             <th class="th-sm">Select Trip
@@ -107,14 +107,15 @@
             let allTrips = await getDocs(collection(db, "Trip"))
             let index = 1
 
-            allTrips.forEach((docs) => {
-              let tripData = docs.data()
-              let tripName = tripData.name
+            allTrips.forEach((doc) => {
+              let tripData = doc.data()
+              let tripName = tripData.Name
               let startDate = tripData.Start_Date
-
               let endDate = tripData.End_Date
+              let budget = tripData.Budget
               let people = tripData.userIds  //array
               let currency = tripData.Currency
+              let tripCode = doc.id
               // let tripCode =
 
               // let tripCode = tripData.Trip_Code
@@ -133,13 +134,13 @@
               let cell8 = row.insertCell(7);
               let cell9 = row.insertCell(8);
 
-              cell2.innerHTML = startDate + " TO "+ endDate ;
+              cell2.innerHTML = startDate + " - "+ endDate ;
               cell3.innerHTML = people;
               cell4.innerHTML = currency;
               cell5.innerHTML = 0;
               cell6.innerHTML = 0;
-              cell7.innerHTML = 0;
-              cell8.innerHTML = "abc"
+              cell7.innerHTML = budget;
+              cell8.innerHTML = tripCode;
 
               let tripButton = document.createElement("button")
               // tripButton.id  = String(tripName)
@@ -157,7 +158,8 @@
               cell9.appendChild(deleteTripButton)
               deleteTripButton.onclick = function() {
                 try {
-                  deleteTrip(tripName)
+                  //deleteTrip(tripName)
+                  deleteTrip(tripCode)
                 } catch(e) {
                   console.error(e.message)
                 }
@@ -169,20 +171,21 @@
           }
           displayTrips()
 
-          async function deleteTrip(tripName){
-            alert("You are going to delete " + tripName)
+          async function deleteTrip(tripCode){
+            alert("You are going to delete " + tripCode)
 
 
-              await deleteDoc(doc(db, "Trip", tripName))
+              await deleteDoc(doc(db, "Trip", tripCode))
               // await db.collection("Trip").doc(tripNme).delete()
 
 
-            console.log("Trip successfully deleted!", tripName)
+            console.log("Trip successfully deleted!", tripCode)
             let tb = document.getElementById("fullTable")
-            while (tb.rows.length>1){
-              tb.deleteRow(1)
-            }
-            displayTrips()
+
+            // while (tb.rows.length>1){
+            //   //tb.deleteRow(1)
+            // }
+            //displayTrips()
           }
         }
   }
@@ -193,7 +196,7 @@
         background-color: floralwhite;
       }
       table {
-                width: 1000px;
+                width: 1100px;
                 border-collapse: collapse;
                 overflow: hidden;
                 box-shadow: 0 0 20px rgba(0,0,0,0.1);
@@ -213,7 +216,7 @@
 
             thead th {
                 background-color: #55608f;
-                color: black;
+                color: white;
             }
 
             #fullTableSection h1 {
