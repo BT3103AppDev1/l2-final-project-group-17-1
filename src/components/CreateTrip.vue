@@ -81,6 +81,7 @@
             currency: "",
             currencies: ["USD", "JPY", "GBP", "EUR", "SGD"],
             users: [],
+            expenses: []
           }
         },
         mounted() {
@@ -89,6 +90,7 @@
             if (user) {
               this.user = user
               this.useremail = auth.currentUser.email
+              this.userid = user.uid
             }
           })
         },
@@ -112,10 +114,11 @@
                 Budget: this.budget,
                 Start_Date: this.startDate, 
                 End_Date: this.endDate,
-                Users : arrayUnion(String(this.useremail))
+                Users : arrayUnion(String(this.userid)),
+                Expenses: []
               })
               console.log(docRef)
-              const userDocRef = await updateDoc(doc(db, "User", this.useremail), {
+              const userDocRef = await updateDoc(doc(db, "User", this.userid), {
                 Trips: arrayUnion(docRef)
               })
               //document.getElementById("createtripform").reset();

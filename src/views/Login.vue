@@ -74,7 +74,7 @@
             UID: uid,
             Trips: []
             }
-            await setDoc(doc(db, "User", String(email)), user);
+            await setDoc(doc(db, "User", String(uid)), user);
         }
         catch(error) {
             console.error("Error adding user: ", error)

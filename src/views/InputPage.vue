@@ -125,7 +125,8 @@
           date: new Date().toISOString().substr(0, 10), //autofill today's date
           spendingType: "Individual",
           trip:"",
-          tripsArray: []
+          tripsArray: [],
+          usersArray: []
       }
     },
 
@@ -152,16 +153,19 @@
           const expenseDocRef = await addDoc(collection(db, "Expense"), {
             Description : this.description, Amount : this.amount, Category : this.category,
             Date : isoString,
-            SpendingType : this.spendingType
+            SpendingType : this.spendingType,
+            Users: arrayUnion(this.userid)
           })
 
           //add expenseDocRef into array in Trip doc
           const tripDocRef = doc(db, "Trip", this.trip);
           await updateDoc(tripDocRef, {
-            expenseIds : arrayUnion(expenseDocRef)
+            Expenses : arrayUnion(expenseDocRef)
           });
           // document.getElementById('myform').reset();
           // this.$emit ("added")
+
+          //add expense to Users
         }
         catch(error) {
           console.error("Error adding document: ", error);
@@ -173,7 +177,8 @@
         allTripDocuments.forEach(doc => this.tripsArray.push({
           id: doc.id,
           name: doc.data().name,
-          startDate: doc.data().Start_Date.toDate().toLocaleDateString(),
+          //startDate: doc.data().Start_Date.toDate().toLocaleDateString(),
+          startDate: doc.data().Start_Date,
         }));
       }
     },
@@ -184,6 +189,7 @@
      onAuthStateChanged(auth, (user) => {
         if (user) {
           this.user = user
+          this.userid = user.uid
         }
       })
     }
