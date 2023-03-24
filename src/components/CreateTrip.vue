@@ -119,7 +119,7 @@
               })
               console.log(docRef)
               const userDocRef = await updateDoc(doc(db, "User", this.userid), {
-                Trips: arrayUnion(docRef)
+                Trips: arrayUnion(docRef.id)
               })
               //document.getElementById("createtripform").reset();
               // this.$emit("added");

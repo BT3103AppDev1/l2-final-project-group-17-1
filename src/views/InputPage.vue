@@ -160,7 +160,7 @@
           //add expenseDocRef into array in Trip doc
           const tripDocRef = doc(db, "Trip", this.trip);
           await updateDoc(tripDocRef, {
-            Expenses : arrayUnion(expenseDocRef)
+            Expenses : arrayUnion(expenseDocRef.id)
           });
           // document.getElementById('myform').reset();
           // this.$emit ("added")
