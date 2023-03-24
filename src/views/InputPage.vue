@@ -59,7 +59,7 @@
                   </div>
                 </div>
 
-                <div class="form-outline mb-4">Spending type:
+                <div class="form-outline mb-4" v-if="isGroupTrip">Spending type:
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Individual" v-model="spendingType">
                     <label class="form-check-label" for="inlineRadio1">Individual</label>
@@ -71,11 +71,13 @@
                 </div>
 
 
-                <div class="form-outline mb-4" v-if="isGroup">
-                  <p class="mb-0">Who needs to pay?</p>
-                  <div class="form-check form-check-inline" v-for="user in usersArray">
-                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" :value="user.id" v-model="selectedUsersArray">
-                    <label class="form-check-label" for="inlineCheckbox1">{{ user.name }}</label>
+                <div class="form-outline mb-4" v-if="isGroupTrip && isGroup">
+                  <p class="mb-0">Who ELSE needs to pay?</p>
+                  <div v-for="user in usersArray">
+                    <div class="form-check form-check-inline" v-if="user.id!=uid">
+                      <input class="form-check-input" type="checkbox" id="inlineCheckbox1" :value="user.id" v-model="selectedUsersArray">
+                      <label class="form-check-label" for="inlineCheckbox1">{{ user.name }}</label>
+                    </div>
                   </div>
                 </div>
 
@@ -118,20 +120,26 @@
           minDate: "",
           maxDate: "",
           usersArray:[],
-          selectedUsersArray:[]
+          selectedUsersArray:[],
+          isGroupTrip: false,
+          uid: "Jb9zg9JMDmUdfGFTiD5pbdEzQQ73" //auth.currentUser.id
       }
     },
 
     watch: {
       trip(tripObj) {
-        if (tripObj == null) {
+        if (tripObj == "") {
           this.minDate = ""
           this.maxDate = ""
           this.usersArray = []
+          this.isGroupTrip = false
         } else {
           this.minDate = tripObj.startDate
           this.maxDate = tripObj.endDate
           this.populateUsersArray(tripObj.usersRefArray);
+          if (tripObj.usersRefArray.length != 1) {
+            this.isGroupTrip = true
+          }
         }
       }
 
@@ -149,28 +157,28 @@
 
     methods: {
       async savetofs(){
-
         if (!this.allFieldsFilled) {
           alert("Please fill all fields!")
           return
         }
-console.log("hey")
+
         alert("Saving your data for Spending")
         const isoString = new Date(this.date).toISOString();
         try{
           //add expense, get expenseDocRef
+          this.selectedUsersArray.push(this.uid)
           const expenseDocRef = await addDoc(collection(db, "Expense"), {
             Description : this.description, Amount : this.amount, Category : this.category,
             Date : isoString,
-            SpendingType : this.spendingType,
-            Users_Array: this.selectedUsersArray
+            // SpendingType : this.spendingType,
+            Paid_By : this.uid,
+            Users: this.selectedUsersArray
           })
 
-          console.log(expenseDocRef.id)
           //add expenseDocRef into array in Trip doc
           const tripDocRef = doc(db, "Trip", this.trip.id);
           await updateDoc(tripDocRef, {
-            expenseIds : arrayUnion(expenseDocRef.id)
+            Expenses : arrayUnion(expenseDocRef.id) //CHANGED
           });
           // document.getElementById('myform').reset();
         }
@@ -180,12 +188,12 @@ console.log("hey")
       },
 
 
-      async populateTripsArray(uid) {
-        const documentRef = await doc(db, "User", uid);
+      async populateTripsArray() {
+        const documentRef = await doc(db, "User", this.uid);
         const documentSnapshot = await getDoc(documentRef);
-        // console.log(documentSnapshot.data().Trips_Array);
+        // console.log(documentSnapshot.data().Trips);
 
-        const tripsRefArray = documentSnapshot.data().Trips_Array
+        const tripsRefArray = documentSnapshot.data().Trips
         tripsRefArray.forEach(async (reference) => {
           const documentRef = doc(db, "Trip", reference);
           getDoc(documentRef)
@@ -196,7 +204,7 @@ console.log("hey")
                   name: doc.data().Name,
                   startDate: doc.data().Start_Date,
                   endDate: doc.data().End_Date,
-                  usersRefArray: doc.data().Users_Array});
+                  usersRefArray: doc.data().Users}); //CHANGED
               } else {
                 console.log("No such document!");
               }
@@ -209,8 +217,6 @@ console.log("hey")
 
       async populateUsersArray(usersRefArray) {
         this.usersArray = []
-        console.log("pop")
-        console.log(usersRefArray)
         usersRefArray.forEach(async (reference) => {
           const documentRef = doc(db, "User", reference);
           getDoc(documentRef)
@@ -241,9 +247,9 @@ console.log("hey")
       // const auth = getAuth();
 
       // if (auth.currentUser) { //probably true
-      //   const uid = auth.currentUser.uid;
-      const uid = "tudrqYHSAUtpOpPbGhvn"
-        this.populateTripsArray(uid);
+      //   this.uid = auth.currentUser.uid;
+
+        this.populateTripsArray();
       // }
 
     }
