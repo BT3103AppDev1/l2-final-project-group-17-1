@@ -1,18 +1,36 @@
 <template>
+  <div id="logged" v-if="user">
   <nav id="vue">
     <div class = "bar">
       <img class="logo" src="src/assets/images/logo3.png">
       <router-link to="/InputPage"><button class = "btn btn-light" id = "input"><b>Input</b></button></router-link>
       <router-link to="/trips"><button class = "btn btn-light" id = "trips"><b>Trips</b></button></router-link>
-      <router-link to="/login"><button class="btn btn-dark" id = "signout">Sign Out</button></router-link>
+      <router-link to="/"><button class="btn btn-dark" id = "signout">Sign Out</button></router-link>
+      
     </div>
   </nav>
+  </div>
 </template>
 
 <script>
+ import firebaseApp from '@/firebase.js'
+ import {getAuth, onAuthStateChanged} from 'firebase/auth'
   export default {
     name: 'Navbar',
     components: {
+    },
+    data() {
+      return {
+        user:false,
+      }
+    },
+    mounted() {
+      const auth = getAuth()
+        onAuthStateChanged(auth, (user) => {
+          if (user) {
+            this.user = user
+          }
+        })
     }
   }
 </script>
@@ -34,6 +52,10 @@
     z-index: 1;
     width: 1500px
   }
+
+  /* .bar a.router-link-exact-active {
+    color:aqua;
+  } */
 
   #input {
     color: black;

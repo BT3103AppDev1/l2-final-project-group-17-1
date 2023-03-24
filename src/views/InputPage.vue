@@ -100,6 +100,9 @@
   import { collection, doc, getDoc, getDocs, addDoc, updateDoc, arrayUnion } from "firebase/firestore";
   import { getAuth } from "firebase/auth";
   import Navbar from '@/components/Navbar.vue';
+  //import Logout from '@/components/Logout.vue'
+  import firebaseApp from '@/firebase.js'
+  import {getAuth, onAuthStateChanged} from 'firebase/auth'
 
   export default {
     name: "InputPage",
@@ -252,6 +255,14 @@
         this.populateTripsArray();
       // }
 
+    //  this.populateTripsArray();
+    //  const auth = getAuth()
+    //  onAuthStateChanged(auth, (user) => {
+    //     if (user) {
+    //       this.user = user
+    //       this.userid = user.uid
+    //     }
+    //   })
     }
   }
 

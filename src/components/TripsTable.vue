@@ -95,6 +95,8 @@
     import db from '../firebase.js';
     import { collection, doc, getDocs, addDoc, updateDoc, arrayUnion, Timestamp, deleteDoc, getFirestore } from "firebase/firestore";
     import Navbar from '@/components/Navbar.vue';
+    import firebaseApp from '@/firebase.js'
+    import {getAuth, onAuthStateChanged} from 'firebase/auth'
     // const db = getFirestore(app);
 
     export default {
@@ -103,7 +105,15 @@
             Navbar
         },
         mounted() {
-          async function displayTrips(){
+          const auth = getAuth()
+          onAuthStateChanged(auth, (user) => {
+            if (user) {
+              this.user = user
+              this.useremail = auth.currentUser.email
+            }
+          })
+          async function fetchAndUpdateData(){
+            // let userdata = await getDocs(collection(db, "User"))
             let allTrips = await getDocs(collection(db, "Trip"))
             let index = 1
 
@@ -113,7 +123,7 @@
               let startDate = tripData.Start_Date
               let endDate = tripData.End_Date
               let budget = tripData.Budget
-              let people = tripData.userIds  //array
+              let people = tripData.Users  //array
               let currency = tripData.Currency
               let tripCode = doc.id
               // let tripCode =
@@ -169,7 +179,7 @@
 
             })
           }
-          displayTrips()
+          fetchAndUpdateData()
 
           async function deleteTrip(tripCode){
             alert("You are going to delete " + tripCode)
