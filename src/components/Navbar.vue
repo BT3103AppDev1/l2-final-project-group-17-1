@@ -5,7 +5,7 @@
       <img class="logo" src="src/assets/images/logo3.png">
       <router-link to="/InputPage"><button class = "btn btn-light" id = "input"><b>Input</b></button></router-link>
       <router-link to="/trips"><button class = "btn btn-light" id = "trips"><b>Trips</b></button></router-link>
-      <router-link to="/"><button class="btn btn-dark" id = "signout">Sign Out</button></router-link>
+      <router-link to="/"><button class="btn btn-dark" id = "signout" @click="signOut()" v-if="user">Sign Out</button></router-link>
       
     </div>
   </nav>
@@ -14,7 +14,8 @@
 
 <script>
  import firebaseApp from '@/firebase.js'
- import {getAuth, onAuthStateChanged} from 'firebase/auth'
+ import {getAuth, onAuthStateChanged, signOut} from 'firebase/auth'
+
   export default {
     name: 'Navbar',
     components: {
@@ -31,7 +32,17 @@
             this.user = user
           }
         })
-    }
+    },
+    methods: {
+      signOut: function() {
+      console.log("signing out")
+            const auth = getAuth()
+            const user = auth.currentUser
+            signOut(auth, user)
+            //this.$router.push('/')
+            ui.start("#firebaseui-auth-container", uiConfig)
+        }
+      }
   }
 </script>
 

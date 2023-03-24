@@ -30,13 +30,15 @@
                 signInSuccessUrl: '/InputPage',
                 signInFlow: 'redirect',
                 callbacks: {
-                    signInSuccessWithAuthResult: function(authResult) {
+                    signInSuccessWithAuthResult: function(authResult, redirectUrl) {
                         const email         = authResult.user.email;
                         const uid = authResult.user.uid
                         //console.log(String(email))
-                        setUser(email, uid);
+                        setUser(email, uid).then(()=>{
+                            console.log("user created")
+                        })
                         return true;
-                    },
+                    },  
                 },
                 signInOptions: [
                     firebase.auth.GoogleAuthProvider.PROVIDER_ID, 
