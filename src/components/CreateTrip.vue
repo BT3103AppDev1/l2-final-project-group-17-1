@@ -54,13 +54,16 @@
 
 <script>
   import db from '../firebase.js';
-  import { collection, doc, getDocs, addDoc, updateDoc, arrayUnion, Timestamp, deleteDoc, getFirestore } from "firebase/firestore";
+  import { collection, doc, setDoc, getDocs, addDoc, updateDoc, arrayUnion, Timestamp, deleteDoc, getFirestore } from "firebase/firestore";
   import Navbar from '@/components/Navbar.vue';
   import TripsTable from '@/components/TripsTable.vue'
+  import firebaseApp from '@/firebase.js'
+  import {getAuth, onAuthStateChanged} from 'firebase/auth'
   //import firebaseApp from "../firebase.js";
   //import { getFirestore } from "firebase/firestore";
   //import {setDoc } from "firebase/firestore";
   // const db = getFirestore(firebaseApp);
+  // const {uid} = useUid();
 
   export default {
         name: 'Trips',
@@ -68,6 +71,7 @@
             Navbar,
             TripsTable
         }, 
+        
         data() {
           return {
             tripName: "",
@@ -75,8 +79,18 @@
             startDate: "",
             endDate: "",
             currency: "",
-            currencies: ["USD", "JPY", "GBP", "EUR", "SGD"]
+            currencies: ["USD", "JPY", "GBP", "EUR", "SGD"],
+            users: [],
           }
+        },
+        mounted() {
+          const auth = getAuth()
+          onAuthStateChanged(auth, (user) => {
+            if (user) {
+              this.user = user
+              this.useremail = auth.currentUser.email
+            }
+          })
         },
         methods: {
           async createTrip(){
@@ -98,8 +112,12 @@
                 Budget: this.budget,
                 Start_Date: this.startDate, 
                 End_Date: this.endDate,
+                Users : arrayUnion(String(this.useremail))
               })
               console.log(docRef)
+              const userDocRef = await updateDoc(doc(db, "User", this.useremail), {
+                Trips: arrayUnion(docRef)
+              })
               //document.getElementById("createtripform").reset();
               // this.$emit("added");
             }
@@ -108,7 +126,7 @@
               console.error("Error adding document: ", error);
             }
           }
-        }
+        },
   }
 </script>
 

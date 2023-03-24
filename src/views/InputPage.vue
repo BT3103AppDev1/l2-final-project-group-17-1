@@ -107,6 +107,9 @@
   import db from '../firebase.js';
   import { collection, doc, getDocs, addDoc, updateDoc, arrayUnion } from "firebase/firestore";
   import Navbar from '@/components/Navbar.vue';
+  //import Logout from '@/components/Logout.vue'
+  import firebaseApp from '@/firebase.js'
+  import {getAuth, onAuthStateChanged} from 'firebase/auth'
 
   export default {
     name: "InputPage",
@@ -177,6 +180,12 @@
 
     mounted() {
      this.populateTripsArray();
+     const auth = getAuth()
+     onAuthStateChanged(auth, (user) => {
+        if (user) {
+          this.user = user
+        }
+      })
     }
   }
 
