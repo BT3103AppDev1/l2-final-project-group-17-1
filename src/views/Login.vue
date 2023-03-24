@@ -34,9 +34,10 @@
                         const email         = authResult.user.email;
                         const uid = authResult.user.uid
                         //console.log(String(email))
-                        setUser(email, uid).then(()=>{
-                            console.log("user created")
-                        })
+                        // setUser(email, uid).then(()=>{
+                        //     console.log("user created")
+                        // })
+                        setUser(email, uid)
                         return true;
                     },  
                 },
