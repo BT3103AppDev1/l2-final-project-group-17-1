@@ -70,11 +70,12 @@
         //     }
         //   }
    }
-    async function setUser(email, uid) {
+    async function setUser(email, uid, name) {
         try {
             const user = {
             Email: email,
             UID: uid,
+            Name : name,
             Trips: []
             }
             await setDoc(doc(db, "User", String(uid)), user);

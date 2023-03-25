@@ -176,7 +176,7 @@
         const allTripDocuments = await getDocs(collection(db, "Trip"));
         allTripDocuments.forEach(doc => this.tripsArray.push({
           id: doc.id,
-          name: doc.data().name,
+          name: doc.data().Name,
           //startDate: doc.data().Start_Date.toDate().toLocaleDateString(),
           startDate: doc.data().Start_Date,
         }));
