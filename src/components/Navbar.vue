@@ -6,7 +6,7 @@
       <router-link to="/InputPage"><button class = "btn btn-light" id = "input"><b>Input</b></button></router-link>
       <router-link to="/trips"><button class = "btn btn-light" id = "trips"><b>Trips</b></button></router-link>
       <router-link to="/"><button class="btn btn-dark" id = "signout">Sign Out</button></router-link>
-      
+
     </div>
   </nav>
   </div>
@@ -29,6 +29,7 @@
         onAuthStateChanged(auth, (user) => {
           if (user) {
             this.user = user
+            console.log("logged")
           }
         })
     }
@@ -37,7 +38,7 @@
 
 <style scoped>
   img {
-    height: 70px; 
+    height: 70px;
     margin-right: 30px;
 
   }
@@ -46,7 +47,7 @@
     color:rgb(248, 241, 210);
     background-color: rgb(156, 201, 215);
     font-family: Arial, Helvetica, sans-serif;
-    line-height: 50px; 
+    line-height: 50px;
     height: 100%;
     position: relative;
     z-index: 1;
@@ -67,7 +68,7 @@
   }
 
   #trips {
-    margin-right: 40px; 
+    margin-right: 40px;
     margin-left: 35px;
     width: 130px;
     font-size: 20px;

@@ -98,17 +98,12 @@
 <script>
   import db from '../firebase.js';
   import { collection, doc, getDoc, getDocs, addDoc, updateDoc, arrayUnion } from "firebase/firestore";
-  import { getAuth } from "firebase/auth";
-  import Navbar from '@/components/Navbar.vue';
   //import Logout from '@/components/Logout.vue'
   import firebaseApp from '@/firebase.js'
   import {getAuth, onAuthStateChanged} from 'firebase/auth'
 
   export default {
     name: "InputPage",
-    components: {
-      Navbar
-    },
 
     data() {
 
@@ -247,13 +242,14 @@
     },
 
     mounted() {
-      // const auth = getAuth();
+      const auth = getAuth();
 
-      // if (auth.currentUser) { //probably true
-      //   this.uid = auth.currentUser.uid;
+      if (auth.currentUser) { //probably true
+        console.log(auth.currentUser)
+        this.uid = auth.currentUser.uid;
 
         this.populateTripsArray();
-      // }
+      }
 
     //  this.populateTripsArray();
     //  const auth = getAuth()
