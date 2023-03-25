@@ -257,7 +257,12 @@
     //     if (user) {
     //       this.user = user
     //       this.userid = user.uid
+    //       console.log("logged in")
     //     }
+    //     else {
+    //       console.log("logged out")
+    //     }
+    //
     //   })
     }
   }
