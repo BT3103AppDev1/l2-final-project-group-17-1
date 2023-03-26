@@ -1,5 +1,5 @@
 <template>
-    
+    <h1>PERSONAL EXPENSE TABLE tripCode: {{tripCode}}</h1>
 </template>
 
 <script>
@@ -10,6 +10,9 @@
     export default {
         name: 'BudgetBar',
         components: {},
+        props:{
+            tripCode: String
+        },
         data() {
             return {
             tripCode: "",

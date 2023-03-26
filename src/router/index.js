@@ -4,6 +4,7 @@ import Trips from '@/views/Trips.vue'
 import LogIn from '@/views/Login.vue'
 import NotFound from '@/views/NotFound.vue'
 import Register from '@/views/Register.vue'
+import PersonalPage from '@/views/PersonalPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +33,12 @@ const router = createRouter({
       path: '/register',
       name: 'Register',
       component: Register
+    },
+    {
+      path: '/PersonalPage?tripCode:tripCode&budget:budget&tripName:tripName&startDate:startDate&endDate:endDate',
+      name: 'PersonalPage',
+      component: PersonalPage,
+      props:true
     }
   ]
 })

@@ -1,5 +1,7 @@
 <template>
-    
+    <div>
+        <h1>BUDGETBAR tripCode: {{tripCode}}</h1>
+        </div>
 </template>
 
 <script>

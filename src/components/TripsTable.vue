@@ -98,7 +98,7 @@
     //import Navbar from '@/components/Navbar.vue';
     // const db = getFirestore(app);
     //import CreateTrip from '@/components/CreateTrip.vue';
-
+    import router from "../router"
 
     export default {
         name: 'Trips',
@@ -126,6 +126,7 @@
               let people = tripData.Users //array
               let currency = tripData.Currency
               let tripCode = doc.id
+              // console.log(typeof tripData)
               // let tripCode =
 
               // let tripCode = tripData.Trip_Code
@@ -165,12 +166,26 @@
               // tripButton.id  = String(tripName)
               tripButton.className= "bwt"
               tripButton.innerHTML = tripName
-
+              tripButton.onclick = function() {
+                try { 
+                  router.push({name:'PersonalPage', params:{
+                    tripCode:tripCode, 
+                    budget:budget,
+                    tripName:tripName,
+                    startDate:startDate,
+                    endDate:endDate,
+                    
+                    }})
+                  //showTrip(tripCode)
+                } catch(e) {
+                  console.error(e.message)
+                }
+              }
               cell1.appendChild(tripButton)
 
 
               let deleteTripButton = document.createElement("button")
-              deleteTripButton.id = String(tripName) //need to change
+              deleteTripButton.id = String(tripName) 
               deleteTripButton.className = "bwt"
               deleteTripButton.innerHTML = "Leave"
 
@@ -212,6 +227,10 @@
             // }
             //displayTrips()
           }
+          //async function showTrip(tc) {
+          //    this.$router.push({name: 'PersonalPage', params:{tripCode: tc}});
+          //    console.log("TRIPCODE", tripCode)
+          //}
 
 
           }
