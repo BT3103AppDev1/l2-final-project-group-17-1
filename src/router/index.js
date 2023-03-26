@@ -35,7 +35,7 @@ const router = createRouter({
       component: Register
     },
     {
-      path: '/PersonalPage?tripCode:tripCode&budget:budget&tripName:tripName&startDate:startDate&endDate:endDate',
+      path: '/PersonalPage?tripCode:tripCode&budget:budget&tripName:tripName&startDate:startDate&endDate:endDate&tripExpenses:tripExpenses',
       name: 'PersonalPage',
       component: PersonalPage,
       props:true

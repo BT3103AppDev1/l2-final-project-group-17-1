@@ -126,6 +126,7 @@
               let people = tripData.Users //array
               let currency = tripData.Currency
               let tripCode = doc.id
+              let tripExpenses = tripData.Expenses
               // console.log(typeof tripData)
               // let tripCode =
 
@@ -174,7 +175,7 @@
                     tripName:tripName,
                     startDate:startDate,
                     endDate:endDate,
-                    
+                    tripExpenses: JSON.stringify(tripExpenses)
                     }})
                   //showTrip(tripCode)
                 } catch(e) {
