@@ -21,10 +21,10 @@ export default {
         })
     },
     methods: {
-        signOut() {
+        async signOut() {
             const auth = getAuth()
             const user = auth.currentUser
-            signOut(auth, user)
+            await signOut(auth, user)
             this.$router.push({name:'Login'})
         }
     }
