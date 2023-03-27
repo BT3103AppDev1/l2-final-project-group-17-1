@@ -44,7 +44,7 @@
             <div class="container text-center card py-3" style="border-color: #55608f;">
                 <h1>Status of Budget</h1>
                 <div class="w3-light-grey w3-xlarge">
-                    <div class="w3-container w3-green w3-center" style="width:50%;">50%</div>
+                    <div id="waterTank" class="w3-container w3-green w3-center" style=""></div>
                 </div>
                 <span>Your Budget: {{budget}}</span>
             </div>
@@ -92,6 +92,54 @@
             </table>
         </div>
     </section>
+    <section class="p-5" id="totalSumTable">
+        <div class = "container" style="background-color: floralwhite;">
+        <table class="table table-bordered" style="background-color: white;">
+            <thead style="background-color: rgb(156, 201, 215); font-family:Arial, Helvetica, sans-serif;">
+            <tr>
+                <th scope="col" style="color:black">Day</th>
+                <th scope="col" style="color:black">Total Spent For Each Day</th>
+            </tr>
+            </thead>
+            <tbody class="text-center">
+            <tr>
+                <td>1</td>
+                <td>$100</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>$200</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>$300</td>
+            
+            </tr>
+            </tbody>
+        </table>
+        </div>
+    </section>
+
+     <!-- Charts -->
+    <section style="background-color: floralwhite;">
+        <div class="container">
+            <div class="d-md-flex justify-content-center">
+                <!-- Pie Chart -->
+                <div class="container text-center">
+                    <h1>Total spending by category</h1>
+                    <pie-chart class ="user" width=500px :data=
+    "pieChartData" ></pie-chart >
+                </div>
+                 
+                <!-- Bar Chart -->
+                <!-- <div class="container text-center">
+                    <h1>Spending by category from past 7 days </h1>
+                    <div id="myBarChart" class="barchart"></div>
+                </div>  -->
+            </div>
+        </div>
+    </section>
+
     </section>
 
 
@@ -108,7 +156,6 @@
     import PersonalExp from '@/components/PersonalExp.vue'
     import BudgetBar from '@/components/BudgetBar.vue';
     import { collection, doc, getDocs, query, where} from "firebase/firestore";
-
 
     //const trip = ref(null)
     //const route = useRoute()
@@ -133,9 +180,23 @@
     components:{
         Navbar,
         BudgetBar,
-        PersonalExp
+        PersonalExp,
     },
-    
+    data () {
+        return {
+           pieChartData: {
+            "Shopping": 100,
+            "Food": 70,
+            "Leisure": 30,
+            "Travel": 300,
+            "Accomodation":700,
+           },
+           barChartData: {
+
+           }
+        }
+    },
+
     mounted() {
         const auth = getAuth()
         onAuthStateChanged(auth, (user) => {
@@ -146,23 +207,24 @@
         }
         })
         
-        async function fetchAndUpdateData(tripExpenses){
+        async function fetchAndUpdateData(tripExpenses, budget){
             let index = 1
             const auth=getAuth()
             const uid = auth.currentUser.uid
             tripExpenses = JSON.parse(tripExpenses)
             // const expenseArray = []
+            var totalCost = 0
             let allExpenses = await getDocs(collection(db, "Expense"))
             allExpenses.forEach((expense) => {
             let users = expense.data().Users;
             console.log(String(expense.id))
+            
 
             if (users.includes(String(uid)) && tripExpenses.includes(expense.id)) {
-
+                var spendingPerDayArray = []
                 // const name = expense.data().Name
                 console.log(expense.data().Description)
                 // expenseArray.push(expense.data())
-
                 let expenseTable = document.getElementById("fullTable")
                 let row = expenseTable.insertRow(index)
                 let cell1 = row.insertCell(0);
@@ -176,6 +238,8 @@
                 cell2.innerHTML = expense.data().Description
                 cell3.innerHTML = expense.data().Category
                 cell4.innerHTML = expense.data().Amount
+                totalCost += Number(expense.data().Amount)
+
                 if (users.length>1) {
                     cell5.innerHTML = "Group"
                 } else {
@@ -186,10 +250,15 @@
                 index +=1
             }
             })
-            
+            var waterTankNum = totalCost/budget * 100
+            var waterTank = document.getElementById("waterTank")
+            console.log('TOTALCOST', totalCost)
+            console.log(waterTankNum)
+            waterTank.style.width = waterTankNum + "%"
+            waterTank.innerHTML = Math.ceil(waterTankNum) + "%"
             
         }
-        fetchAndUpdateData(this.tripExpenses)
+        fetchAndUpdateData(this.tripExpenses, this.budget)
 
     }
     }
