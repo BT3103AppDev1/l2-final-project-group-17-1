@@ -35,48 +35,50 @@
 </template>
 
 <script>
-import db from '../firebase.js';
-import { collection, doc, getDocs, addDoc, updateDoc, arrayUnion, Timestamp, deleteDoc, getFirestore } from "firebase/firestore";
-import {getAuth, onAuthStateChanged} from 'firebase/auth'
+    import db from '../firebase.js';
+    import { collection, doc, getDocs, addDoc, updateDoc, arrayUnion, Timestamp, deleteDoc, getFirestore } from "firebase/firestore";
+    import {getAuth, onAuthStateChanged} from 'firebase/auth'
 
-export default {
-    name: 'JoinTrip',
-    components: {},
-    data() {
-        return {
-          tripCode: "",
-          budget: "",
-        }
-    },
-
-    mounted() {
-        const auth = getAuth()
-        onAuthStateChanged(auth, (user) => {
-          if (user) {
-            this.user = user
-            this.useremail = auth.currentUser.email
-            this.userid = user.uid
-            this.name = user.Name
-          }
-        })
-    },
-
-    methods: {
-        async joinTrip() {
-            console.log(this.tripCode);
-            console.log(this.userid)
-            try {
-                const userRef = await updateDoc(collection(db, "User", this.userid), {
-                    Trips: arrayUnion(this.tripCode)
-                })
-                const tripRef = await updateDoc(collection(db, "Trip", this.tripCode), {
-                    Users: arrayUnion(this.userid)
-                }) 
+    export default {
+        name: 'JoinTrip',
+        components: {},
+        data() {
+            return {
+            tripCode: "",
+            budget: "",
             }
-            catch(error) {
-                console.error("Error adding document: ", error);
-            } 
+        },
+
+        mounted() {
+            const auth = getAuth()
+            onAuthStateChanged(auth, (user) => {
+            if (user) {
+                this.user = user
+                this.useremail = auth.currentUser.email
+                this.userid = user.uid
+                this.name = user.Name
+            }
+            })
+        },
+
+        methods: {
+            async joinTrip() {
+                console.log(this.tripCode);
+                console.log(this.userid)
+                try {
+                    const userRef = await updateDoc(doc(db, "User", this.userid), {
+                        Trips: arrayUnion({
+                            Trip: this.tripCode,
+                            Budget: this.budget})
+                    })
+                    const tripRef = await updateDoc(doc(db, "Trip", this.tripCode), {
+                        Users: arrayUnion(this.userid)
+                    }) 
+                }
+                catch(error) {
+                    console.error("Error adding document: ", error);
+                } 
+            }
         }
     }
-}
 </script>
