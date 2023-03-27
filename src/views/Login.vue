@@ -1,7 +1,7 @@
 <template>
     <h1 style="align-items: center;">Welcome to TrackTrip!</h1>
     <h2 style="align-items: center;">Login Here</h2>
-    <div id = "firebaseui-auth-container"></div>
+    <div id = "firebaseui-auth-container" @submit.prevent="setUser"></div>
  </template>
  
  <script>
@@ -20,6 +20,7 @@
          components: {
              
          },
+         
          mounted() {
             var ui = firebaseui.auth.AuthUI.getInstance();
             if (!ui) {
@@ -31,14 +32,22 @@
                 signInFlow: 'redirect',
                 callbacks: {
                     signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-                        const email         = authResult.user.email;
+                        const email = authResult.user.email;
                         const uid = authResult.user.uid
+                        const name = authResult.user.displayName
                         //console.log(String(email))
                         // setUser(email, uid).then(()=>{
                         //     console.log("user created")
                         // })
-                        setUser(email, uid)
-                        return true;
+                        setUser(email, uid, name)
+                            .then(() => {
+                                // console.log("success")
+                                window.location.href = "/InputPage"
+                            })
+                            .catch(error => {
+                                console.error("error adding user data to database", error)
+                            });
+                        return false;
                     },  
                 },
                 signInOptions: [
@@ -71,6 +80,7 @@
         //   }
    }
     async function setUser(email, uid, name) {
+        console.log(name)
         try {
             const user = {
             Email: email,

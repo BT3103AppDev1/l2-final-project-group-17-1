@@ -143,7 +143,8 @@
                   if (doc.exists()) {
                     console.log(doc.data())
                     doc.data().Trips.forEach(trip => {
-                      tripsArray.push(trip.Trip) //tripcodde
+                      tripsArray.push(trip.Trip_Code) //tripcode
+                      tripsArray.push(trip)
                     })
                   } else {
                     console.log('no such user');

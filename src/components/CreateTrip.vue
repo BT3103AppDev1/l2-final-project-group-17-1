@@ -117,7 +117,7 @@ export default {
             console.log(docRef)
             console.log(this.userid)
             const userDocRef = await updateDoc(doc(db, "User", this.userid), {
-              Trips: arrayUnion({Trip: docRef.id,
+              Trips: arrayUnion({Trip_Code: docRef.id,
                 Budget: this.budget})
             })
             //document.getElementById("createtripform").reset();

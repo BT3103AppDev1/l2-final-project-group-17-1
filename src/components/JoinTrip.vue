@@ -68,7 +68,7 @@
                 try {
                     const userRef = await updateDoc(doc(db, "User", this.userid), {
                         Trips: arrayUnion({
-                            Trip: this.tripCode,
+                            Trip_Code: this.tripCode,
                             Budget: this.budget})
                     })
                     const tripRef = await updateDoc(doc(db, "Trip", this.tripCode), {
