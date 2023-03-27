@@ -2,7 +2,7 @@
     <div class = "page">
         <!-- <BudgetBar :tripCode = 'tripCode'/> -->
         <!-- <PersonalExp :tripCode = 'tripCode'/>  -->
-        <p>tripCode is : {{tripCode}} </p>
+        <p>tripCode is : {{tripCode}}  {{tripExpenses}}</p>
         
       <!-- <div class = "container">
         <div id = "budget"> <Budget/> </div>
@@ -84,7 +84,8 @@
                 </th>
                 <th class="th-sm" style="color:#111;">Type
                 </th>
-                <th></th>
+                <th class="th-sm" style="color:#111;">Option
+                </th>
                 </tr>
             </thead>
 
@@ -106,6 +107,8 @@
     import {ref, onBeforeMount} from 'vue' 
     import PersonalExp from '@/components/PersonalExp.vue'
     import BudgetBar from '@/components/BudgetBar.vue';
+    import { collection, doc, getDocs, query, where} from "firebase/firestore";
+
 
     //const trip = ref(null)
     //const route = useRoute()
@@ -118,13 +121,14 @@
     //tripCode = $route.params.tripCode
     
     export default {
-    name: "Dashboard",
+    name: "PersonalPage",
     props:{
         tripCode: String,
         budget: String,
         tripName: String,
         startDate: String,
-        endDate: String
+        endDate: String,
+        tripExpenses: Array
     },
     components:{
         Navbar,
@@ -141,9 +145,51 @@
             this.name = user.Name
         }
         })
-        async function fetchAndUpdateData(){
+        
+        async function fetchAndUpdateData(tripExpenses){
+            let index = 1
+            const auth=getAuth()
+            const uid = auth.currentUser.uid
+            tripExpenses = JSON.parse(tripExpenses)
+            // const expenseArray = []
+            let allExpenses = await getDocs(collection(db, "Expense"))
+            allExpenses.forEach((expense) => {
+            let users = expense.data().Users;
+            console.log(String(expense.id))
+
+            if (users.includes(String(uid)) && tripExpenses.includes(expense.id)) {
+
+                // const name = expense.data().Name
+                console.log(expense.data().Description)
+                // expenseArray.push(expense.data())
+
+                let expenseTable = document.getElementById("fullTable")
+                let row = expenseTable.insertRow(index)
+                let cell1 = row.insertCell(0);
+                let cell2 = row.insertCell(1);
+                let cell3 = row.insertCell(2);
+                let cell4 = row.insertCell(3);
+                let cell5 = row.insertCell(4);
+                let cell6 = row.insertCell(5);
+
+                cell1.innerHTML = expense.data().Date
+                cell2.innerHTML = expense.data().Description
+                cell3.innerHTML = expense.data().Category
+                cell4.innerHTML = expense.data().Amount
+                if (users.length>1) {
+                    cell5.innerHTML = "Group"
+                } else {
+                    cell5.innerHTML = "Individual"
+                }
+                let deleteExpenseButton = document.createElement("button")
+                cell6.appendChild(deleteExpenseButton)
+                index +=1
+            }
+            })
+            
             
         }
+        fetchAndUpdateData(this.tripExpenses)
 
     }
     }
@@ -154,6 +200,43 @@
         .page {
             background-color: floralwhite;
         }
+           table {
+              width: 1000px;
+              border-collapse: collapse;
+              overflow: hidden;
+              box-shadow: 0 0 20px rgba(0,0,0,0.1);
+              border-top-right-radius: 25px;
+              border-top-left-radius: 25px;
+              border-bottom-right-radius: 25px;
+              border-bottom-left-radius: 25px;
+          }
+  
+          th,
+          td {
+              padding: 15px;
+              background-color: rgba(255,255,255,0.2);
+              color: black
+          }
+  
+          thead th {
+              background-color: #55608f;
+  
+          }
+          
+          #fullTableSection h1 {
+                  color: #111;
+                  font-family: 'Helvetica Neue', sans-serif; 
+                  font-size: 50px; 
+                  font-weight: bold; 
+                  letter-spacing: -1px; 
+                  line-height: 1; 
+                  text-align: left; 
+              }
+  
+          th {
+              text-align: center;
+              color:white;
+          }
     
     </style>
     

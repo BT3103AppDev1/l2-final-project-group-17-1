@@ -167,7 +167,7 @@
           this.selectedUsersArray.push(this.uid)
           const expenseDocRef = await addDoc(collection(db, "Expense"), {
             Description : this.description, Amount : this.amount, Category : this.category,
-            Date : isoString,
+            Date : this.date,
             // SpendingType : this.spendingType,
             Paid_By : this.uid,
             Users: this.selectedUsersArray
@@ -246,7 +246,8 @@
 
       if (auth.currentUser) { //probably true
         console.log(auth.currentUser)
-        this.uid = auth.currentUser.uid;
+        // this.uid = auth.currentUser.uid;
+        this.uid = "5CymwvZ7sORrKGB8CzkTuHfeKdJ2";
 
         this.populateTripsArray();
       }
@@ -272,9 +273,9 @@
 
 
 <style>
-  body {
+  section {
     /* WHERE */
-    background-image: url('picture/input1.jpg');
     background-color: floralwhite;
+    background-image: url('picture/input1.jpg');
   }
 </style>
