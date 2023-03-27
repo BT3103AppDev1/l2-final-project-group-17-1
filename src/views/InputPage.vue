@@ -19,17 +19,26 @@
           <div class="container">
             <div class="card shadow-2-strong" style="border-radius: 1rem; background-color: rgb(179, 214, 214);">
               <div class="card-body p-5 text-center">
+              <form ref="myForm">
 
                 <h3 class="mb-5">Add Spending</h3>
 
                 <div class="form-outline mb-4">
-                  <input type="email" id="typeEmail" class="form-control form-control-lg" v-model="description"/>
+                  <input type="text" class="form-control form-control-lg" v-model="description"/>
                   <label class="form-label" for="typeEmail">Description</label>
                 </div>
 
                 <div class="form-outline mb-4">
-                  <input type="email" id="typeEmail" class="form-control form-control-lg" v-model="amount"/>
+                  <input type="number" class="form-control form-control-lg" v-model="amount"/>
                   <label class="form-label" for="typeEmail">Amount</label>
+                </div>
+
+                <div class="form-outline mb-4" >
+                  <label>Choose a Trip:</label>
+                  <select v-model="trip">
+                    <option key="" value=""></option>
+                    <option v-for="trip in tripsArray" :key="trip" :value="trip">{{ trip.name }} [{{ trip.startDate }}]</option>
+                  </select>
                 </div>
 
                 <div class="d-flex flex-row">
@@ -46,11 +55,11 @@
                   </div>
                   <div class="form-outline mb-4" style="padding-left: 60px;">
                     <label for="date">Date: </label>
-                    <input type="date" id="datePicker" v-model="date">
+                    <input type="date" id="datePicker" v-model="date" :min="minDate" :max="maxDate">
                   </div>
                 </div>
 
-                <div class="form-outline mb-4">Spending type:
+                <div class="form-outline mb-4" v-if="isGroupTrip">Spending type:
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Individual" v-model="spendingType">
                     <label class="form-check-label" for="inlineRadio1">Individual</label>
@@ -62,36 +71,19 @@
                 </div>
 
 
-                <div class="form-outline mb-4" v-if="isGroup">
-                  <p class="mb-0">Who needs to pay?</p>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                    <label class="form-check-label" for="inlineCheckbox1">Timothy</label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
-                    <label class="form-check-label" for="inlineCheckbox2">Abby</label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3">
-                    <label class="form-check-label" for="inlineCheckbox3">Chancy</label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3">
-                    <label class="form-check-label" for="inlineCheckbox3">Zhi Qi</label>
+                <div class="form-outline mb-4" v-if="isGroupTrip && isGroup">
+                  <p class="mb-0">Who ELSE needs to pay?</p>
+                  <div v-for="user in usersArray">
+                    <div class="form-check form-check-inline" v-if="user.id!=uid">
+                      <input class="form-check-input" type="checkbox" id="inlineCheckbox1" :value="user.id" v-model="selectedUsersArray">
+                      <label class="form-check-label" for="inlineCheckbox1">{{ user.name }}</label>
+                    </div>
                   </div>
                 </div>
 
-                <div class="form-outline mb-4" >
-                  <label>Choose a Trip:</label>
-                  <select v-model="trip">
-                    <option key="" value=""></option>
-                    <option v-for="trip in tripsArray" :key="trip.id" :value="trip.id">{{ trip.name }} [{{ trip.startDate }}]</option>
-                  </select>
-                </div>
+                <button class="btn btn-lg btn-block shadow text-light" type="submit" style="background-color: #2196F3;" @click.prevent="savetofs">Save</button>
 
-                <button class="btn btn-lg btn-block shadow text-light" type="submit" style="background-color: #2196F3;" @click="savetofs">Save</button>
-
+              </form>
               </div>
             </div>
           </div>
@@ -105,19 +97,16 @@
 
 <script>
   import db from '../firebase.js';
-  import { collection, doc, getDocs, addDoc, updateDoc, arrayUnion } from "firebase/firestore";
-  import Navbar from '@/components/Navbar.vue';
+  import { collection, doc, getDoc, getDocs, addDoc, updateDoc, arrayUnion } from "firebase/firestore";
   //import Logout from '@/components/Logout.vue'
   import firebaseApp from '@/firebase.js'
   import {getAuth, onAuthStateChanged} from 'firebase/auth'
 
   export default {
     name: "InputPage",
-    components: {
-      Navbar
-    },
 
     data() {
+
       return {
           description:"",
           amount:"",
@@ -126,9 +115,34 @@
           spendingType: "Individual",
           trip:"",
           tripsArray: [],
-          usersArray: []
+          minDate: "",
+          maxDate: "",
+          usersArray:[],
+          selectedUsersArray:[],
+          isGroupTrip: false,
+          uid: "Jb9zg9JMDmUdfGFTiD5pbdEzQQ73" //auth.currentUser.id
       }
     },
+
+    watch: {
+      trip(tripObj) {
+        if (tripObj == "") {
+          this.minDate = ""
+          this.maxDate = ""
+          this.usersArray = []
+          this.isGroupTrip = false
+        } else {
+          this.minDate = tripObj.startDate
+          this.maxDate = tripObj.endDate
+          this.populateUsersArray(tripObj.usersRefArray);
+          if (tripObj.usersRefArray.length != 1) {
+            this.isGroupTrip = true
+          }
+        }
+      }
+
+    },
+
 
     computed: {
       isGroup() {
@@ -150,52 +164,107 @@
         const isoString = new Date(this.date).toISOString();
         try{
           //add expense, get expenseDocRef
+          this.selectedUsersArray.push(this.uid)
           const expenseDocRef = await addDoc(collection(db, "Expense"), {
             Description : this.description, Amount : this.amount, Category : this.category,
-            Date : isoString,
-            SpendingType : this.spendingType,
-            Users: arrayUnion(this.userid)
+            Date : this.date,
+            // SpendingType : this.spendingType,
+            Paid_By : this.uid,
+            Users: this.selectedUsersArray
           })
 
           //add expenseDocRef into array in Trip doc
-          const tripDocRef = doc(db, "Trip", this.trip);
+          const tripDocRef = doc(db, "Trip", this.trip.id);
           await updateDoc(tripDocRef, {
-            Expenses : arrayUnion(expenseDocRef.id)
+            Expenses : arrayUnion(expenseDocRef.id) //CHANGED
           });
           // document.getElementById('myform').reset();
-          // this.$emit ("added")
-
-          //add expense to Users
         }
         catch(error) {
           console.error("Error adding document: ", error);
         }
       },
 
+
       async populateTripsArray() {
-        const allTripDocuments = await getDocs(collection(db, "Trip"));
-        allTripDocuments.forEach(doc => this.tripsArray.push({
-          id: doc.id,
-          name: doc.data().Name,
-          //startDate: doc.data().Start_Date.toDate().toLocaleDateString(),
-          startDate: doc.data().Start_Date,
-        }));
+        const documentRef = await doc(db, "User", this.uid);
+        const documentSnapshot = await getDoc(documentRef);
+        // console.log(documentSnapshot.data().Trips);
+
+        const tripsRefArray = documentSnapshot.data().Trips
+        tripsRefArray.forEach(async (reference) => {
+          const documentRef = doc(db, "Trip", reference);
+          getDoc(documentRef)
+            .then((doc) => {
+              if (doc.exists()) {
+                this.tripsArray.push({
+                  id: doc.id,
+                  name: doc.data().Name,
+                  startDate: doc.data().Start_Date,
+                  endDate: doc.data().End_Date,
+                  usersRefArray: doc.data().Users}); //CHANGED
+              } else {
+                console.log("No such document!");
+              }
+            })
+            .catch((error) => {
+              console.log("Error getting document:", error);
+            });
+        });
+      },
+
+      async populateUsersArray(usersRefArray) {
+        this.usersArray = []
+        usersRefArray.forEach(async (reference) => {
+          const documentRef = doc(db, "User", reference);
+          getDoc(documentRef)
+            .then((doc) => {
+              if (doc.exists()) {
+                const documentData = {
+                  id: doc.id,
+                  name: doc.data().Name
+                };
+                this.usersArray.push(documentData)
+              } else {
+                console.log("No such document!");
+              }
+            })
+            .catch((error) => {
+              console.log("Error getting document:", error);
+            });
+        });
+      },
+
+      resetForm() {
+        this.$refs.myForm.reset();
       }
+
     },
 
     mounted() {
-     this.populateTripsArray();
-     const auth = getAuth()
-     onAuthStateChanged(auth, (user) => {
-        if (user) {
-          this.user = user
-          this.userid = user.uid
-          console.log("logged in")
-        }
-        else {
-          console.log("logged out")
-        }
-      })
+      const auth = getAuth();
+
+      if (auth.currentUser) { //probably true
+        console.log(auth.currentUser)
+        // this.uid = auth.currentUser.uid;
+        this.uid = "5CymwvZ7sORrKGB8CzkTuHfeKdJ2";
+
+        this.populateTripsArray();
+      }
+
+    //  this.populateTripsArray();
+    //  const auth = getAuth()
+    //  onAuthStateChanged(auth, (user) => {
+    //     if (user) {
+    //       this.user = user
+    //       this.userid = user.uid
+    //       console.log("logged in")
+    //     }
+    //     else {
+    //       console.log("logged out")
+    //     }
+    //
+    //   })
     }
   }
 
@@ -204,9 +273,9 @@
 
 
 <style>
-  body {
+  section {
     /* WHERE */
-    background-image: url('picture/input1.jpg');
     background-color: floralwhite;
+    background-image: url('picture/input1.jpg');
   }
 </style>
