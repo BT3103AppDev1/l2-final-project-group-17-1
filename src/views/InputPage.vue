@@ -161,7 +161,7 @@
         }
 
         alert("Saving your data for Spending")
-        const isoString = new Date(this.date).toISOString();
+        // const isoString = new Date(this.date).toISOString();
         try{
           //add expense, get expenseDocRef
           this.selectedUsersArray.push(this.uid)
