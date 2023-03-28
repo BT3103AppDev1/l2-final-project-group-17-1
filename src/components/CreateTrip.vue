@@ -120,9 +120,11 @@ export default {
             })
             //document.getElementById("createtripform").reset();
             // this.$emit("added");
+            alert("Creating trip ", this.tripName)
+
           }
           catch(error) {
-            console.error("Error adding document: ", error);
+            console.error("Error creating trip: ", error);
           }
         }
       },

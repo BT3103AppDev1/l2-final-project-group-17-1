@@ -72,9 +72,11 @@ export default {
                 const tripRef = await updateDoc(collection(db, "Trip", this.tripCode), {
                     Users: arrayUnion(this.userid)
                 }) 
+                alert("Joining trip ", this.tripCode)
+
             }
             catch(error) {
-                console.error("Error adding document: ", error);
+                console.error("Error joining trip: ", error);
             } 
         }
     }
