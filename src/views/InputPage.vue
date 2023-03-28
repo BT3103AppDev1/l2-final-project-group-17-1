@@ -120,7 +120,7 @@
           usersArray:[],
           selectedUsersArray:[],
           isGroupTrip: false,
-          uid: "Jb9zg9JMDmUdfGFTiD5pbdEzQQ73" //auth.currentUser.id
+          uid: "",
       }
     },
 
@@ -183,15 +183,23 @@
         catch(error) {
           console.error("Error adding document: ", error);
         }
+
+        this.clearForm()
       },
 
 
       async populateTripsArray() {
         const documentRef = await doc(db, "User", this.uid);
         const documentSnapshot = await getDoc(documentRef);
-        // console.log(documentSnapshot.data().Trips);
 
-        const tripsRefArray = documentSnapshot.data().Trips
+        const tripsObjArray = documentSnapshot.data().Trips
+
+        //extract the Trip_Code from the array of objects
+        const tripsRefArray = tripsObjArray.map((tripObj) => {
+          return tripObj.Trip_Code
+        })
+
+
         tripsRefArray.forEach(async (reference) => {
           const documentRef = doc(db, "Trip", reference);
           getDoc(documentRef)
@@ -235,22 +243,44 @@
         });
       },
 
-      resetForm() {
-        this.$refs.myForm.reset();
+      clearForm() {
+        this.description = "";
+        this.amount = "";
+        this.category = "";
+        this.date = new Date().toISOString().substr(0, 10);
+        this.spendingType = "Individual";
+        this.trip = "";
+        // this.tripsArray = [];
+        this.minDate = "";
+        this.maxDate = "";
+        // this.usersArray = [];
+        this.selectedUsersArray = [];
+        this.isGroupTrip = false;
+        // this.uid = "";
       }
 
     },
 
     mounted() {
-      const auth = getAuth();
+      const auth = getAuth()
+          onAuthStateChanged(auth, (user) => {
+              if (user) {
+                this.uid = user.uid;
+                console.log(this.uid)
+                this.populateTripsArray();
+              }
+              else {
+                console.log("logged out")
+              }
+          })
 
-      if (auth.currentUser) { //probably true
-        console.log(auth.currentUser)
-        // this.uid = auth.currentUser.uid;
-        this.uid = "5CymwvZ7sORrKGB8CzkTuHfeKdJ2";
+      // if (auth.currentUser) { //probably true
+      //   console.log(auth.currentUser)
+      //   this.uid = auth.currentUser.uid;
+      //   // this.uid = "5CymwvZ7sORrKGB8CzkTuHfeKdJ2";
 
-        this.populateTripsArray();
-      }
+      //   this.populateTripsArray();
+      // }
 
     //  this.populateTripsArray();
     //  const auth = getAuth()

@@ -32,21 +32,27 @@
                 signInFlow: 'redirect',
                 callbacks: {
                     signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-                        const email = authResult.user.email;
-                        const uid = authResult.user.uid
-                        const name = authResult.user.displayName
-                        //console.log(String(email))
-                        // setUser(email, uid).then(()=>{
-                        //     console.log("user created")
-                        // })
-                        setUser(email, uid, name)
-                            .then(() => {
-                                // console.log("success")
-                                window.location.href = "/InputPage"
-                            })
-                            .catch(error => {
-                                console.error("error adding user data to database", error)
-                            });
+                        const isNewUser = authResult.additionalUserInfo.isNewUser;
+                        if (isNewUser) {
+                          console.log("New user signed up!");
+
+                          const email = authResult.user.email;
+                          const uid = authResult.user.uid
+                          const name = authResult.user.displayName
+                          //console.log(String(email))
+                          // setUser(email, uid).then(()=>{
+                          //     console.log("user created")
+                          // })
+                          setUser(email, uid, name)
+                              .then(() => {
+                                  // console.log("success")
+                                  window.location.href = "/InputPage"
+                              })
+                              .catch(error => {
+                                  console.error("error adding user data to database", error)
+                              });
+                          return false;
+                        }
                         return true;
                     },
                 },
