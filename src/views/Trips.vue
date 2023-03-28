@@ -1,6 +1,6 @@
 <template>
 <div class = "page">
-  <TripsTable/>
+  <TripsTable />
   <div class = "container">
     <div id = "create"> <CreateTrip/> </div>
     <div id = "join"><JoinTrip/> </div>
@@ -18,6 +18,11 @@ import {getAuth, onAuthStateChanged} from 'firebase/auth'
 
 export default {
   name: "Trip",
+
+  data() {
+    return {
+    }
+  },
   components:{
     Navbar,
     TripsTable,

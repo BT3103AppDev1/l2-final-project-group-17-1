@@ -94,18 +94,20 @@
 <script>
 
     import db from '../firebase.js';
-    import { collection, doc, getDocs, addDoc, updateDoc, arrayUnion, Timestamp, deleteDoc, getFirestore, onSnapshot} from "firebase/firestore";
+    import { collection, doc, getDocs, getDoc, addDoc, updateDoc, arrayUnion, Timestamp, deleteDoc, getFirestore, onSnapshot} from "firebase/firestore";
     //import Navbar from '@/components/Navbar.vue';
     // const db = getFirestore(app);
     //import CreateTrip from '@/components/CreateTrip.vue';
     import router from "../router"
+    import {getAuth, onAuthStateChanged} from 'firebase/auth'
 
     export default {
         name: 'Trips',
-        components: {
-          
+        data() {
+          return {
+            userid : ""
+          }  
         },
-
         computed: {
           haveTrips() {
             const collectionRef = getDocs(collection(db, "Trip"));
@@ -113,129 +115,160 @@
           }
         }, 
         mounted() {
-          async function displayTrips(){
-            let allTrips = await getDocs(collection(db, "Trip"))
-            let allUsers = await getDocs(collection(db, "User"))
-            let index = 1
-            allTrips.forEach((doc) => {
-              let tripData = doc.data()
-              let tripName = tripData.Name
-              let startDate = tripData.Start_Date
-              let endDate = tripData.End_Date
-              let budget = tripData.Budget
-              let people = tripData.Users //array
-              let currency = tripData.Currency
-              let tripCode = doc.id
-              let tripExpenses = tripData.Expenses
-              // console.log(typeof tripData)
-              // let tripCode =
-
-              // let tripCode = tripData.Trip_Code
-              const namesArray = [];
-              // const users = getDocs(collection(db, "User"))
-              allUsers.forEach((doc) => {
-                let userid = doc.id;
-                if (people.includes(userid)) {
-                  const name = doc.data().Name
-                  namesArray.push(name)
-                }
-              })
-
-              let tripsTable = document.getElementById("fullTable")
-              let row = tripsTable.insertRow(index)
-
-              let cell1 = row.insertCell(0);
-              let cell2 = row.insertCell(1);
-              let cell3 = row.insertCell(2);
-              let cell4 = row.insertCell(3);
-              let cell5 = row.insertCell(4);
-              let cell6 = row.insertCell(5);
-              let cell7 = row.insertCell(6);
-              let cell8 = row.insertCell(7);
-              let cell9 = row.insertCell(8);
-
-              cell2.innerHTML = startDate + " - "+ endDate ;
-              cell3.innerHTML = namesArray; //people;
-              cell4.innerHTML = currency;
-              cell5.innerHTML = 0;
-              cell6.innerHTML = 0;
-              cell7.innerHTML = budget;
-              cell8.innerHTML = tripCode;
-
-
-              let tripButton = document.createElement("button")
-              // tripButton.id  = String(tripName)
-              tripButton.className= "bwt"
-              tripButton.innerHTML = tripName
-              tripButton.onclick = function() {
-                try { 
-                  router.push({name:'PersonalPage', params:{
-                    tripCode:tripCode, 
-                    budget:budget,
-                    tripName:tripName,
-                    startDate:startDate,
-                    endDate:endDate,
-                    tripExpenses: JSON.stringify(tripExpenses)
-                    }})
-                  //showTrip(tripCode)
-                } catch(e) {
-                  console.error(e.message)
-                }
+          const auth = getAuth()
+          onAuthStateChanged(auth, (user) => {
+              if (user) {
+                this.user = user
+                this.userid = user.uid
+                console.log("logged in")
               }
-              cell1.appendChild(tripButton)
-
-
-              let deleteTripButton = document.createElement("button")
-              deleteTripButton.id = String(tripName) 
-              deleteTripButton.className = "bwt"
-              deleteTripButton.innerHTML = "Leave"
-
-              cell9.appendChild(deleteTripButton)
-              deleteTripButton.onclick = function() {
-                try {
-                  //deleteTrip(tripName)
-                  deleteTrip(tripCode)
-                } catch(e) {
-                  console.error(e.message)
-                }
+              else {
+                console.log("logged out")
               }
-              index +=1
-            }
-            )
-            // const rows = document.querySelectorAll("table td");
-            // rows.forEach(cell => cell.classList.add("scroll"));
-          }
-          displayTrips()
-
-          async function deleteTrip(tripCode){
-            alert("You are going to delete " + tripCode)
-
-
-              await deleteDoc(doc(db, "Trip", tripCode))
-              // await db.collection("Trip").doc(tripNme).delete()
-
-            console.log("Trip successfully deleted!", tripCode)
-            let tb = document.getElementById("fullTable")
-            for (var i = 0; i < tb.rows.length; i++) {
-              var row = tb.rows[i];
-              var value = row.cells[7].innerHTML;
-              if (value == tripCode) {
-                tb.deleteRow(i);
-              }
-            }
-            // while (tb.rows.length>1){
-            //   //tb.deleteRow(1)
-            // }
-            //displayTrips()
-          }
+          })
+          this.displayTrips()
           //async function showTrip(tc) {
           //    this.$router.push({name: 'PersonalPage', params:{tripCode: tc}});
           //    console.log("TRIPCODE", tripCode)
           //}
+        },
+        methods: {
+            async displayTrips() {
+              let allTrips = await getDocs(collection(db, "Trip"))
+              let allUsers = await getDocs(collection(db, "User"))
+              const userRef = doc(db, 'User', this.userid);
+              let tripsArray = [];
+              await getDoc(userRef)
+                .then((doc) => {
+                  if (doc.exists()) {
+                    console.log(doc.data())
+                    doc.data().Trips.forEach(trip => {
+                      tripsArray.push(trip.Trip_Code) //tripcode
+                      tripsArray.push(trip)
+                    })
+                  } else {
+                    console.log('no such user');
+                  }
+                })
+                .catch((error) => {
+                  console.log('Error getting document:', error);
+                });
+              // let currUser = await getDoc(doc(db, "User", this.userid))
+         
+              let index = 1
+              allTrips.forEach((doc) => {
+                let tripCode = doc.id
+                if (tripsArray.includes(tripCode)) {
+                  let tripData = doc.data()
+                  let tripName = tripData.Name
+                  let startDate = tripData.Start_Date
+                  let endDate = tripData.End_Date
+                  let budget = tripData.Budget
+                  let people = tripData.Users //array
+                  let currency = tripData.Currency
+                  let tripExpenses = tripData.Expenses
+                  // console.log(typeof tripData)
+                  // let tripCode =
+
+                  // let tripCode = tripData.Trip_Code
+                  const namesArray = [];
+                  // const users = getDocs(collection(db, "User"))
+                  allUsers.forEach((doc) => {
+                    let userid = doc.id;
+                    if (people.includes(userid)) {
+                      const name = doc.data().Name
+                      namesArray.push(name)
+                    }
+                  })
+
+                  let tripsTable = document.getElementById("fullTable")
+                  let row = tripsTable.insertRow(index)
+
+                  let cell1 = row.insertCell(0);
+                  let cell2 = row.insertCell(1);
+                  let cell3 = row.insertCell(2);
+                  let cell4 = row.insertCell(3);
+                  let cell5 = row.insertCell(4);
+                  let cell6 = row.insertCell(5);
+                  let cell7 = row.insertCell(6);
+                  let cell8 = row.insertCell(7);
+                  let cell9 = row.insertCell(8);
+
+                  cell2.innerHTML = startDate + " - "+ endDate ;
+                  cell3.innerHTML = namesArray; //people;
+                  cell4.innerHTML = currency;
+                  cell5.innerHTML = 0;
+                  cell6.innerHTML = 0;
+                  cell7.innerHTML = budget;
+                  cell8.innerHTML = tripCode;
 
 
-          }
+                  let tripButton = document.createElement("button")
+                  // tripButton.id  = String(tripName)
+                  tripButton.className= "bwt"
+                  tripButton.innerHTML = tripName
+                  tripButton.onclick = function() {
+                    try { 
+                      router.push({name:'PersonalPage', params:{
+                        tripCode:tripCode, 
+                        budget:budget,
+                        tripName:tripName,
+                        startDate:startDate,
+                        endDate:endDate,
+                        tripExpenses: JSON.stringify(tripExpenses)
+                        }})
+                      //showTrip(tripCode)
+                    } catch(e) {
+                      console.error(e.message)
+                    }
+                  }
+                  cell1.appendChild(tripButton)
+
+
+                  let deleteTripButton = document.createElement("button")
+                  deleteTripButton.id = String(tripName) 
+                  deleteTripButton.className = "bwt"
+                  deleteTripButton.innerHTML = "Leave"
+
+                  cell9.appendChild(deleteTripButton)
+                  deleteTripButton.onclick = function() {
+                    try {
+                      //deleteTrip(tripName)
+                      deleteTrip(tripCode)
+                    } catch(e) {
+                      console.error(e.message)
+                    }
+                  }
+                  index +=1
+                }
+            })  
+              // const rows = document.querySelectorAll("table td");
+              // rows.forEach(cell => cell.classList.add("scroll"));
+            },
+            async deleteTrip(tripCode){
+              alert("You are going to delete " + tripCode)
+
+
+                await deleteDoc(doc(db, "Trip", tripCode))
+                // await db.collection("Trip").doc(tripNme).delete()
+
+              console.log("Trip successfully deleted!", tripCode)
+              let tb = document.getElementById("fullTable")
+              for (var i = 0; i < tb.rows.length; i++) {
+                var row = tb.rows[i];
+                var value = row.cells[7].innerHTML;
+                if (value == tripCode) {
+                  tb.deleteRow(i);
+                }
+              }
+              // while (tb.rows.length>1){
+              //   //tb.deleteRow(1)
+              // }
+              //displayTrips()
+            },
+        }
     }
+    
 </script>
 
 <style scoped>
