@@ -39,47 +39,6 @@
     import { collection, doc, getDocs, addDoc, updateDoc, arrayUnion, Timestamp, deleteDoc, getFirestore } from "firebase/firestore";
     import {getAuth, onAuthStateChanged} from 'firebase/auth'
 
-<<<<<<< HEAD
-export default {
-    name: 'JoinTrip',
-    components: {},
-    data() {
-        return {
-          tripCode: "",
-          budget: "",
-        }
-    },
-
-    mounted() {
-        const auth = getAuth()
-        onAuthStateChanged(auth, (user) => {
-          if (user) {
-            this.user = user
-            this.useremail = auth.currentUser.email
-            this.userid = user.uid
-            this.name = user.Name
-          }
-        })
-    },
-
-    methods: {
-        async joinTrip() {
-            console.log(this.tripCode);
-            console.log(this.userid)
-            try {
-                const userRef = await updateDoc(collection(db, "User", this.userid), {
-                    Trips: arrayUnion(this.tripCode)
-                })
-                const tripRef = await updateDoc(collection(db, "Trip", this.tripCode), {
-                    Users: arrayUnion(this.userid)
-                }) 
-                alert("Joining trip ", this.tripCode)
-
-            }
-            catch(error) {
-                console.error("Error joining trip: ", error);
-            } 
-=======
     export default {
         name: 'JoinTrip',
         components: {},
@@ -120,7 +79,6 @@ export default {
                     console.error("Error adding document: ", error);
                 } 
             }
->>>>>>> 0af071db671772a65baa763d92bbc49cafc931a9
         }
     }
 </script>
