@@ -94,28 +94,14 @@
     </section>
     <section class="p-5" id="totalSumTable">
         <div class = "container" style="background-color: floralwhite;">
-        <table class="table table-bordered" style="background-color: white;">
+        <table id="dayExpenseTable" class="table table-bordered" style="background-color: white;">
             <thead style="background-color: rgb(156, 201, 215); font-family:Arial, Helvetica, sans-serif;">
             <tr>
                 <th scope="col" style="color:black">Day</th>
                 <th scope="col" style="color:black">Total Spent For Each Day</th>
             </tr>
             </thead>
-            <tbody class="text-center">
-            <tr>
-                <td>1</td>
-                <td>$100</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>$200</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>$300</td>
-            
-            </tr>
-            </tbody>
+           
         </table>
         </div>
     </section>
@@ -184,20 +170,32 @@
     },
     data () {
         return {
+            // categoryDict:{},
            pieChartData: {
-            "Shopping": 100,
-            "Food": 70,
-            "Leisure": 30,
-            "Travel": 300,
-            "Accomodation":700,
+            "Shopping": 0,
+            "Food": 0,
+            "Leisure": 0,
+            "Travel": 0,
+            "Accomodation":0,
            },
            barChartData: {
 
            }
         }
     },
+    methods: { 
+        updatePieChart: function(categoryDict) {
+            this.pieChartData = {
+                "Shopping": categoryDict["Shopping"],
+                "Food": categoryDict["Food"],
+                "Leisure": categoryDict["Leisure"],
+                "Travel": categoryDict["Travel"],
+                "Accomodation": categoryDict["Accomodation"]
+            }
+        }
+    },
 
-    mounted() {
+    async mounted() {
         const auth = getAuth()
         onAuthStateChanged(auth, (user) => {
         if (user) {
@@ -209,19 +207,28 @@
         
         async function fetchAndUpdateData(tripExpenses, budget){
             let index = 1
+            let index2 = 1
             const auth=getAuth()
             const uid = auth.currentUser.uid
             tripExpenses = JSON.parse(tripExpenses)
-            // const expenseArray = []
+            
             var totalCost = 0
+            var spendingPerDayDict = {}
+            var categoryDict = {
+                "Shopping":0,
+                "Food": 0,
+                "Leisure":0,
+                "Travel":0,
+                "Accomodation":0
+            }
+
             let allExpenses = await getDocs(collection(db, "Expense"))
             allExpenses.forEach((expense) => {
             let users = expense.data().Users;
-            console.log(String(expense.id))
-            
+            // console.log(String(expense.id))
+
 
             if (users.includes(String(uid)) && tripExpenses.includes(expense.id)) {
-                var spendingPerDayArray = []
                 // const name = expense.data().Name
                 console.log(expense.data().Description)
                 // expenseArray.push(expense.data())
@@ -234,11 +241,28 @@
                 let cell5 = row.insertCell(4);
                 let cell6 = row.insertCell(5);
 
-                cell1.innerHTML = expense.data().Date
+            
+                var date = expense.data().Date
+                var amount = expense.data().Amount
+                var cat = expense.data().Category
+                cell1.innerHTML = date
                 cell2.innerHTML = expense.data().Description
-                cell3.innerHTML = expense.data().Category
-                cell4.innerHTML = expense.data().Amount
-                totalCost += Number(expense.data().Amount)
+                cell3.innerHTML = cat
+                cell4.innerHTML = amount
+
+                totalCost += Number(amount)
+
+                console.log(date) 
+                console.log(amount)
+                //data for spending per day table
+                if (date in spendingPerDayDict===false) {
+                    spendingPerDayDict[date] = amount
+                } else {
+                    spendingPerDayDict[date] += amount
+                }
+
+                categoryDict[cat] += amount
+               
 
                 if (users.length>1) {
                     cell5.innerHTML = "Group"
@@ -252,16 +276,44 @@
             })
             var waterTankNum = totalCost/budget * 100
             var waterTank = document.getElementById("waterTank")
-            console.log('TOTALCOST', totalCost)
-            console.log(waterTankNum)
+            // console.log('TOTALCOST', totalCost)
+            // console.log(waterTankNum)
+            for (var day in spendingPerDayDict) {
+                var dayExpense = spendingPerDayDict[day]
+                let dayExpenseTable = document.getElementById("dayExpenseTable")
+                let dayRow = dayExpenseTable.insertRow(index2)
+                let dayCell1 = dayRow.insertCell(0);
+                let dayCell2 = dayRow.insertCell(1);
+                dayCell1.innerHTML = day
+                dayCell2.innerHTML = dayExpense
+                index2 += 1
+            }
+
+            // for (var cat in categoryDict) {
+            //     var catExpense = categoryDict[cat]
+            //     this.pieChartData = {
+            //         cat:catExpense
+            //     }
+            // }
+            // this.categoryDict = categoryDict
+            console.log(categoryDict)
+
+            // this.pieChartData = {
+            //     "Shopping": categoryDict["Shopping"],
+            //     "Food": categoryDict["Food"],
+            //     "Leisure": categoryDict["Leisure"],
+            //     "Travel": categoryDict["Travel"],
+            //     "Accomodation": categoryDict["Accomodation"]
+            // }
+
             waterTank.style.width = waterTankNum + "%"
             waterTank.innerHTML = Math.ceil(waterTankNum) + "%"
-            
-        }
+            await this.updatePieChart(categoryDict)
+        }  
+        // this.updatePieChart(this.categoryDict)
         fetchAndUpdateData(this.tripExpenses, this.budget)
-
-    }
-    }
+    } 
+    } 
 </script> 
     
     <style scoped>

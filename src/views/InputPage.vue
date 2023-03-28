@@ -262,30 +262,6 @@
     },
 
     mounted() {
-<<<<<<< HEAD
-      // const auth = getAuth();
-      // if (auth.currentUser) { //probably true
-      //   console.log(auth.currentUser)
-      //   // this.uid = auth.currentUser.uid;
-      //   this.uid = "5CymwvZ7sORrKGB8CzkTuHfeKdJ2";
-
-      //   this.populateTripsArray();
-      // }
-
-     this.populateTripsArray();
-     const auth = getAuth()
-     onAuthStateChanged(auth, (user) => {
-        if (user) {
-          this.user = user
-          this.userid = user.uid
-          console.log("logged in")
-        }
-        else {
-          console.log("logged out")
-        }
-    
-      })
-=======
       const auth = getAuth()
           onAuthStateChanged(auth, (user) => {
               if (user) {
@@ -319,7 +295,6 @@
     //     }
     //
     //   })
->>>>>>> 18c2559923d5f594368501cc494369ac3a3f23a9
     }
   }
 
