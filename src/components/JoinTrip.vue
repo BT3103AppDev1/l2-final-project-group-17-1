@@ -36,7 +36,7 @@
 
 <script>
     import db from '../firebase.js';
-    import { collection, doc, getDocs, addDoc, updateDoc, arrayUnion, Timestamp, deleteDoc, getFirestore } from "firebase/firestore";
+    import { collection, doc, getDocs, addDoc, getDoc, updateDoc, arrayUnion, Timestamp, deleteDoc, getFirestore } from "firebase/firestore";
     import {getAuth, onAuthStateChanged} from 'firebase/auth'
 
     export default {
@@ -65,19 +65,40 @@
             async joinTrip() {
                 console.log(this.tripCode);
                 console.log(this.userid)
-                try {
-                    const userRef = await updateDoc(doc(db, "User", this.userid), {
-                        Trips: arrayUnion({
-                            Trip_Code: this.tripCode,
-                            Budget: this.budget})
-                    })
-                    const tripRef = await updateDoc(doc(db, "Trip", this.tripCode), {
-                        Users: arrayUnion(this.userid)
-                    }) 
+                
+                let tripsArray = []
+                const userRef = doc(db, 'User', this.userid);
+                
+                await getDoc(userRef).then((doc) => {
+                    if (doc.exists()) {
+                        doc.data().Trips.forEach(trip => {
+                            tripsArray.push(trip.Trip_Code) //tripcode
+                        })
+                    }
+                })
+                if (!tripsArray.includes(this.tripCode)) {
+                    try {
+                        const userRef = await updateDoc(doc(db, "User", this.userid), {
+                            Trips: arrayUnion({
+                                Trip_Code: this.tripCode,
+                                Budget: this.budget})
+                        })
+                        const tripRef = await updateDoc(doc(db, "Trip", this.tripCode), {
+                            Users: arrayUnion(this.userid)
+                        }) 
+                        Promise.all([userRef, tripRef]).then(() => {
+                            this.tripCode = '';
+                            this.budget = '';
+                        })
+                    }
+                    catch(error) {
+                        console.error("Error adding document: ", error);
+                    } 
+                } else {
+                    alert("Already joined trip! ");
+                    this.tripCode = '';
+                    this.budget = '';
                 }
-                catch(error) {
-                    console.error("Error adding document: ", error);
-                } 
             }
         }
     }
