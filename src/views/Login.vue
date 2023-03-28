@@ -3,7 +3,7 @@
     <h2 style="align-items: center;">Login Here</h2>
     <div id = "firebaseui-auth-container" @submit.prevent="setUser"></div>
  </template>
- 
+
  <script>
  import db from '../firebase.js';
  import firebaseApp from '@/firebase.js'
@@ -18,9 +18,9 @@
      export default {
          name: 'LogIn',
          components: {
-             
+
          },
-         
+
          mounted() {
             var ui = firebaseui.auth.AuthUI.getInstance();
             if (!ui) {
@@ -32,29 +32,35 @@
                 signInFlow: 'redirect',
                 callbacks: {
                     signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-                        const email = authResult.user.email;
-                        const uid = authResult.user.uid
-                        const name = authResult.user.displayName
-                        //console.log(String(email))
-                        // setUser(email, uid).then(()=>{
-                        //     console.log("user created")
-                        // })
-                        setUser(email, uid, name)
-                            .then(() => {
-                                // console.log("success")
-                                window.location.href = "/InputPage"
-                            })
-                            .catch(error => {
-                                console.error("error adding user data to database", error)
-                            });
-                        return false;
-                    },  
+                        const isNewUser = authResult.additionalUserInfo.isNewUser;
+                        if (isNewUser) {
+                          console.log("New user signed up!");
+
+                          const email = authResult.user.email;
+                          const uid = authResult.user.uid
+                          const name = authResult.user.displayName
+                          //console.log(String(email))
+                          // setUser(email, uid).then(()=>{
+                          //     console.log("user created")
+                          // })
+                          setUser(email, uid, name)
+                              .then(() => {
+                                  // console.log("success")
+                                  window.location.href = "/InputPage"
+                              })
+                              .catch(error => {
+                                  console.error("error adding user data to database", error)
+                              });
+                          return false;
+                        }
+                        return true;
+                    },
                 },
                 signInOptions: [
-                    firebase.auth.GoogleAuthProvider.PROVIDER_ID, 
+                    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
                     firebase.auth.EmailAuthProvider.PROVIDER_ID,
                 ],
-            
+
                 // tosUrl: '/tos',
                 // privacyPolicyUrl: function() {
                 //     window.location.assign('/pp');
@@ -63,7 +69,7 @@
 
             ui.start("#firebaseui-auth-container", uiConfig)
          },
-    
+
         //   async createUser(){
         //     try {
         //         const docRef = await addDoc(collection(db, "User", String(this.useremail)), {
@@ -95,9 +101,7 @@
         }
     }
  </script>
- 
+
  <style scoped>
-    
+
  </style>
- 
- 

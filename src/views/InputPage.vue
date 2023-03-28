@@ -120,7 +120,7 @@
           usersArray:[],
           selectedUsersArray:[],
           isGroupTrip: false,
-          uid: "Jb9zg9JMDmUdfGFTiD5pbdEzQQ73" //auth.currentUser.id
+          uid: "",
       }
     },
 
@@ -161,7 +161,7 @@
         }
 
         alert("Saving your data for Spending")
-        const isoString = new Date(this.date).toISOString();
+        // const isoString = new Date(this.date).toISOString();
         try{
           //add expense, get expenseDocRef
           this.selectedUsersArray.push(this.uid)
@@ -183,15 +183,23 @@
         catch(error) {
           console.error("Error adding document: ", error);
         }
+
+        this.clearForm()
       },
 
 
       async populateTripsArray() {
         const documentRef = await doc(db, "User", this.uid);
         const documentSnapshot = await getDoc(documentRef);
-        // console.log(documentSnapshot.data().Trips);
 
-        const tripsRefArray = documentSnapshot.data().Trips
+        const tripsObjArray = documentSnapshot.data().Trips
+
+        //extract the Trip_Code from the array of objects
+        const tripsRefArray = tripsObjArray.map((tripObj) => {
+          return tripObj.Trip_Code
+        })
+
+
         tripsRefArray.forEach(async (reference) => {
           const documentRef = doc(db, "Trip", reference);
           getDoc(documentRef)
@@ -235,13 +243,26 @@
         });
       },
 
-      resetForm() {
-        this.$refs.myForm.reset();
+      clearForm() {
+        this.description = "";
+        this.amount = "";
+        this.category = "";
+        this.date = new Date().toISOString().substr(0, 10);
+        this.spendingType = "Individual";
+        this.trip = "";
+        // this.tripsArray = [];
+        this.minDate = "";
+        this.maxDate = "";
+        // this.usersArray = [];
+        this.selectedUsersArray = [];
+        this.isGroupTrip = false;
+        // this.uid = "";
       }
 
     },
 
     mounted() {
+<<<<<<< HEAD
       // const auth = getAuth();
       // if (auth.currentUser) { //probably true
       //   console.log(auth.currentUser)
@@ -264,6 +285,41 @@
         }
     
       })
+=======
+      const auth = getAuth()
+          onAuthStateChanged(auth, (user) => {
+              if (user) {
+                this.uid = user.uid;
+                console.log(this.uid)
+                this.populateTripsArray();
+              }
+              else {
+                console.log("logged out")
+              }
+          })
+
+      // if (auth.currentUser) { //probably true
+      //   console.log(auth.currentUser)
+      //   this.uid = auth.currentUser.uid;
+      //   // this.uid = "5CymwvZ7sORrKGB8CzkTuHfeKdJ2";
+
+      //   this.populateTripsArray();
+      // }
+
+    //  this.populateTripsArray();
+    //  const auth = getAuth()
+    //  onAuthStateChanged(auth, (user) => {
+    //     if (user) {
+    //       this.user = user
+    //       this.userid = user.uid
+    //       console.log("logged in")
+    //     }
+    //     else {
+    //       console.log("logged out")
+    //     }
+    //
+    //   })
+>>>>>>> 18c2559923d5f594368501cc494369ac3a3f23a9
     }
   }
 
