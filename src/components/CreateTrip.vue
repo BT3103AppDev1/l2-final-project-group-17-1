@@ -14,7 +14,7 @@
         <div class="container">
           <div class="card shadow-2-strong" style="border-radius: 1rem; background-color: rgb(179, 214, 214);">
             <div class="card-body p-4 text-center">
-
+              <form>
               <div class="form-outline mb-4">
                 <input type="email" id="typeEmail" class="form-control form-control-lg" v-model = "tripName"/>
                 <label class="form-label" for="typeEmail">Trip Name</label>
@@ -42,7 +42,7 @@
                 <input type="date" id="enddate" name="date" v-model = "endDate">
               </div>
               <button class="btn btn-lg btn-block shadow text-light" type="submit" v-on:click="createTrip" style="background-color: #3d6d9e;">Save</button>
-
+            </form>
             </div>
           </div>
         </div>
@@ -119,6 +119,12 @@ export default {
             const userDocRef = await updateDoc(doc(db, "User", this.userid), {
               Trips: arrayUnion({Trip_Code: docRef.id,
                 Budget: this.budget})
+            }).then(() => {
+              this.tripName ='';
+              this.budget = '';
+              this.currency = '';
+              this.startDate = '';
+              this.endDate = '';
             })
             //document.getElementById("createtripform").reset();
             // this.$emit("added");
@@ -128,7 +134,7 @@ export default {
           catch(error) {
             console.error("Error creating trip: ", error);
           }
-        }
+        },
       },
 }
 </script>

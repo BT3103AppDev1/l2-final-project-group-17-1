@@ -54,7 +54,7 @@
             </th>
             <th class="th-sm">Your Budget
             </th>
-            <th class="th-sm">Trip Code
+            <th id = "tripcode">Trip Code
             </th>
             <th>Options</th>
             </tr>
@@ -101,6 +101,7 @@
     import router from "../router"
     import {getAuth, onAuthStateChanged} from 'firebase/auth'
 
+
     export default {
         name: 'Trips',
         data() {
@@ -136,15 +137,17 @@
             async displayTrips() {
               let allTrips = await getDocs(collection(db, "Trip"))
               let allUsers = await getDocs(collection(db, "User"))
+              let allExpenses = await getDocs(collection(db, "Expense"))
               const userRef = doc(db, 'User', this.userid);
               let tripsArray = [];
+              let budgetArray = [];
               await getDoc(userRef)
                 .then((doc) => {
                   if (doc.exists()) {
                     console.log(doc.data())
                     doc.data().Trips.forEach(trip => {
                       tripsArray.push(trip.Trip_Code) //tripcode
-                      tripsArray.push(trip)
+                      budgetArray.push(trip.Budget);
                     })
                   } else {
                     console.log('no such user');
@@ -154,94 +157,243 @@
                   console.log('Error getting document:', error);
                 });
               // let currUser = await getDoc(doc(db, "User", this.userid))
-         
-              let index = 1
-              allTrips.forEach((doc) => {
-                let tripCode = doc.id
-                if (tripsArray.includes(tripCode)) {
-                  let tripData = doc.data()
-                  let tripName = tripData.Name
-                  let startDate = tripData.Start_Date
-                  let endDate = tripData.End_Date
-                  let budget = tripData.Budget
-                  let people = tripData.Users //array
-                  let currency = tripData.Currency
-                  let tripExpenses = tripData.Expenses
-                  // console.log(typeof tripData)
-                  // let tripCode =
 
-                  // let tripCode = tripData.Trip_Code
-                  const namesArray = [];
-                  // const users = getDocs(collection(db, "User"))
-                  allUsers.forEach((doc) => {
-                    let userid = doc.id;
-                    if (people.includes(userid)) {
-                      const name = doc.data().Name
-                      namesArray.push(name)
+              Promise.all([allTrips, allUsers, allExpenses]).then(results => {
+                let index = 1
+                allTrips.forEach((doc) => {
+                  let tripCode = doc.id
+                  if (tripsArray.includes(tripCode)) {
+                    let tripData = doc.data()
+                    let tripName = tripData.Name
+                    let startDate = tripData.Start_Date
+                    let endDate = tripData.End_Date
+                    let budget = budgetArray[tripsArray.indexOf(tripCode)]
+                    let people = tripData.Users //array
+                    let currency = tripData.Currency
+                    let tripExpenses = tripData.Expenses
+                    // console.log(typeof tripData)
+                    // let tripCode =
+
+                    // let tripCode = tripData.Trip_Code
+                    const namesArray = [];
+
+                    // people.forEach(user => {
+                    //   let ref = doc(db, 'User', user);
+                    //   getDoc(ref)
+                    //     .then((doc) => { 
+                    //       let name = doc.data().Name;
+                    //       namesArray.push(name)
+                    //     })
+                    // })
+                    //const users = getDocs(collection(db, "User"))
+                    allUsers.forEach((doc) => {
+                      let userid = doc.id;
+                      if (people.includes(userid)) {
+                        const name = doc.data().Name
+                        namesArray.push(name)
+                      }
+                    })
+
+                    let tripsTable = document.getElementById("fullTable")
+                    let row = tripsTable.insertRow(index)
+
+                    let cell1 = row.insertCell(0);
+                    let cell2 = row.insertCell(1);
+                    let cell3 = row.insertCell(2);
+                    let cell4 = row.insertCell(3);
+                    let cell5 = row.insertCell(4);
+                    let cell6 = row.insertCell(5);
+                    let cell7 = row.insertCell(6);
+                    let cell8 = row.insertCell(7);
+                    let cell9 = row.insertCell(8);
+
+
+                    let totalexp = 0;
+                    let netowe = 0;
+                    // tripExpenses.forEach(async (expense) => {
+                    //   const ref = doc(db, 'Expense', expense);
+                    //   getDoc(ref)
+                    //     .then((doc) => {
+                    //       if (doc.exists()) {
+                    //         let exp = doc.data()
+                    //         let pax = exp.Users.length
+                    //         let amt = exp.Amount
+                    //         if (pax == 1) {
+                    //           totalexp += amt
+                    //         } else {
+                    //           totalexp += amt / pax
+                    //           if (this.userid == exp.Paid_By) {
+                    //             netowe += amt/pax*(pax - 1)
+                    //           } else  {
+                    //             netowe -= amt/pax
+                    //           }
+                    //         }
+                    //       }
+                    //   })
+                    // })
+
+
+                    cell2.innerHTML = startDate + " - "+ endDate ;
+                    cell3.innerHTML = namesArray; //people;
+                    cell4.innerHTML = currency;
+                    cell5.innerHTML = netowe;
+                    cell6.innerHTML = totalexp; //expenses
+                    cell7.innerHTML = budget;
+
+                    // let code = document.createElement("p")
+                    // code.textContent = tripCode;
+                    // // code.style.content = "fit"
+                    // cell8.appendChild(code)
+                    cell8.innerHTML = tripCode;
+
+
+                    let tripButton = document.createElement("button")
+                    // tripButton.id  = String(tripName)
+                    tripButton.className= "bwt"
+                    tripButton.innerHTML = tripName
+                    tripButton.onclick = function() {
+                      try { 
+                        router.push({name:'PersonalPage', params:{
+                          tripCode:tripCode, 
+                          budget:budget,
+                          tripName:tripName,
+                          startDate:startDate,
+                          endDate:endDate,
+                          tripExpenses: JSON.stringify(tripExpenses)
+                          }})
+                        //showTrip(tripCode)
+                      } catch(e) {
+                        console.error(e.message)
+                      }
                     }
-                  })
-
-                  let tripsTable = document.getElementById("fullTable")
-                  let row = tripsTable.insertRow(index)
-
-                  let cell1 = row.insertCell(0);
-                  let cell2 = row.insertCell(1);
-                  let cell3 = row.insertCell(2);
-                  let cell4 = row.insertCell(3);
-                  let cell5 = row.insertCell(4);
-                  let cell6 = row.insertCell(5);
-                  let cell7 = row.insertCell(6);
-                  let cell8 = row.insertCell(7);
-                  let cell9 = row.insertCell(8);
-
-                  cell2.innerHTML = startDate + " - "+ endDate ;
-                  cell3.innerHTML = namesArray; //people;
-                  cell4.innerHTML = currency;
-                  cell5.innerHTML = 0;
-                  cell6.innerHTML = 0;
-                  cell7.innerHTML = budget;
-                  cell8.innerHTML = tripCode;
+                    cell1.appendChild(tripButton)
 
 
-                  let tripButton = document.createElement("button")
-                  // tripButton.id  = String(tripName)
-                  tripButton.className= "bwt"
-                  tripButton.innerHTML = tripName
-                  tripButton.onclick = function() {
-                    try { 
-                      router.push({name:'PersonalPage', params:{
-                        tripCode:tripCode, 
-                        budget:budget,
-                        tripName:tripName,
-                        startDate:startDate,
-                        endDate:endDate,
-                        tripExpenses: JSON.stringify(tripExpenses)
-                        }})
-                      //showTrip(tripCode)
-                    } catch(e) {
-                      console.error(e.message)
+                    let deleteTripButton = document.createElement("button")
+                    deleteTripButton.id = String(tripName) 
+                    deleteTripButton.className = "bwt"
+                    deleteTripButton.innerHTML = "Leave"
+
+                    cell9.appendChild(deleteTripButton)
+                    deleteTripButton.onclick = function() {
+                      try {
+                        //deleteTrip(tripName)
+                        deleteTrip(tripCode)
+                      } catch(e) {
+                        console.error(e.message)
+                      }
                     }
+                    index +=1
                   }
-                  cell1.appendChild(tripButton)
-
-
-                  let deleteTripButton = document.createElement("button")
-                  deleteTripButton.id = String(tripName) 
-                  deleteTripButton.className = "bwt"
-                  deleteTripButton.innerHTML = "Leave"
-
-                  cell9.appendChild(deleteTripButton)
-                  deleteTripButton.onclick = function() {
-                    try {
-                      //deleteTrip(tripName)
-                      deleteTrip(tripCode)
-                    } catch(e) {
-                      console.error(e.message)
-                    }
-                  }
-                  index +=1
-                }
             })  
+              })
+         
+            //   let index = 1
+            //   allTrips.forEach((doc) => {
+            //     let tripCode = doc.id
+            //     if (tripsArray.includes(tripCode)) {
+            //       let tripData = doc.data()
+            //       let tripName = tripData.Name
+            //       let startDate = tripData.Start_Date
+            //       let endDate = tripData.End_Date
+            //       let budget = budgetArray[tripsArray.indexOf(tripCode)]
+            //       let people = tripData.Users //array
+            //       let currency = tripData.Currency
+            //       let tripExpenses = tripData.Expenses
+            //       // console.log(typeof tripData)
+            //       // let tripCode =
+
+            //       // let tripCode = tripData.Trip_Code
+            //       const namesArray = [];
+
+            //       // people.forEach(user => {
+            //       //   let ref = doc(db, 'User', user);
+            //       //   getDoc(ref)
+            //       //     .then((doc) => { 
+            //       //       let name = doc.data().Name;
+            //       //       namesArray.push(name)
+            //       //     })
+            //       // })
+            //       const users = getDocs(collection(db, "User"))
+            //       allUsers.forEach((doc) => {
+            //         let userid = doc.id;
+            //         if (people.includes(userid)) {
+            //           const name = doc.data().Name
+            //           namesArray.push(name)
+            //         }
+            //       })
+
+            //       let tripsTable = document.getElementById("fullTable")
+            //       let row = tripsTable.insertRow(index)
+
+            //       let cell1 = row.insertCell(0);
+            //       let cell2 = row.insertCell(1);
+            //       let cell3 = row.insertCell(2);
+            //       let cell4 = row.insertCell(3);
+            //       let cell5 = row.insertCell(4);
+            //       let cell6 = row.insertCell(5);
+            //       let cell7 = row.insertCell(6);
+            //       let cell8 = row.insertCell(7);
+            //       let cell9 = row.insertCell(8);
+
+
+            //       let sum = 0;
+                  
+
+
+            //       cell2.innerHTML = startDate + " - "+ endDate ;
+            //       cell3.innerHTML = namesArray; //people;
+            //       cell4.innerHTML = currency;
+            //       cell5.innerHTML = 0;
+            //       cell6.innerHTML = 0; //expenses
+            //       cell7.innerHTML = budget;
+
+            //       // let code = document.createElement("p")
+            //       // code.textContent = tripCode;
+            //       // // code.style.content = "fit"
+            //       // cell8.appendChild(code)
+            //       cell8.innerHTML = tripCode;
+
+
+            //       let tripButton = document.createElement("button")
+            //       // tripButton.id  = String(tripName)
+            //       tripButton.className= "bwt"
+            //       tripButton.innerHTML = tripName
+            //       tripButton.onclick = function() {
+            //         try { 
+            //           router.push({name:'PersonalPage', params:{
+            //             tripCode:tripCode, 
+            //             budget:budget,
+            //             tripName:tripName,
+            //             startDate:startDate,
+            //             endDate:endDate,
+            //             tripExpenses: JSON.stringify(tripExpenses)
+            //             }})
+            //           //showTrip(tripCode)
+            //         } catch(e) {
+            //           console.error(e.message)
+            //         }
+            //       }
+            //       cell1.appendChild(tripButton)
+
+
+            //       let deleteTripButton = document.createElement("button")
+            //       deleteTripButton.id = String(tripName) 
+            //       deleteTripButton.className = "bwt"
+            //       deleteTripButton.innerHTML = "Leave"
+
+            //       cell9.appendChild(deleteTripButton)
+            //       deleteTripButton.onclick = function() {
+            //         try {
+            //           //deleteTrip(tripName)
+            //           deleteTrip(tripCode)
+            //         } catch(e) {
+            //           console.error(e.message)
+            //         }
+            //       }
+            //       index +=1
+            //     }
+            // })  
               // const rows = document.querySelectorAll("table td");
               // rows.forEach(cell => cell.classList.add("scroll"));
             },
