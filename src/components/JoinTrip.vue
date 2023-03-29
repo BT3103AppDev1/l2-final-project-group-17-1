@@ -13,7 +13,7 @@
           <div class="container">
             <div class="card shadow-2-strong" style="border-radius: 1rem; border-color: #3d6d9e; background-color: rgb(179, 214, 214);">
               <div class="card-body p-4 text-center">
-
+                <form>
                 <div class="form-outline mb-4" style="width: 500px">
                   <input type="email" id="typeEmail" class="form-control form-control-lg" v-model = "tripCode"/>
                   <label class="form-label" for="typeEmail">Trip Code</label>
@@ -26,7 +26,7 @@
 
                 <button class="btn btn-lg btn-block shadow text-light" style="background-color: #3d6d9e;" type="submit" v-on:click="joinTrip">Save</button>
                 <!-- style="background-color: #2196F3; -->
-
+                </form>
               </div>
             </div>
           </div>
@@ -65,10 +65,20 @@
             async joinTrip() {
                 console.log(this.tripCode);
                 console.log(this.userid)
-                
+
+                let allTrips = await getDocs(collection(db, "Trip"))
+                let existingTrips = []
+                allTrips.forEach((trip) => {
+                    existingTrips.push(trip.id)
+                })
+                if (!existingTrips.includes(this.tripCode)) {
+                    alert("Trip does not exist! ");
+                    this.tripCode = '';
+                    this.budget = '';
+                    return;
+                }
                 let tripsArray = []
                 const userRef = doc(db, 'User', this.userid);
-                
                 await getDoc(userRef).then((doc) => {
                     if (doc.exists()) {
                         doc.data().Trips.forEach(trip => {

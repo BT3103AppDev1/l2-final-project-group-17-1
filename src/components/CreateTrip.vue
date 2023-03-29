@@ -108,7 +108,7 @@ export default {
             const docRef = await addDoc(collection(db, "Trip"), {
               Name: this.tripName,
               Currency: this.currency,
-              Budget: this.budget,
+              // Budget: this.budget,
               Start_Date: this.startDate, 
               End_Date: this.endDate,
               Users : arrayUnion(String(this.userid)),
@@ -134,6 +134,7 @@ export default {
           catch(error) {
             console.error("Error creating trip: ", error);
           }
+          // this.$emit('update')
         },
       },
 }

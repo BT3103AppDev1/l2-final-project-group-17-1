@@ -128,10 +128,9 @@
               }
           })
           this.displayTrips()
-          //async function showTrip(tc) {
-          //    this.$router.push({name: 'PersonalPage', params:{tripCode: tc}});
-          //    console.log("TRIPCODE", tripCode)
-          //}
+          // this.$parent.$on('update', () => {
+          //   this.$forceUpdate()
+          // })
         },
         methods: {
             async displayTrips() {
@@ -158,7 +157,7 @@
                 });
               // let currUser = await getDoc(doc(db, "User", this.userid))
 
-              Promise.all([allTrips, allUsers, allExpenses]).then(results => {
+              // Promise.all([allTrips, allUsers, allExpenses]).then(results => {
                 let index = 1
                 allTrips.forEach((doc) => {
                   let tripCode = doc.id
@@ -286,7 +285,7 @@
                     index +=1
                   }
             })  
-              })
+          //})
          
             //   let index = 1
             //   allTrips.forEach((doc) => {
