@@ -258,7 +258,9 @@
                           tripName:tripName,
                           startDate:startDate,
                           endDate:endDate,
-                          tripExpenses: JSON.stringify(tripExpenses)
+                          tripExpenses: JSON.stringify(tripExpenses),
+                          people: JSON.stringify(people),
+                          currency:currency,
                           }})
                         //showTrip(tripCode)
                       } catch(e) {

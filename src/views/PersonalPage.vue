@@ -2,7 +2,7 @@
     <div class = "page">
         <!-- <BudgetBar :tripCode = 'tripCode'/> -->
         <!-- <PersonalExp :tripCode = 'tripCode'/>  -->
-        <p>tripCode is : {{tripCode}}  {{tripExpenses}}</p>
+        <p>tripCode is : {{tripCode}}  {{people}}</p>
         
       <!-- <div class = "container">
         <div id = "budget"> <Budget/> </div>
@@ -24,7 +24,7 @@
 
                 <div class="d-flex justify-content-end p-5">
                     <!-- Switch between indiv and group -->
-                    <div class="d-flex flex-column px-3">
+                    <!-- <div class="d-flex flex-column px-3">
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="test"> 
                             <label class="form-check-label" for="flexRadioDefault1">
@@ -37,6 +37,9 @@
                             Individual
                             </label>
                         </div>
+                    </div> -->
+                    <div class="d-flex flex-columnn">
+                    <router-link to="/GroupPage"><button class = "btn btn-light" id = "Group"><b>Group</b></button></router-link>
                     </div>
 
                 </div>
@@ -140,9 +143,11 @@
     import {getAuth, onAuthStateChanged} from 'firebase/auth'
     import {useRoute} from 'vue-router'
     import {ref, onBeforeMount} from 'vue' 
-    import PersonalExp from '@/components/PersonalExp.vue'
-    import BudgetBar from '@/components/BudgetBar.vue';
+    // import PersonalExp from '@/components/PersonalExp.vue'
+    // import BudgetBar from '@/components/BudgetBar.vue';
     import { collection, doc, getDocs, query, where} from "firebase/firestore";
+// import router from "../router"
+
 
     //const trip = ref(null)
     //const route = useRoute()
@@ -162,12 +167,12 @@
         tripName: String,
         startDate: String,
         endDate: String,
-        tripExpenses: Array
+        tripExpenses: Array,
+        people: Array, 
+        currency: String
     },
     components:{
         Navbar,
-        BudgetBar,
-        PersonalExp,
     },
     data () {
         return {
@@ -193,7 +198,8 @@
                 "Travel": categoryDict["Travel"],
                 "Accomodation": categoryDict["Accomodation"]
             }
-        }
+        },
+ 
     },
 
     async mounted() {
@@ -231,7 +237,7 @@
 
             if (users.includes(String(uid)) && tripExpenses.includes(expense.id)) {
                 // const name = expense.data().Name
-                console.log(expense.data().Description)
+                // console.log(expense.data().Description)
                 // expenseArray.push(expense.data())
                 let expenseTable = document.getElementById("fullTable")
                 let row = expenseTable.insertRow(index)
@@ -253,8 +259,8 @@
 
                 totalCost += Number(amount)
 
-                console.log(date) 
-                console.log(amount)
+                // console.log(date) 
+                // console.log(amount)
                 //data for spending per day table
                 if (date in spendingPerDayDict===false) {
                     spendingPerDayDict[date] = amount
@@ -278,10 +284,11 @@
             var waterTankNum = totalCost/budget * 100
             var waterTank = document.getElementById("waterTank")
             // console.log('TOTALCOST', totalCost)
-            // console.log(waterTankNum)
+            console.log(spendingPerDayDict)
+            let dayExpenseTable = document.getElementById("dayExpenseTable")
             for (var day in spendingPerDayDict) {
+                console.log(dayExpenseTable.rows.length)
                 var dayExpense = spendingPerDayDict[day]
-                let dayExpenseTable = document.getElementById("dayExpenseTable")
                 let dayRow = dayExpenseTable.insertRow(index2)
                 let dayCell1 = dayRow.insertCell(0);
                 let dayCell2 = dayRow.insertCell(1);
@@ -309,7 +316,7 @@
 
             waterTank.style.width = waterTankNum + "%"
             waterTank.innerHTML = Math.ceil(waterTankNum) + "%"
-            await this.updatePieChart(categoryDict)
+            // this.updatePieChart(categoryDict)
         }  
         // this.updatePieChart(this.categoryDict)
         fetchAndUpdateData(this.tripExpenses, this.budget)
