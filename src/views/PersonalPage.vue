@@ -26,7 +26,7 @@
                     <!-- Switch between indiv and group -->
                     <div class="d-flex flex-column px-3">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="test"> 
                             <label class="form-check-label" for="flexRadioDefault1">
                             Group
                             </label>
@@ -38,6 +38,7 @@
                             </label>
                         </div>
                     </div>
+
                 </div>
             </div>
             <!-- Water tank -->
