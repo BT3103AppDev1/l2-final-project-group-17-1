@@ -2,8 +2,8 @@
 <div class = "page">
   <TripsTable />
   <div class = "container">
-    <div id = "create"> <CreateTrip/> </div>
-    <div id = "join"><JoinTrip/> </div>
+    <div id = "create"> <CreateTrip /> </div>
+    <div id = "join"><JoinTrip /> </div>
   </div>
 </div>
 </template>
@@ -21,6 +21,7 @@ export default {
 
   data() {
     return {
+        shared:[]
     }
   },
   components:{
@@ -38,6 +39,10 @@ export default {
         this.name = user.Name
       }
     })
+    
+  },
+  methods: {
+   
   }
 }
 </script> 
