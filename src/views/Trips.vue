@@ -1,9 +1,9 @@
 <template>
 <div class = "page">
-  <TripsTable />
+  <TripsTable ref="table"/>
   <div class = "container">
-    <div id = "create"> <CreateTrip /> </div>
-    <div id = "join"><JoinTrip /> </div>
+    <div id = "create"> <CreateTrip v-on:update="refresh"/> </div>
+    <div id = "join"><JoinTrip v-on:update="refresh"/> </div>
   </div>
 </div>
 </template>
@@ -42,7 +42,12 @@ export default {
     
   },
   methods: {
-   
+    refresh() {
+        console.log('refresh')
+        const tripsTable = this.$refs.table;
+        tripsTable.refresh();
+        // tripsTable.displayTrips();
+    }
   }
 }
 </script> 
