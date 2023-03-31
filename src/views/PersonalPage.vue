@@ -106,14 +106,16 @@
                 <div class="container text-center">
                     <h1>Total spending by category</h1>
                     <pie-chart class ="user" width=500px :data=
-    "pieChartData" ></pie-chart >
+    "categoryDict" ></pie-chart >
                 </div>
                  
                 <!-- Bar Chart -->
-                <!-- <div class="container text-center">
+                <div class="container text-center">
                     <h1>Spending by category from past 7 days </h1>
-                    <div id="myBarChart" class="barchart"></div>
-                </div>  -->
+                    <line-chart class="user" width=500px :data="spendingPerDayDict">
+
+                    </line-chart>
+                </div> 
             </div>
         </div>
     </section>
@@ -156,34 +158,54 @@
             people: "",
             currency: "",
             componentKey: 0,
-            // categoryDict:{},
-           pieChartData: {
+            //categoryDict:{},
+            categoryDict: {
             "Shopping": 0,
             "Food": 0,
             "Leisure": 0,
             "Travel": 0,
             "Accomodation":0,
-           },
-           barChartData: {
-
-           }
-        }
+            }
+            
+        } 
     },
     created() {
         this.getStartDate(),
         this.getEndDate(),
-        this.getTripExpenses(),
+        this.updateCharts()
         this.getBudget()
+        this.getTripExpenses()
+        //this.getBudget()
     },
     methods: { 
-        updatePieChart: function(categoryDict) {
-            this.pieChartData = {
-                "Shopping": categoryDict["Shopping"],
-                "Food": categoryDict["Food"],
-                "Leisure": categoryDict["Leisure"],
-                "Travel": categoryDict["Travel"],
-                "Accomodation": categoryDict["Accomodation"]
+        async updateCharts() { 
+            let trip = await getDoc(doc(db, "Trip", this.tripCode))
+            let currentTripExpenses = trip.data().Expenses
+            let uid = this.userid
+            let categoryDict = { 
+                "Shopping":0,
+                "Food": 0,
+                "Leisure": 0,
+                "Travel": 0,
+                "Accomodation":0,
             }
+
+            // console.log("TEST", uid)
+            let allExpenses = await getDocs(collection(db, "Expense")) //all expenses
+            allExpenses.forEach((expense) => {
+                let users = expense.data().Users;
+            if (users.includes(String(uid)) && currentTripExpenses.includes(expense.id)) {
+                let cat = expense.data().Category
+                let amt = expense.data().Amount
+                categoryDict[cat] += amt
+                console.log(categoryDict)
+                }
+            })
+            this.categoryDict = categoryDict
+
+        },
+        forceRerender() {
+            this.componentKey += 1;
         },
         forceRerender() {
             this.componentKey += 1;
@@ -296,7 +318,6 @@
                 "Accomodation":0
             }
 
-            //let allExpenses = await getDocs(collection(db, "Expense"))
             let currentTripExpenses = currentTrip.data().Expenses //all expenses of this specific trip (string)
             let allExpenses = await getDocs(collection(db, "Expense")) //all expenses
             allExpenses.forEach((expense) => {
@@ -332,7 +353,7 @@
                     spendingPerDayDict[date] += amount
                 }
 
-                categoryDict[cat] += amount
+                // categoryDict[cat] += amount
                
 
                 if (users.length>1) {
@@ -348,11 +369,13 @@
             var waterTankNum = totalCost/budget * 100
             var waterTank = document.getElementById("waterTank")
             // console.log('TOTALCOST', totalCost)
-            console.log(spendingPerDayDict)
+            // console.log("SPENDING DICT", spendingPerDayDict)
+            // console.log("CAT DICT", categoryDict)
+
             let dayExpenseTable = document.getElementById("dayExpenseTable")
             let index2 = 1
             for (var day in spendingPerDayDict) {
-                console.log(dayExpenseTable.rows.length)
+                // console.log(dayExpenseTable.rows.length)
                 var dayExpense = spendingPerDayDict[day]
 
                 let dayRow = dayExpenseTable.insertRow(index2)
@@ -370,7 +393,6 @@
             //     }
             // }
             // this.categoryDict = categoryDict
-            console.log(categoryDict)
 
             // this.pieChartData = {
             //     "Shopping": categoryDict["Shopping"],
