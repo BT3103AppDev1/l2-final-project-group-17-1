@@ -12,7 +12,7 @@
                     </div>
                 </div>
                 <div class="d-flex flex-columnn">
-                    <router-link to="/PersonalPage"><button class = "btn btn-light" id = "Personal"><b>Personal</b></button></router-link>
+                    <button class = "btn btn-light" id = "Personal" @click="redirectToPersonal()"><b>Personal</b></button>
                     </div>
             </div>
         
@@ -100,6 +100,10 @@ export default {
         async getEndDate() {
             let trip = await getDoc(doc(db, "Trip", this.tripCode))
             this.endDate = moment(trip.data().End_Date).format('DD/MM/YYYY')
+        },
+        redirectToPersonal() {
+            this.$router.push({name:'PersonalPage', query:{
+            tripCode: this.tripCode, tripName: this.tripName}})
         }
     },
 

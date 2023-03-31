@@ -254,15 +254,18 @@
                     tripButton.onclick = function() {
                       //router.push('/PersonalPage')
                       try { 
-                        router.push({name:'PersonalPage', params:{
-                          tripCode:tripCode, 
-                          budget:budget,
-                          tripName:tripName,
-                          startDate:startDate,
-                          endDate:endDate,
-                          tripExpenses: JSON.stringify(tripExpenses),
-                          people: JSON.stringify(people),
-                          currency:currency,
+                        router.push({name:'PersonalPage', 
+                          // params:{
+                          // tripCode:tripCode, 
+                          // budget:budget,
+                          // tripName:tripName,
+                          // startDate:startDate,
+                          // endDate:endDate,
+                          // tripExpenses: JSON.stringify(tripExpenses),
+                          // people: JSON.stringify(people),
+                          // currency:currency,
+                          query: {
+                            tripCode: tripCode, tripName: tripName
                           }})
                         //showTrip(tripCode)
                       } catch(e) {
