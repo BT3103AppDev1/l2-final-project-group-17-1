@@ -35,13 +35,14 @@
         <router-link to="/Profile">
           <button style="width:100%; color:white; background-color: black;" @click="showMenu = !showMenu;" >Edit Profile</button>
         </router-link>
-        <button style="width:100%; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; color:white; background-color: black;">Sign Out</button>
+        <router-link to="/" id = "signoutRouter">
+        <button style="width:100%; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; color:white; background-color: black;"  @click="signOut()" v-if="user">Sign Out</button>
+        </router-link>
         </ul>
       </div>
-
-      <router-link to="/" id = "signoutRouter">
+      <!-- <router-link to="/" id = "signoutRouter">
         <button class="btn btn-dark border-0" @click="signOut()" v-if="user">Sign Out</button>
-      </router-link>
+      </router-link> -->
 
   </nav>
 
@@ -80,12 +81,19 @@
     },
     methods: {
       signOut: function() {
-            console.log("signing out")
-            const auth = getAuth()
-            const user = auth.currentUser
-            signOut(auth, user)
-            //this.$router.push('/')
-            ui.start("#firebaseui-auth-container", uiConfig)
+            const confirmLogout = window.confirm('Are you sure you want to log out?');
+            if (confirmLogout) {
+              console.log("signing out")
+              const auth = getAuth()
+              const user = auth.currentUser
+              signOut(auth, user)
+              //this.$router.push('/')
+              ui.start("#firebaseui-auth-container", uiConfig)
+            } else {
+              console.log("cancelled log out")
+              //window.history.back();
+              window.location.href = "/InputPage";
+            }
         },
         async getName() {
           const userRef = await getDoc(doc(db, "User", this.userid))
@@ -156,7 +164,7 @@
 
 
   #userCard {
-    margin-right: 60px;
+    margin-right: 35px;
     margin-left: auto;
     background-color: aliceblue;
     border-radius: 10px;
@@ -220,6 +228,5 @@
     max-width: 600px;
     /* margin:  auto; */
   }
-
 
 </style>
