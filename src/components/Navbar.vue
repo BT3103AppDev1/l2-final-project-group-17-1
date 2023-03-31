@@ -25,7 +25,8 @@
 
       <div id = "userCard" class="d-flex align-items-center" style="display: inline-block; float: right;">
         <div class="circular-icon mr-2">
-          <img src="src/assets/images/plane4.jpg" alt="Your Image">
+          <img src="src/assets/images/snowy.png" alt="Your Image">
+          <!-- "src/assets/images/plane4.jpg" -->
         </div>
         <div id="userName">{{ user.displayName }}</div>
       </div>
