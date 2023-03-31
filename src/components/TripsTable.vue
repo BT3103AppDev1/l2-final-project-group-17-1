@@ -108,7 +108,7 @@
         data() {
           return {
             userid : "",
-            componentKey: 0
+            componentKey: 0,
           }  
         },
         computed: {
@@ -158,7 +158,7 @@
                 });
               // let currUser = await getDoc(doc(db, "User", this.userid))
 
-              // Promise.all([allTrips, allUsers, allExpenses]).then(results => {
+              Promise.all([allTrips, allUsers, allExpenses]).then(results => {
                 let index = 1
                 allTrips.forEach((doc) => {
                   let tripCode = doc.id
@@ -206,38 +206,18 @@
                     let cell7 = row.insertCell(6);
                     let cell8 = row.insertCell(7);
                     let cell9 = row.insertCell(8);
-
-
-                    let totalexp = 0;
-                    let netowe = 0;
-                    // tripExpenses.forEach(async (expense) => {
-                    //   const ref = doc(db, 'Expense', expense);
-                    //   getDoc(ref)
-                    //     .then((doc) => {
-                    //       if (doc.exists()) {
-                    //         let exp = doc.data()
-                    //         let pax = exp.Users.length
-                    //         let amt = exp.Amount
-                    //         if (pax == 1) {
-                    //           totalexp += amt
-                    //         } else {
-                    //           totalexp += amt / pax
-                    //           if (this.userid == exp.Paid_By) {
-                    //             netowe += amt/pax*(pax - 1)
-                    //           } else  {
-                    //             netowe -= amt/pax
-                    //           }
-                    //         }
-                    //       }
-                    //   })
-                    // })
-
+                  
+                    const resultPromise = this.loadExpenses(tripExpenses);
+                    resultPromise.then((result) => {
+                      const expense = result.expense;
+                      const netowe = result.netowe;
+                      cell5.innerHTML = netowe;
+                      cell6.innerHTML = expense; //expenses
+                    });
 
                     cell2.innerHTML = startDate + " - "+ endDate ;
                     cell3.innerHTML = namesArray; //people;
                     cell4.innerHTML = currency;
-                    cell5.innerHTML = netowe;
-                    cell6.innerHTML = totalexp; //expenses
                     cell7.innerHTML = budget;
 
                     // let code = document.createElement("p")
@@ -291,7 +271,8 @@
                     }
                     index +=1
                   }
-              })  
+              })
+            })  
             },
             async deleteTrip(tripCode){
               alert("You are going to delete " + tripCode)
@@ -316,8 +297,39 @@
             },
             refresh() {
               this.componentKey += 1;
+            },
+            async loadExpenses(expRefs) {
+              let expense = 0;
+              let netowe = 0;
+              try {
+                for (const expRef of expRefs) {
+                  const docRef = doc(db, "Expense", expRef);
+                  const docSnap = await getDoc(docRef);
+                  if (docSnap.exists()) {
+                    const exp = docSnap.data()
+                    const pax = exp.Users.length
+                    const amt = exp.Amount
+                    if (pax == 1) {
+                      expense += amt
+                    } else {
+                      expense += amt / pax
+                      if (this.userid == exp.Paid_By) {
+                        netowe += amt/pax*(pax - 1)
+                      } else  {
+                        netowe -= amt/pax
+                      }
+                    }
+                  }
+                }
+                const result = {expense: expense.toFixed(2),
+                                netowe: netowe.toFixed(2)}
+                return result;
+              } catch (error) {
+                console.log("Error calculating expense", error);
+              }
             }
         }
+
     }
     
 </script>
