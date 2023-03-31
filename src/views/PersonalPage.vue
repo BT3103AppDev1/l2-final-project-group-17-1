@@ -1,5 +1,6 @@
 <template>
     <div class = "page">
+        <router-view></router-view>
         <!-- <BudgetBar :tripCode = 'tripCode'/> -->
         <!-- <PersonalExp :tripCode = 'tripCode'/>  -->
         <p>tripCode is : {{tripCode}}  {{people}}</p>
@@ -23,24 +24,10 @@
                 </div>
 
                 <div class="d-flex justify-content-end p-5">
-                    <!-- Switch between indiv and group -->
-                    <!-- <div class="d-flex flex-column px-3">
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="test"> 
-                            <label class="form-check-label" for="flexRadioDefault1">
-                            Group
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
-                            <label class="form-check-label" for="flexRadioDefault2">
-                            Individual
-                            </label>
-                        </div>
-                    </div> -->
                     <div class="d-flex flex-columnn">
-                    <router-link to="/GroupPage"><button class = "btn btn-light" id = "Group"><b>Group</b></button></router-link>
-                    </div>
+                    <!-- <router-link to="{name: 'GroupPage', params: {id: tripCode.value}}"><button class = "btn btn-light" id = "Group"><b>Group</b></button></router-link> -->
+                    <button class = "btn btn-light" id = "Group" @click="redirectToGroup()"><b>Group</b></button>
+                </div>
 
                 </div>
             </div>
@@ -142,40 +129,45 @@
     import firebaseApp from '@/firebase.js'
     import {getAuth, onAuthStateChanged} from 'firebase/auth'
     import {useRoute} from 'vue-router'
-    import {ref, onBeforeMount} from 'vue' 
+    import {toRef, ref, onBeforeMount} from 'vue' 
     // import PersonalExp from '@/components/PersonalExp.vue'
     // import BudgetBar from '@/components/BudgetBar.vue';
-    import { collection, doc, getDocs, query, where} from "firebase/firestore";
-// import router from "../router"
-
-
-    //const trip = ref(null)
-    //const route = useRoute()
-    //const {tripCode} = $route.params.tripCode
-
-    //onBeforeMount(() => {
-    //    trip.value = getDoc(doc(db,"Trip", tripCode))
-    //})
-
-    //tripCode = $route.params.tripCode
+    import { collection, doc, getDoc, getDocs, query, where} from "firebase/firestore";
+    import moment from 'moment'
     
     export default {
     name: "PersonalPage",
-    props:{
-        tripCode: String,
-        budget: String,
-        tripName: String,
-        startDate: String,
-        endDate: String,
-        tripExpenses: Array,
-        people: Array, 
-        currency: String
-    },
+    // props:{
+    //     tripCode: String,
+    //     budget: String,
+    //     tripName: String,
+    //     startDate: String,
+    //     endDate: String,
+    //     tripExpenses: Array,
+    //     people: Array, 
+    //     currency: String
+    // },
+    // setup(props) {
+    //     //console.log(props.tripCode)
+    //     const tripCode = toRef(props, 'tripCode')
+    //     console.log(tripCode.value)
+    //     return tripCode.value
+    // },
+
     components:{
         Navbar,
     },
     data () {
         return {
+            userid : "",
+            tripCode: this.$route.query.tripCode,
+            budget: "",
+            tripName: this.$route.query.tripName,
+            startDate: "",
+            endDate: "",
+            tripExpenses: "",
+            people: "",
+            currency: "",
             // categoryDict:{},
            pieChartData: {
             "Shopping": 0,
@@ -189,6 +181,11 @@
            }
         }
     },
+    created() {
+        this.getStartDate(),
+        this.getEndDate(),
+        this.getTripExpenses()
+    },
     methods: { 
         updatePieChart: function(categoryDict) {
             this.pieChartData = {
@@ -199,7 +196,24 @@
                 "Accomodation": categoryDict["Accomodation"]
             }
         },
- 
+        async getStartDate() {
+            let trip = await getDoc(doc(db, "Trip", this.tripCode))
+            this.startDate = moment(trip.data().Start_Date).format('DD/MM/YYYY')
+        },
+        async getEndDate() {
+            let trip = await getDoc(doc(db, "Trip", this.tripCode))
+            this.endDate = moment(trip.data().End_Date).format('DD/MM/YYYY')
+        },
+        async getTripExpenses() {
+            let trip = await getDoc(doc(db, "Trip", this.tripCode))
+            this.tripExpenses = trip.data().Expenses
+        },
+        redirectToGroup() {
+            // this.$router.push({name:'GroupPage', params:{
+            //     tripCode: this.tripCode}})
+            this.$router.push({name:'GroupPage', query:{
+                tripCode: this.tripCode, tripName: this.tripName}})
+        }
     },
 
     async mounted() {
@@ -211,13 +225,13 @@
             this.name = user.Name
         }
         })
-        
-        async function fetchAndUpdateData(tripExpenses, budget){
+
+        async function fetchAndUpdateData(tripCode, tripExpenses, budget){
             let index = 1
             let index2 = 1
             const auth=getAuth()
             const uid = auth.currentUser.uid
-            tripExpenses = JSON.parse(tripExpenses)
+            //tripExpenses = JSON.parse(tripExpenses)
             
             var totalCost = 0
             var spendingPerDayDict = {}
@@ -229,16 +243,14 @@
                 "Accomodation":0
             }
 
-            let allExpenses = await getDocs(collection(db, "Expense"))
+            //let allExpenses = await getDocs(collection(db, "Expense"))
+            let currentTrip = await getDoc(doc(db, "Trip", tripCode)) 
+            let currentTripExpenses = currentTrip.data().Expenses //all expenses of this specific trip (string)
+            let allExpenses = await getDocs(collection(db, "Expense")) //all expenses
             allExpenses.forEach((expense) => {
-            let users = expense.data().Users;
-            // console.log(String(expense.id))
+                let users = expense.data().Users;
 
-
-            if (users.includes(String(uid)) && tripExpenses.includes(expense.id)) {
-                // const name = expense.data().Name
-                // console.log(expense.data().Description)
-                // expenseArray.push(expense.data())
+            if (users.includes(String(uid)) && currentTripExpenses.includes(expense.id)) {
                 let expenseTable = document.getElementById("fullTable")
                 let row = expenseTable.insertRow(index)
                 let cell1 = row.insertCell(0);
@@ -319,7 +331,7 @@
             // this.updatePieChart(categoryDict)
         }  
         // this.updatePieChart(this.categoryDict)
-        fetchAndUpdateData(this.tripExpenses, this.budget)
+        fetchAndUpdateData(this.tripCode, this.tripExpenses, this.budget)
     } 
     } 
 </script> 

@@ -8,7 +8,7 @@ import 'bootstrap/dist/js/bootstrap.js';
 import 'w3-css/w3.css';
 import VueChartkick from 'vue-chartkick'
 import 'chartkick/chart.js'
-
+import moment from 'moment'
 
 const app = createApp(App).use(VueChartkick)
 

@@ -1,29 +1,112 @@
 <template>
+    <section style="background-color: floralwhite;">
     <h1>GROUP PAGE </h1>
-    <div class="container">
+    <p>{{ tripCode }}</p>
+    <div class="container" style="background-color: floralwhite;">
             <div class="d-flex justify-content-between">
                 <div class="text-center py-5" style= "width: 40rem;">
-                    <div id="tripName" class="card-body px-5" style="text-align:justify; padding:5px">
+                    <div id="tripName" class="card-body px-5" style="text-align:justify; padding:0px">
                       <!-- <img src="globe.png" style="float:left;" width="120" height="auto">  -->
-                      <h1>Trip to Japan</h1>
-                      <span style="font-family:monospace;">1 Jan 2023 - 14 Jan 2023</span>
+                      <h1>Trip to {{ tripName }}</h1>
+                      <span style="font-family:monospace;">{{ startDate }} - {{endDate}}</span>
                     </div>
                 </div>
+                <div class="d-flex flex-columnn">
+                    <button class = "btn btn-light" id = "Personal" @click="redirectToPersonal()"><b>Personal</b></button>
+                    </div>
             </div>
+        
+            <!-- Table with all group expenses -->
+    <section class="container p-3" id="fullTableSection" style="background-color: floralwhite;"> 
+        
+        <div class="d-flex justify-content-between px-3">
+            <h2 class="py-3 d-flex justify-content-start">Group Expenses</h2>
+    
+            <div class="d-flex flex-row" style="padding:0px;">
+              <div class = "dropdown px-3">
+                  <button class = "btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                      Currency
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <a class="dropdown-item" href="#">SGD</a>
+                      <a class="dropdown-item" href="#">Original</a>
+                  </div>
+                </div>
+              </div>
+          </div>
+        <div class="scrollable" style="background-color: white;">
+            <table id="fullTable" class="table table-striped table-bordered table-sm table-scroll text-center" cellspacing="0"
+            width="100%">
+            <thead style="background-color: rgb(156, 201, 215); font-family:Arial, Helvetica, sans-serif;">
+                <tr>
+                <th class="th-sm" style="color:#111;">Day
+                </th>
+                <th class="th-sm" style="color:#111;">Description
+                </th>
+                <th class="th-sm" style="color:#111;">Category
+                </th>
+                <th class="th-sm" style="color:#111;">Cost
+                </th>
+                <th class="th-sm" style="color:#111;">People Involved
+                </th>
+                <th class="th-sm" style="color:#111;">Option
+                </th>
+                </tr>
+            </thead>
+
+            </table>
+        </div>
+    </section>
             </div>
+        </section>
 </template>
 
 <script>
     import db from '../firebase.js';
     import Navbar from '@/components/Navbar.vue'
     import {getAuth, onAuthStateChanged} from 'firebase/auth'
-
+    import { collection, doc, getDocs, getDoc, query, where} from "firebase/firestore";
+    import moment from 'moment'
 
 export default {
     name: "GroupPage",
     components:{
         Navbar,
     },
+    data() {
+          return {
+            userid : "",
+            tripCode: this.$route.query.tripCode,
+            budget: "",
+            tripName: this.$route.query.tripName,
+            startDate: "",
+            endDate: "",
+            tripExpenses: "",
+            people: "",
+            currency: "",
+          }  
+    },
+
+    created() {
+        this.getStartDate(),
+        this.getEndDate()
+    },
+
+    methods: {
+        async getStartDate() {
+            let trip = await getDoc(doc(db, "Trip", this.tripCode))
+            this.startDate = moment(trip.data().Start_Date).format('DD/MM/YYYY')
+        },
+        async getEndDate() {
+            let trip = await getDoc(doc(db, "Trip", this.tripCode))
+            this.endDate = moment(trip.data().End_Date).format('DD/MM/YYYY')
+        },
+        redirectToPersonal() {
+            this.$router.push({name:'PersonalPage', query:{
+            tripCode: this.tripCode, tripName: this.tripName}})
+        }
+    },
+
     mounted() {
         const auth = getAuth()
         onAuthStateChanged(auth, (user) => {
@@ -37,9 +120,89 @@ export default {
             }
         })
         console.log("logged in", this.tripCode)
+        //console.log(this.$route.query.tripCode)
+        async function displayDates(tripCode) {
 
-    }
-        
+        }
+
+        async function displayGroupExpenses(tripCode){
+            let index = 1
+            let index2 = 1
+            const auth=getAuth()
+            //const uid = auth.currentUser.uid
+            let currentTrip = await getDoc(doc(db, "Trip", tripCode)) 
+            let currentTripExpenses = currentTrip.data().Expenses //all expenses of this specific trip
+            let allExpenses = await getDocs(collection(db, "Expense")) //all expenses
+            let allUsers = await getDocs(collection(db, "User"))
+
+            var totalCost = 0
+            var spendingPerDayDict = {}
+            var categoryDict = {
+                "Shopping":0,
+                "Food": 0,
+                "Leisure":0,
+                "Travel":0,
+                "Accomodation":0
+            }
+            console.log(currentTripExpenses)
+            currentTripExpenses.forEach((expenseID) => { //for each expenseID in trip, get expense data
+                let userNames = ""
+                allExpenses.forEach((expense)=> {
+                    if (expenseID == expense.id) {
+                        let users = expense.data().Users; //array of user ids (string)
+                        //console.log(expense.id)
+                        if (users.length > 1) {
+                            let expenseTable = document.getElementById("fullTable")
+                            let row = expenseTable.insertRow(index)
+                            let cell1 = row.insertCell(0);
+                            let cell2 = row.insertCell(1);
+                            let cell3 = row.insertCell(2);
+                            let cell4 = row.insertCell(3);
+                            let cell5 = row.insertCell(4);
+                            let cell6 = row.insertCell(5);
+
+                            var date = expense.data().Date
+                            var amount = expense.data().Amount
+                            var cat = expense.data().Category
+                            cell1.innerHTML = date
+                            cell2.innerHTML = expense.data().Description
+                            cell3.innerHTML = cat
+                            cell4.innerHTML = amount
+                            users.forEach((userID)=> { //for each userid in expense
+                                allUsers.forEach((user)=> {
+                                    if (user.id == userID) {
+                                        userNames = userNames + ", " + user.data().Name
+                                        userNames = userNames.substring(1,)
+                                    }
+                                })
+                            })
+                            cell5.innerHTML = userNames
+                            let deleteExpenseButton = document.createElement("button")
+                            cell6.appendChild(deleteExpenseButton)
+                            index +=1
+                        }
+                    }
+                })
+            
+            })
+            }
+        displayGroupExpenses(this.tripCode)
+    },
+    // methods: {
+    //     async getUserNames(users) {
+    //         let userNames = ""
+    //         let allUsers = await getDocs(collection(db, "User"))
+    //         users.forEach((userID)=> { //for each userid in expense
+    //             allUsers.forEach((user)=> {
+    //                 if (user.id == userID) {
+    //                     userNames = userNames + " " + user.data().Name
+    //                 }
+    //             })
+    //         })
+    //         return userNames
+    //     }, 
+    // }
+
 
 }
 </script>
