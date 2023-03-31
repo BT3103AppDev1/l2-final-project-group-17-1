@@ -1,4 +1,5 @@
 <template>
+    <button class="btn btn-lg btn-block shadow text-light" id = "back" style="background-color: maroon" @click="goBack">Go Back</button>
     <div class="contain">
         <div style="border-radius: 1rem; background-color: rgb(179, 214, 214);">
             <div class="card-body p-5 text-center">
@@ -61,6 +62,7 @@
                 Name : this.displayName
                 });
                 alert("Name Updated Successfully!")
+                //window.history.back();
                 window.location.href = '/InputPage'
             } else {
                 alert("Please enter a valid name!")
@@ -71,6 +73,9 @@
           const userRef = await getDoc(doc(db, "User", this.userid))
           this.displayName = userRef.data().Name
         },
+        goBack() {
+            window.history.back();
+        }
     }
     }
     
@@ -78,9 +83,20 @@
   
   <style>
     .contain {
-        margin-top: 100px;
+        margin-top: 80px;
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    #back {
+        margin-top: 20px;;
+        margin-left: 30px;
+        height: 60px;
+        width: 120px;
+        border-top-left-radius: 200px;
+        border-bottom-left-radius: 200px;
+        border-top-right-radius: 30px;
+        border-bottom-right-radius: 30px;
     }
   </style>
