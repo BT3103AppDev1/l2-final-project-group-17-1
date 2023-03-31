@@ -1,18 +1,19 @@
 <template>
 
   <section class="vh-100" >
-      <div class="container py-5 h-100">
-        <div class="d-flex flex-row justify-content-center h-100">
+      <div class="container py-5">
+
+        <div class="d-flex flex-row justify-content-center align-items-center margin-auto">
 
 
-          <div class="container d-flex flex-column align-items-center pt-5">
-            <div class="container py-5"></div>
-            <div class="text-center d-flex flex-column">
+          <div class="container d-flex flex-column align-items-center">
+            <!-- <div class="container py-5"></div> -->
+            <!-- <div class="text-center d-flex flex-column"> -->
               <h1 style="text-shadow:2px 2px 8px grey; ;">Record your Spendings!</h1>
               <img src="src/assets/images/money.avif" width="370px" height="auto" style="padding-left: 110px;">
               <br>
               <p>Just fill in your spending details and it will be saved!</p>
-            </div>
+            <!-- </div> -->
           </div>
 
 
@@ -307,5 +308,6 @@
     /* WHERE */
     background-color: floralwhite;
     background-image: url('picture/input1.jpg');
+    margin:auto;
   }
 </style>
