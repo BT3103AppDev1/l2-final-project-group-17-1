@@ -134,7 +134,7 @@ export default {
           catch(error) {
             console.error("Error creating trip: ", error);
           }
-          // this.$emit('update')
+          this.$emit('update')
         },
       },
 }

@@ -109,6 +109,7 @@
                     this.tripCode = '';
                     this.budget = '';
                 }
+                this.$emit('update')
             }
         }
     }
