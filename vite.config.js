@@ -8,7 +8,8 @@ export default defineConfig({
   plugins: [vue({
     template: {
       compilerOptions: {
-        isCustomElement: (tag) => ['md-linedivider'].includes(tag),
+        //isCustomElement: (tag) => ['md-linedivider'].includes(tag),
+        isCustomElement: (tag) => ['MyComponent'].includes(tag),
       }
     }
   })],

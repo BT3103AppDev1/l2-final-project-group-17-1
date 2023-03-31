@@ -85,6 +85,7 @@
     </section>
     <section class="p-5" id="totalSumTable">
         <div class = "container" style="background-color: floralwhite;">
+        <MyComponent :key="componentKey" />
         <table id="dayExpenseTable" class="table table-bordered" style="background-color: white;">
             <thead style="background-color: rgb(156, 201, 215); font-family:Arial, Helvetica, sans-serif;">
             <tr>
@@ -134,7 +135,8 @@
     // import BudgetBar from '@/components/BudgetBar.vue';
     import { collection, doc, getDoc, getDocs, query, where} from "firebase/firestore";
     import moment from 'moment'
-    
+    //import {diff} from moment
+
     export default {
     name: "PersonalPage",
     
@@ -153,6 +155,7 @@
             tripExpenses: "",
             people: "",
             currency: "",
+            componentKey: 0,
             // categoryDict:{},
            pieChartData: {
             "Shopping": 0,
@@ -181,6 +184,9 @@
                 "Travel": categoryDict["Travel"],
                 "Accomodation": categoryDict["Accomodation"]
             }
+        },
+        forceRerender() {
+            this.componentKey += 1;
         },
         async getStartDate() {
             let trip = await getDoc(doc(db, "Trip", this.tripCode))
@@ -212,7 +218,20 @@
         redirectToGroup() {
             this.$router.push({name:'GroupPage', query:{
                 tripCode: this.tripCode, tripName: this.tripName}})
-        }
+        },
+        // getDays() {
+        //     // let days = []
+        //     // var date1 = this.startDate;
+        //     // var date2 = this.endDate;
+        //     // var Difference_In_Time = date2.getTime() - date1.getTime();
+        //     // var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+        //     // for (var i = 0; i < Difference_In_Days; i++) {
+        //     //     var d = new Date();
+        //     //     d.setDate(date1.getDate() + i + 1);
+        //     //     days.push(d);
+        //     // }
+        //     console.log(this.startDate)
+        // }
     },
 
     async mounted() {
@@ -225,25 +244,50 @@
             //this.getBudget()
         }
         })
-        // function getDates() {
-        //     return 0
-        // }
+
         async function fetchAndUpdateData(tripCode){
             let index = 1
-            let index2 = 1
+            // let index2 = 1
             const auth=getAuth()
             const uid = auth.currentUser.uid
             //tripExpenses = JSON.parse(tripExpenses)
             var budget = 0;
             let currentUser = await getDoc(doc(db, "User", uid))
-            let currentUserTrips = currentUser.data().Trips
+            let currentUserTrips = currentUser.data().Trips //trips the user is involved in
             currentUserTrips.forEach((trip)=> {
                 if(trip.Trip_Code == tripCode) {
                     budget = trip.Budget
                 }
             })
             var totalCost = 0
+
+            //DICTIONARY FOR DAILY SPENDINGS
             var spendingPerDayDict = {}
+            let days = []
+            let currentTrip = await getDoc(doc(db, "Trip", tripCode)) 
+            const startDate = moment(currentTrip.data().Start_Date);
+            const endDate = moment(currentTrip.data().End_Date);
+            var Difference_In_Days = endDate.diff(startDate, 'days')
+            let d = startDate
+            days.push(d.format('YYYY-MM-DD')) //start date
+            for (var i = 0; i < Difference_In_Days; i++) {
+                d = d.add(1, 'days')
+                //var d = new Date();
+                //d.setDate(startDate.toDate() + i + 1);
+                days.push(d.format('YYYY-MM-DD'));
+            }
+            days.forEach((day)=> {
+                spendingPerDayDict[day] = 0
+            })
+                
+            // console.log(spendingPerDayDict)
+            // var date1 = new Date(currentTrip.data().Start_Date);
+            // var date2 = new Date(endDate);
+            //var Difference_In_Time = date2.getTime() - date1.getTime();
+            //var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+    
+
+            //DICTIONARY FOR SPENDINGS BY CATEGORY
             var categoryDict = {
                 "Shopping":0,
                 "Food": 0,
@@ -253,7 +297,6 @@
             }
 
             //let allExpenses = await getDocs(collection(db, "Expense"))
-            let currentTrip = await getDoc(doc(db, "Trip", tripCode)) 
             let currentTripExpenses = currentTrip.data().Expenses //all expenses of this specific trip (string)
             let allExpenses = await getDocs(collection(db, "Expense")) //all expenses
             allExpenses.forEach((expense) => {
@@ -280,9 +323,9 @@
 
                 totalCost += Number(amount)
 
-                // console.log(date) 
-                // console.log(amount)
-                //data for spending per day table
+
+                //DATA FOR DAILY SPENDINGS 
+
                 if (date in spendingPerDayDict===false) {
                     spendingPerDayDict[date] = amount
                 } else {
@@ -307,9 +350,11 @@
             // console.log('TOTALCOST', totalCost)
             console.log(spendingPerDayDict)
             let dayExpenseTable = document.getElementById("dayExpenseTable")
+            let index2 = 1
             for (var day in spendingPerDayDict) {
                 console.log(dayExpenseTable.rows.length)
                 var dayExpense = spendingPerDayDict[day]
+
                 let dayRow = dayExpenseTable.insertRow(index2)
                 let dayCell1 = dayRow.insertCell(0);
                 let dayCell2 = dayRow.insertCell(1);
