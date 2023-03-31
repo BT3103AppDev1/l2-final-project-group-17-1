@@ -185,6 +185,7 @@
         this.getStartDate(),
         this.getEndDate(),
         this.getTripExpenses()
+        //this.getBudget()
     },
     methods: { 
         updatePieChart: function(categoryDict) {
@@ -208,9 +209,10 @@
             let trip = await getDoc(doc(db, "Trip", this.tripCode))
             this.tripExpenses = trip.data().Expenses
         },
+        // getBudget: async function() {
+        //     this.onAuthStateChanged
+        // }
         redirectToGroup() {
-            // this.$router.push({name:'GroupPage', params:{
-            //     tripCode: this.tripCode}})
             this.$router.push({name:'GroupPage', query:{
                 tripCode: this.tripCode, tripName: this.tripName}})
         }
@@ -223,16 +225,24 @@
             this.user = user
             this.userid = user.uid
             this.name = user.Name
+            //this.getBudget()
         }
         })
-
-        async function fetchAndUpdateData(tripCode, tripExpenses, budget){
+        
+        async function fetchAndUpdateData(tripCode){
             let index = 1
             let index2 = 1
             const auth=getAuth()
             const uid = auth.currentUser.uid
             //tripExpenses = JSON.parse(tripExpenses)
-            
+            var budget = 0;
+            let currentUser = await getDoc(doc(db, "User", uid))
+            let currentUserTrips = currentUser.data().Trips
+            currentUserTrips.forEach((trip)=> {
+                if(trip.Trip_Code == tripCode) {
+                    budget = trip.Budget
+                }
+            })
             var totalCost = 0
             var spendingPerDayDict = {}
             var categoryDict = {
@@ -331,7 +341,7 @@
             // this.updatePieChart(categoryDict)
         }  
         // this.updatePieChart(this.categoryDict)
-        fetchAndUpdateData(this.tripCode, this.tripExpenses, this.budget)
+        fetchAndUpdateData(this.tripCode)
     } 
     } 
 </script> 
