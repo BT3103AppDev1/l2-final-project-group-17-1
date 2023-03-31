@@ -1,5 +1,6 @@
 <template>
     <div class = "page">
+        <router-view></router-view>
         <!-- <BudgetBar :tripCode = 'tripCode'/> -->
         <!-- <PersonalExp :tripCode = 'tripCode'/>  -->
         <p>tripCode is : {{tripCode}}  {{people}}</p>
@@ -39,8 +40,9 @@
                         </div>
                     </div> -->
                     <div class="d-flex flex-columnn">
-                    <router-link to="/GroupPage"><button class = "btn btn-light" id = "Group"><b>Group</b></button></router-link>
-                    </div>
+                    <!-- <router-link to="{name: 'GroupPage', params: {id: tripCode.value}}"><button class = "btn btn-light" id = "Group"><b>Group</b></button></router-link> -->
+                    <button class = "btn btn-light" id = "Group" @click="redirectToGroup()"><b>Group</b></button>
+                </div>
 
                 </div>
             </div>
@@ -142,22 +144,11 @@
     import firebaseApp from '@/firebase.js'
     import {getAuth, onAuthStateChanged} from 'firebase/auth'
     import {useRoute} from 'vue-router'
-    import {ref, onBeforeMount} from 'vue' 
+    import {toRef, ref, onBeforeMount} from 'vue' 
     // import PersonalExp from '@/components/PersonalExp.vue'
     // import BudgetBar from '@/components/BudgetBar.vue';
     import { collection, doc, getDocs, query, where} from "firebase/firestore";
-// import router from "../router"
 
-
-    //const trip = ref(null)
-    //const route = useRoute()
-    //const {tripCode} = $route.params.tripCode
-
-    //onBeforeMount(() => {
-    //    trip.value = getDoc(doc(db,"Trip", tripCode))
-    //})
-
-    //tripCode = $route.params.tripCode
     
     export default {
     name: "PersonalPage",
@@ -171,11 +162,18 @@
         people: Array, 
         currency: String
     },
+    setup(props) {
+        //console.log(props.tripCode)
+        const tripCode = toRef(props, 'tripCode')
+        console.log(tripCode.value)
+        return tripCode.value
+    },
     components:{
         Navbar,
     },
     data () {
         return {
+            //tripCode: this.tripCode,
             // categoryDict:{},
            pieChartData: {
             "Shopping": 0,
@@ -189,6 +187,7 @@
            }
         }
     },
+
     methods: { 
         updatePieChart: function(categoryDict) {
             this.pieChartData = {
@@ -199,7 +198,12 @@
                 "Accomodation": categoryDict["Accomodation"]
             }
         },
- 
+        redirectToGroup() {
+            // this.$router.push({name:'GroupPage', params:{
+            //     tripCode: this.tripCode}})
+            this.$router.push({name:'GroupPage', query:{
+                tripCode: this.tripCode, tripName: this.tripName}})
+        }
     },
 
     async mounted() {
@@ -211,7 +215,7 @@
             this.name = user.Name
         }
         })
-        
+
         async function fetchAndUpdateData(tripExpenses, budget){
             let index = 1
             let index2 = 1

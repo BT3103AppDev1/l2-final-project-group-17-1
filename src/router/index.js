@@ -37,12 +37,15 @@ const router = createRouter({
     },
     {
       path: '/PersonalPage?tripCode:tripCode&budget:budget&tripName:tripName&startDate:startDate&endDate:endDate&tripExpenses:tripExpenses&people:people&currency:currency',
+      //path: '/PersonalPage?tripCodeA57mUKDFHF9nEpskfkDw&budget2000&tripNameDubai&startDate2023-03-21&endDate2023-03-30&tripExpenses["YGqHHMg1r2okgUSd7TpD","lDxrkBO0Hx3eSLZQNDKf","jNyn7gwEosPd9mY6vPQc"]&people["wIJSfQo547OOJWXNVhUmWZBDryi2"]&currencyUSD',
+      //path: '/PersonalPage',
       name: 'PersonalPage',
+      //alias: '/PersonalPage',
       component: PersonalPage,
       props:true
     },
     {
-      path:'/GroupPage',
+      path:'/GroupPage/:tripCode',
       name: 'GroupPage',
       component: GroupPage,
 

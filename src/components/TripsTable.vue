@@ -251,6 +251,7 @@
                     tripButton.className= "bwt"
                     tripButton.innerHTML = tripName
                     tripButton.onclick = function() {
+                      //router.push('/PersonalPage')
                       try { 
                         router.push({name:'PersonalPage', params:{
                           tripCode:tripCode, 
