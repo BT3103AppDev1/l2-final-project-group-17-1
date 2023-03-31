@@ -23,12 +23,20 @@
         </button>
       </router-link>
 
-      <div id = "userCard" class="d-flex align-items-center" style="display: inline-block; float: right;">
-        <div class="circular-icon mr-2">
-          <img src="src/assets/images/snowy.png" alt="Your Image">
-          <!-- "src/assets/images/plane4.jpg" -->
-        </div>
-        <div id="userName">{{ user.displayName }}</div>
+      <div class = "rightSide" style="display: inline-block; float: right;  margin-left: auto;">
+        <button @click="showMenu = !showMenu" id = "userCard" class="d-flex align-items-center" >
+          <div class="circular-icon mr-2">
+            <img src="src/assets/images/snowy.png" alt="Your Image">
+            <!-- "src/assets/images/plane4.jpg" -->
+          </div>
+          <div id="userName">{{ this.displayName }}</div>
+        </button>
+        <ul class = "dropdown" v-if="showMenu">
+        <router-link to="/Profile">
+          <button style="width:100%; color:white; background-color: black;" @click="showMenu = !showMenu;" >Edit Profile</button>
+        </router-link>
+        <button style="width:100%; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; color:white; background-color: black;">Sign Out</button>
+        </ul>
       </div>
 
       <router-link to="/" id = "signoutRouter">
@@ -41,16 +49,22 @@
 
 <script>
  import firebaseApp from '@/firebase.js'
+ import db from '../firebase.js';
  import {getAuth, onAuthStateChanged, signOut} from 'firebase/auth'
+ import { collection, doc, getDoc, getDocs, query, where} from "firebase/firestore";
 
 
   export default {
     name: 'Navbar',
     components: {
+
     },
     data() {
       return {
         user:false,
+        showMenu: false,
+        componentKey: 0,
+        displayName: "",
       }
     },
     mounted() {
@@ -58,24 +72,37 @@
         onAuthStateChanged(auth, (user) => {
           if (user) {
             console.log("logged")
+            this.userid = user.uid
           }
           this.user = user
+          this.getName()
         })
     },
     methods: {
       signOut: function() {
-      console.log("signing out")
+            console.log("signing out")
             const auth = getAuth()
             const user = auth.currentUser
             signOut(auth, user)
             //this.$router.push('/')
             ui.start("#firebaseui-auth-container", uiConfig)
-        }
+        },
+        async getName() {
+          const userRef = await getDoc(doc(db, "User", this.userid))
+          this.displayName = userRef.data().Name
+        },
+  
+
+      
       }
   }
 </script>
 
 <style scoped>
+  #vue {
+    bottom: 0;
+    margin-bottom: 0;
+  }
   nav {
     display: flex;
     flex-direction: row;
@@ -99,7 +126,7 @@
   }
 
   #signoutRouter{
-    margin-right: 80px;
+    margin-right: 30px;
   }
 
   .routerLeftSide {
@@ -121,14 +148,23 @@
     background-color: floralwhite;
   }
 
+  #userCard:hover {
+    transform: scale(1.1); /* increase the size by 10% */
+    transition: all 0.2s ease-in-out; /* add a smooth transition effect */
+    background-color: floralwhite;
+  }
+
 
   #userCard {
-    margin-right: 70px;
+    margin-right: 60px;
     margin-left: auto;
     background-color: aliceblue;
     border-radius: 10px;
     padding: 5px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    border-width: 2px;
+    position: relative;
   }
 
   #userName {
@@ -162,7 +198,28 @@
     object-fit:fill;
   }
 
+  .dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 3;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color:grey;
+    /* box-shadow: 0 2px 2px black; */
+    width: 68%;
+    text-align: center;
+    color: white;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+  }
 
+  .rightSide {
+    position: relative;
+    max-width: 600px;
+    /* margin:  auto; */
+  }
 
 
 </style>

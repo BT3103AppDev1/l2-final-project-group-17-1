@@ -6,6 +6,8 @@ import NotFound from '@/views/NotFound.vue'
 import Register from '@/views/Register.vue'
 import PersonalPage from '@/views/PersonalPage.vue'
 import GroupPage from '@/views/GroupPage.vue'
+import Profile from '@/views/Profile.vue'
+import Navbar from '@/components/Navbar.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -49,6 +51,16 @@ const router = createRouter({
       name: 'GroupPage',
       component: GroupPage,
 
+    },
+    {
+      path:'/Profile',
+      name: 'Profile',
+      component: Profile
+    },
+    {
+      path:'/Navbar',
+      name: 'Navbar',
+      component: Navbar
     }
   ]
 })

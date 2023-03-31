@@ -307,17 +307,19 @@
                   const docSnap = await getDoc(docRef);
                   if (docSnap.exists()) {
                     const exp = docSnap.data()
-                    const pax = exp.Users.length
-                    const amt = exp.Amount
-                    if (pax == 1) {
-                      expense += amt
-                    } else {
-                      expense += amt / pax
-                      if (this.userid == exp.Paid_By) {
-                        netowe += amt/pax*(pax - 1)
-                      } else  {
-                        netowe -= amt/pax
-                      }
+                    if (exp.Users.includes(this.userid)) {
+                      const pax = exp.Users.length
+                      const amt = exp.Amount
+                      if (pax == 1) {
+                        expense += amt
+                      } else {
+                        expense += amt / pax
+                        if (this.userid == exp.Paid_By) {
+                          netowe += amt/pax*(pax - 1)
+                        } else  {
+                          netowe -= amt/pax
+                        }
+                    }
                     }
                   }
                 }

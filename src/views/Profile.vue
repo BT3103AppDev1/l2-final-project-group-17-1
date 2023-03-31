@@ -1,0 +1,86 @@
+<template>
+    <div class="contain">
+        <div style="border-radius: 1rem; background-color: rgb(179, 214, 214);">
+            <div class="card-body p-5 text-center">
+            <form>
+
+            <h3 class="mb-5">Edit Profile</h3>
+
+            <div class="form-outline mb-4">
+                <input  id="displayNameInput" type="text" class="form-control form-control-lg" v-model="displayName"/>
+                <label class="form-label" for="displayNameInput">Display Name</label>
+            </div>
+
+            <button class="btn btn-lg btn-block shadow text-light"  style="background-color: #2196F3;" @click.prevent="saveProfile">Save</button>
+
+            </form>
+            </div>
+        </div>
+        </div>
+  </template>
+  
+  <script>
+    import Navbar from '@/components/Navbar.vue'
+    import db from '../firebase.js';
+    import { collection, doc, getDoc, getDocs, addDoc, updateDoc, arrayUnion } from "firebase/firestore";
+    import {getAuth, onAuthStateChanged} from 'firebase/auth'
+  
+    export default{
+     name: 'Profile',
+     components: {
+
+     }, 
+     data() {
+        return {
+            displayName: ""
+        }
+     },
+
+     mounted() {
+        const auth = getAuth()
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    this.user = user
+                    this.userid = user.uid
+                    this.getName()
+                    displayNameInput.value = this.displayName
+                    console.log("logged in", this.displayName)
+                }
+                else {
+                console.log("logged out")
+                }
+            })
+// 
+     },
+     methods: {
+        async saveProfile() {
+            if (this.displayName.length >= 1) {
+                this.user.displayName = this.displayName
+                const userRef = doc(db, "User", this.userid);
+                await updateDoc(userRef, {
+                Name : this.displayName
+                });
+                alert("Name Updated Successfully!")
+                window.location.href = '/InputPage'
+            } else {
+                alert("Please enter a valid name!")
+            }
+        },
+
+        async getName() {
+          const userRef = await getDoc(doc(db, "User", this.userid))
+          this.displayName = userRef.data().Name
+        },
+    }
+    }
+    
+  </script>
+  
+  <style>
+    .contain {
+        margin-top: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+  </style>
