@@ -1,10 +1,11 @@
 <template>
+    <section style="background-color: floralwhite;">
     <h1>GROUP PAGE </h1>
     <p>{{ tripCode }}</p>
-    <div class="container">
+    <div class="container" style="background-color: floralwhite;">
             <div class="d-flex justify-content-between">
                 <div class="text-center py-5" style= "width: 40rem;">
-                    <div id="tripName" class="card-body px-5" style="text-align:justify; padding:5px">
+                    <div id="tripName" class="card-body px-5" style="text-align:justify; padding:0px">
                       <!-- <img src="globe.png" style="float:left;" width="120" height="auto">  -->
                       <h1>Trip to {{ tripName }}</h1>
                       <span style="font-family:monospace;">{{ startDate }} - {{endDate}}</span>
@@ -16,7 +17,7 @@
             </div>
         
             <!-- Table with all group expenses -->
-    <section class="container p-3" id="fullTableSection"> 
+    <section class="container p-3" id="fullTableSection" style="background-color: floralwhite;"> 
         
         <div class="d-flex justify-content-between px-3">
             <h2 class="py-3 d-flex justify-content-start">Group Expenses</h2>
@@ -57,7 +58,7 @@
         </div>
     </section>
             </div>
-        
+        </section>
 </template>
 
 <script>
