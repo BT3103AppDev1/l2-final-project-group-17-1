@@ -137,22 +137,7 @@
     
     export default {
     name: "PersonalPage",
-    // props:{
-    //     tripCode: String,
-    //     budget: String,
-    //     tripName: String,
-    //     startDate: String,
-    //     endDate: String,
-    //     tripExpenses: Array,
-    //     people: Array, 
-    //     currency: String
-    // },
-    // setup(props) {
-    //     //console.log(props.tripCode)
-    //     const tripCode = toRef(props, 'tripCode')
-    //     console.log(tripCode.value)
-    //     return tripCode.value
-    // },
+    
 
     components:{
         Navbar,
@@ -184,8 +169,8 @@
     created() {
         this.getStartDate(),
         this.getEndDate(),
-        this.getTripExpenses()
-        //this.getBudget()
+        this.getTripExpenses(),
+        this.getBudget()
     },
     methods: { 
         updatePieChart: function(categoryDict) {
@@ -209,9 +194,21 @@
             let trip = await getDoc(doc(db, "Trip", this.tripCode))
             this.tripExpenses = trip.data().Expenses
         },
-        // getBudget: async function() {
-        //     this.onAuthStateChanged
-        // }
+        async getBudget() {
+            const auth = getAuth()
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    this.userid = user.uid
+                    let currentUser = await getDoc(doc(db, "User", this.userid))
+                    let currentUserTrips = currentUser.data().Trips
+                    currentUserTrips.forEach((trip)=> {
+                        if(trip.Trip_Code == this.tripCode) {
+                            this.budget = trip.Budget
+                        }
+                    })
+                }
+            })
+        },
         redirectToGroup() {
             this.$router.push({name:'GroupPage', query:{
                 tripCode: this.tripCode, tripName: this.tripName}})
@@ -228,7 +225,9 @@
             //this.getBudget()
         }
         })
-        
+        // function getDates() {
+        //     return 0
+        // }
         async function fetchAndUpdateData(tripCode){
             let index = 1
             let index2 = 1
