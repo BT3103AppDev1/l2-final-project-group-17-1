@@ -51,8 +51,6 @@
       </section>
 
 
-
-
     <!-- <h1 style="align-items: center;">Welcome to TrackTrip!</h1>
     <h2 style="align-items: center;">Login Here</h2> -->
     <!-- <div id = "firebaseui-auth-container" @submit.prevent="setUser"></div> -->
