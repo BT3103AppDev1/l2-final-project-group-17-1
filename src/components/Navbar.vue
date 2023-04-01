@@ -1,8 +1,8 @@
 <template>
 
-  <nav id="vue" v-if="user">
+  <nav v-if="user">
 
-      <img class="logo" src="src/assets/images/logo3.png">
+      <img id="trackTripImg" src="src/assets/images/logo3.png">
 
       <router-link to="/InputPage" class="routerLeftSide">
       <button class = "btn btn-outline-light border-0 btnLeftSide" :class="{ 'btn-active': $route.path === '/InputPage' }">
@@ -23,33 +23,29 @@
         </button>
       </router-link>
 
-      <div class = "rightSide" style="display: inline-block; float: right;  margin-left: auto;">
-        <button @click="showMenu = !showMenu" id = "userCard" class="d-flex align-items-center" >
+
+      <div class = "rightSide">
+
+        <button @click="showMenu = !showMenu" id = "userCard">
           <div class="circular-icon mr-2">
             <img src="src/assets/images/snowy.png" alt="Your Image">
-            <!-- "src/assets/images/plane4.jpg" -->
           </div>
           <div id="userName">{{ this.displayName }}</div>
         </button>
+
         <ul class = "dropdown" v-if="showMenu">
-        <router-link to="/Profile">
-          <button style="width:100%; color:white; background-color: black;" @click="showMenu = !showMenu;" >Edit Profile</button>
-        </router-link>
-        <router-link to="/" id = "signoutRouter">
-        <button style="width:100%; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; color:white; background-color: black;"  @click="signOut()" v-if="user">Sign Out</button>
-        </router-link>
+          <router-link to="/Profile">
+            <button style="width:100%; color:white; background-color: black;" @click="showMenu = !showMenu;" >Edit Profile</button>
+          </router-link>
+          <router-link to="/" id = "signoutRouter">
+            <button style="width:100%; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; color:white; background-color: black;"  @click="signOut()" v-if="user">Sign Out</button>
+          </router-link>
         </ul>
       </div>
-<<<<<<< HEAD
 
-      <router-link to="/" id = "signoutRouter">
-        <button id="signoutBtn" class="btn btn-dark border-0" @click="signOut()" v-if="user">Sign Out</button>
-      </router-link>
-=======
       <!-- <router-link to="/" id = "signoutRouter">
-        <button class="btn btn-dark border-0" @click="signOut()" v-if="user">Sign Out</button>
+        <button id="signoutBtn" class="btn btn-dark border-0" @click="signOut()" v-if="user">Sign Out</button>
       </router-link> -->
->>>>>>> 280212204a5cf57cf4fb26e4950646f476acedc6
 
   </nav>
 
@@ -106,18 +102,15 @@
           const userRef = await getDoc(doc(db, "User", this.userid))
           this.displayName = userRef.data().Name
         },
-  
 
-      
+
+
       }
   }
 </script>
 
 <style scoped>
-  #vue {
-    bottom: 0;
-    margin-bottom: 0;
-  }
+
   nav {
     display: flex;
     flex-direction: row;
@@ -127,24 +120,11 @@
     color:rgb(248, 241, 210);
     background-color: rgb(156, 201, 215);
     font-family: Arial, Helvetica, sans-serif;
-    line-height: 50px;
-    height: 100%;
-    position: relative;
-    z-index: 1;
   }
 
-
-  img {
+  #trackTripImg {
     margin-left: 20px;
     height: 70px;
-  }
-
-  #signoutRouter{
-<<<<<<< HEAD
-    margin-right: 60px;
-=======
-    margin-right: 30px;
->>>>>>> 280212204a5cf57cf4fb26e4950646f476acedc6
   }
 
   .routerLeftSide {
@@ -165,50 +145,28 @@
   }
 
   .btn:hover {
-    transform: scale(1.1); /* increase the size by 10% */
+    transform: scale(1.05); /* increase the size */
     transition: all 0.2s ease-in-out; /* add a smooth transition effect */
     background-color: lightcyan;
-  }
-
-<<<<<<< HEAD
-  #signoutBtn {
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-  }
-
-  #signoutBtn:hover {
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-    background-color: darkslategrey;
   }
 
   .btn-active {
     background-color: lightcyan;
   }
 
-  #userCard {
-    margin-right: 40px;
-=======
-  #userCard:hover {
-    transform: scale(1.1); /* increase the size by 10% */
-    transition: all 0.2s ease-in-out; /* add a smooth transition effect */
-    background-color: floralwhite;
-  }
+
 
 
   #userCard {
     margin-right: 35px;
->>>>>>> 280212204a5cf57cf4fb26e4950646f476acedc6
     margin-left: auto;
     background-color: lightcyan;
     border-radius: 10px;
     padding: 5px;
-<<<<<<< HEAD
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-=======
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-    border-radius: 15px;
-    border-width: 2px;
-    position: relative;
->>>>>>> 280212204a5cf57cf4fb26e4950646f476acedc6
+
+    display: flex;
+    align-items: center;
   }
 
   #userName {
@@ -239,30 +197,30 @@
   .circular-icon img {
     max-width: 100%;
     max-height: 100%;
-    object-fit: fill;
+    object-fit: contain;
   }
 
   .dropdown {
     position: absolute;
     top: 100%;
-    left: 0;
-    z-index: 3;
-    list-style: none;
+    /* left: 0; */
+    /* z-index: 3; */
+    /* list-style: none; */
     padding: 0;
     margin: 0;
     background-color:grey;
     /* box-shadow: 0 2px 2px black; */
-    width: 68%;
+    width: 89%;
     text-align: center;
     color: white;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
   }
 
   .rightSide {
     position: relative;
-    max-width: 600px;
-    /* margin:  auto; */
+    display: inline-block;
+    margin-left: auto;
   }
 
 </style>

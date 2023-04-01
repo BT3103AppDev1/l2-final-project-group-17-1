@@ -10,8 +10,7 @@
             <!-- <div class="container py-5"></div> -->
             <!-- <div class="text-center d-flex flex-column"> -->
               <h1 style="text-shadow:2px 2px 8px grey; ;">Record your Spendings!</h1>
-              <img src="src/assets/images/money.avif" width="370px" height="auto" style="padding-left: 110px;">
-              <br>
+              <img src="src/assets/images/money.avif" style="height: 220px; margin-top: 20px; margin-bottom: 20px;">
               <p>Just fill in your spending details and it will be saved!</p>
             <!-- </div> -->
           </div>

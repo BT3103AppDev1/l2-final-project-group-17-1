@@ -6,19 +6,17 @@
 
             <div class="col-md d-flex flex-column align-items-center ">
               <div class="text-center py-5">
-                <h1>New Here?</h1>
-                <br>
-                <p>
-                Sign up and gain complete control over your spending now!</p>
+                <h1>Welcome to TrackTrip</h1>
+                <img id="trackTripImg" src="src/assets/images/money_login.png" style="height: 200px; margin-top:20px; margin-bottom: 20px;">
+                <p>Gain control over your spending now! Be it yourself, or with friends!</p>
               </div>
-              <!-- <button class="btn btn-lg btn-block text-light" type="submit" style="background-color: #2196F3;">Sign Up</button> -->
             </div>
 
             <div class="col-md">
-              <div class="card shadow-2-strong" style="border-radius: 1rem;">
+              <div class="card shadow-2-strong" style="border-radius: 1rem; width: 500px">
                 <div class="card-body p-5 text-center">
 
-                  <h3 class="mb-5">Log In</h3>
+                  <h3 class="mb-5">Sign In</h3>
 
                   <div id = "firebaseui-auth-container" @submit.prevent="setUser"></div>
 
@@ -159,6 +157,10 @@
 
  </script>
 
- <style scoped>
 
+ <style scoped>
+   #trackTripImg {
+    margin-left: 20px;
+    height: 70px;
+  }
  </style>
