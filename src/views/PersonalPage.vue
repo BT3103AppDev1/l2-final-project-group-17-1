@@ -109,17 +109,18 @@
                 </div>
                  
                 <!-- Bar Chart -->
-                <!-- <div class="container text-center">
+                <div class="container text-center">
                     <h1>Total Spending By Category</h1>
                     <bar-chart class="user" width=500px :data="categoryDict">
 
                     </bar-chart>
-                </div>  -->
+                </div> 
             </div>
-            <!-- <div class="container text-center">
+            <div class="d-md-flex justify-content-center">
+            <div class="container text-center">
                 <h1>Spending Insights By Day</h1>
                 <line-chart class ="user" width="500px" :data="spendingPerDayDict"></line-chart>
-            </div> -->
+            </div></div>
         </div>
     </section>
 
@@ -191,7 +192,7 @@
         this.updateCharts()
         this.getBudget()
         this.getTripExpenses()
-        //this.getSpendingPerDayDict()
+        this.getSpendingPerDayDict()
     },
     methods: { 
         async updateCharts() { 
@@ -283,50 +284,50 @@
             this.$router.push({name:'GroupPage', query:{
                 tripCode: this.tripCode, tripName: this.tripName}})
         },  
-        // async getSpendingPerDayDict() {
-        //     //DICTIONARY FOR DAILY SPENDINGS
-        //     const auth=getAuth()
-        //     const uid = auth.currentUser.uid
-        //     var spendingPerDayDict = {}
-        //     let days = []
-        //     let currentTrip = await getDoc(doc(db, "Trip", this.tripCode)) 
-        //     const startDate = moment(currentTrip.data().Start_Date);
-        //     const endDate = moment(currentTrip.data().End_Date);
-        //     var Difference_In_Days = endDate.diff(startDate, 'days')
-        //     let d = startDate
-        //     days.push(d.format('YYYY-MM-DD')) //start date
-        //     for (var i = 0; i < Difference_In_Days; i++) {
-        //         d = d.add(1, 'days')
-        //         //var d = new Date();
-        //         //d.setDate(startDate.toDate() + i + 1);
-        //         days.push(d.format('YYYY-MM-DD'));
-        //     }
-        //     days.forEach((day)=> {
-        //         spendingPerDayDict[day] = 0
-        //     })
+        async getSpendingPerDayDict() {
+            //DICTIONARY FOR DAILY SPENDINGS
+            const auth=getAuth()
+            const uid = auth.currentUser.uid
+            var spendingPerDayDict = {}
+            let days = []
+            let currentTrip = await getDoc(doc(db, "Trip", this.tripCode)) 
+            const startDate = moment(currentTrip.data().Start_Date);
+            const endDate = moment(currentTrip.data().End_Date);
+            var Difference_In_Days = endDate.diff(startDate, 'days')
+            let d = startDate
+            days.push(d.format('YYYY-MM-DD')) //start date
+            for (var i = 0; i < Difference_In_Days; i++) {
+                d = d.add(1, 'days')
+                //var d = new Date();
+                //d.setDate(startDate.toDate() + i + 1);
+                days.push(d.format('YYYY-MM-DD'));
+            }
+            days.forEach((day)=> {
+                spendingPerDayDict[day] = 0
+            })
 
-        //     let currentTripExpenses = currentTrip.data().Expenses //all expenses of this specific trip (string)
-        //     let allExpenses = await getDocs(collection(db, "Expense")) //all expenses
-        //     allExpenses.forEach((expense) => {
-        //         let users = expense.data().Users;
-        //         if (users.includes(String(uid)) && currentTripExpenses.includes(expense.id)) {
-        //             var date = expense.data().Date
-        //             var amount = expense.data().Amount
+            let currentTripExpenses = currentTrip.data().Expenses //all expenses of this specific trip (string)
+            let allExpenses = await getDocs(collection(db, "Expense")) //all expenses
+            allExpenses.forEach((expense) => {
+                let users = expense.data().Users;
+                if (users.includes(String(uid)) && currentTripExpenses.includes(expense.id)) {
+                    var date = expense.data().Date
+                    var amount = expense.data().Amount
 
-        //             //DATA FOR DAILY SPENDINGS 
-        //             if (date in spendingPerDayDict===false) {
-        //                 spendingPerDayDict[date] = amount
-        //             } else {
-        //                 spendingPerDayDict[date] += amount
-        //             }
-        //         }
-        //     })
-        //     this.spendingPerDayDict = spendingPerDayDict
-        //     //console.log(this.spendingPerDayDict)
-        //     //console.log("method called")
-        // },
+                    //DATA FOR DAILY SPENDINGS 
+                    if (date in spendingPerDayDict===false) {
+                        spendingPerDayDict[date] = amount
+                    } else {
+                        spendingPerDayDict[date] += amount
+                    }
+                }
+            })
+            this.spendingPerDayDict = spendingPerDayDict
+            //console.log(this.spendingPerDayDict)
+            //console.log("method called")
+        },
 
-        // getDays() {
+        //getDays() {
         //     // let days = []
         //     // var date1 = this.startDate;
         //     // var date2 = this.endDate;
