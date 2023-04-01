@@ -103,11 +103,10 @@
           this.displayName = userRef.data().Name
         },
 
-
-
       }
   }
 </script>
+
 
 <style scoped>
 
@@ -155,7 +154,11 @@
   }
 
 
-
+  #userCard:hover {
+    transform: scale(1.03); /* increase the size by 10% */
+    transition: all 0.2s ease-in-out; /* add a smooth transition effect */
+    background-color: aliceblue;
+  }
 
   #userCard {
     margin-right: 35px;
