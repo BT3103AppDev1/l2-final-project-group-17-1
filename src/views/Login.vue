@@ -7,8 +7,8 @@
             <div class="col-md d-flex flex-column align-items-center ">
               <div class="text-center py-5">
                 <h1>Welcome to <b>TrackTrip</b></h1>
-                <img id="trackTripImg" src="src/assets/images/money_login.png" style="height: 200px; margin-top:20px; margin-bottom: 30px;">
-                <p>Gain control over your spending now! Be it yourself, or with friends!</p>
+                <img id="trackTripImg" src="src/assets/images/money_login.png" style="height: 200px; margin-top:20px; margin-bottom: 20px;">
+                <h6>Gain control over your spending now! Be it yourself, or with friends!</h6>
               </div>
             </div>
 
