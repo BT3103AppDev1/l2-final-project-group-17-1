@@ -1,6 +1,6 @@
 <template>
 
-<section class="vh-80" >
+<section class="vh-80 bg-image" >
         <div class="container py-5 h-100">
           <div class="d-flex justify-content-center align-items-center h-100">
 
@@ -12,48 +12,22 @@
               </div>
             </div>
 
-            <div class="col-md">
-              <div class="card shadow-2-strong" style="border-radius: 1rem; width: 500px">
-                <div class="card-body p-5 text-center">
+            <div class="col-md" >
+              <div class="card " style="border-radius: 1rem; width: 500px; background-color: rgba(255, 255, 255, 0.7); border: none;">
+                <div class="card-body p-5 text-center shadow-2-strong" >
 
                   <h3 class="mb-5">Sign In</h3>
 
                   <div id = "firebaseui-auth-container" @submit.prevent="setUser"></div>
 
-                  <!-- <div class="form-outline mb-4">
-                    <input type="email" id="typeEmail" class="form-control form-control-lg" />
-                    <label class="form-label" for="typeEmail">Email</label>
-                  </div>
-
-                  <div class="form-outline mb-4">
-                    <input type="password" id="typePassword" class="form-control form-control-lg" />
-                    <label class="form-label" for="typePassword">Password</label>
-                  </div> -->
-
-                  <!-- Checkbox -->
-                  <!-- <div class="form-check d-flex justify-content-start mb-4">
-                    <input class="form-check-input" type="checkbox" value="" id="form1Example3" />
-                    <label class="form-check-label px-2" for="form1Example3"> Remember Me</label>
-                  </div>
-
-                  <button class="btn text-light btn-lg btn-block" type="submit" style="background-color: #2196F3;">Login</button>
-
-                  <hr class="my-4">
-
-                  <button class="btn btn-lg btn-block btn-primary mb-2" style="background-color: #dd4b39;"
-                    type="submit"><i class="bi bi-google me-2"></i> Continue with google</button> -->
-
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </section>
 
-
-    <!-- <h1 style="align-items: center;">Welcome to TrackTrip!</h1>
-    <h2 style="align-items: center;">Login Here</h2> -->
-    <!-- <div id = "firebaseui-auth-container" @submit.prevent="setUser"></div> -->
  </template>
 
  <script>
@@ -161,4 +135,12 @@
     margin-left: 20px;
     height: 70px;
   }
+
+  .bg-image {
+  background-image: url('src/assets/images/beach.jpeg');
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+}
+
  </style>
