@@ -3,7 +3,7 @@
         <router-view></router-view>
         <!-- <BudgetBar :tripCode = 'tripCode'/> -->
         <!-- <PersonalExp :tripCode = 'tripCode'/>  -->
-        <p>tripCode is : {{tripCode}}  {{people}}</p>
+        <!-- <p>tripCode is : {{tripCode}}  {{people}}</p> -->
         
       <!-- <div class = "container">
         <div id = "budget"> <Budget/> </div>
@@ -37,7 +37,8 @@
                 <div class="w3-light-grey w3-xlarge">
                     <div id="waterTank" class="w3-container w3-green w3-center" style=""></div>
                 </div>
-                <span>Your Budget: {{budget}}</span>
+                <span>Total Spent: {{totalSpent}}</span>
+                <span> Your Budget: {{budget}}</span>
             </div>
         </div>
     </section>
@@ -110,12 +111,13 @@
                  
                 <!-- Bar Chart -->
                 <div class="container text-center">
-                    <h1>Total Spending By Category</h1>
+                    <h1>Overall Spending By Category</h1>
                     <bar-chart class="user" width=500px :data="categoryDict">
 
                     </bar-chart>
                 </div> 
             </div>
+            <!-- Line Chart -->
             <div class="d-md-flex justify-content-center">
             <div class="container text-center">
                 <h1>Spending Insights By Day</h1>
@@ -158,6 +160,7 @@
             startDate: "",
             endDate: "",
             tripExpenses: "",
+            totalSpent: "",
             people: "",
             currency: "",
             componentKey: 0,
@@ -248,6 +251,7 @@
             this.categoryDict = categoryDict
             this.categoryPercentageDict = categoryPercentageDict
             this.pieChartData = formattedForPieChart
+            this.totalSpent = "$" + totalAmount
             //console.log(this.categoryDict)
         },
         forceRerender() {
@@ -274,7 +278,7 @@
                     let currentUserTrips = currentUser.data().Trips
                     currentUserTrips.forEach((trip)=> {
                         if(trip.Trip_Code == this.tripCode) {
-                            this.budget = trip.Budget
+                            this.budget = "$" + trip.Budget
                         }
                     })
                 }
