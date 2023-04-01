@@ -1,9 +1,10 @@
 <template>
 
-  <nav v-if="user">
+  <nav class="displayFlexRow">
 
       <img id="trackTripImg" src="src/assets/images/logo3.png">
 
+    <div class="displayFlexRow" v-if="user">
       <router-link to="/InputPage" class="routerLeftSide">
       <button class = "btn btn-outline-light border-0 btnLeftSide" :class="{ 'btn-active': $route.path === '/InputPage' }">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6" style="width: 20px; height: 20px;">
@@ -47,6 +48,7 @@
         <button id="signoutBtn" class="btn btn-dark border-0" @click="signOut()" v-if="user">Sign Out</button>
       </router-link> -->
 
+    </div>
   </nav>
 
 </template>
@@ -111,14 +113,16 @@
 <style scoped>
 
   nav {
+    color:rgb(248, 241, 210);
+    background-color: rgb(156, 201, 215);
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .displayFlexRow {
     display: flex;
     flex-direction: row;
     align-items: center;
     width: 100%;
-
-    color:rgb(248, 241, 210);
-    background-color: rgb(156, 201, 215);
-    font-family: Arial, Helvetica, sans-serif;
   }
 
   #trackTripImg {

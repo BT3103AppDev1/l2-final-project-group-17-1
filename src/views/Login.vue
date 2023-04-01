@@ -1,13 +1,13 @@
 <template>
 
-<section class="vh-100" >
+<section class="vh-80" >
         <div class="container py-5 h-100">
           <div class="d-flex justify-content-center align-items-center h-100">
 
             <div class="col-md d-flex flex-column align-items-center ">
               <div class="text-center py-5">
-                <h1>Welcome to TrackTrip</h1>
-                <img id="trackTripImg" src="src/assets/images/money_login.png" style="height: 200px; margin-top:20px; margin-bottom: 20px;">
+                <h1>Welcome to <b>TrackTrip</b></h1>
+                <img id="trackTripImg" src="src/assets/images/money_login.png" style="height: 200px; margin-top:20px; margin-bottom: 30px;">
                 <p>Gain control over your spending now! Be it yourself, or with friends!</p>
               </div>
             </div>
