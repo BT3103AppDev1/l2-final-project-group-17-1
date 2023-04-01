@@ -104,19 +104,22 @@
             <div class="d-md-flex justify-content-center">
                 <!-- Pie Chart -->
                 <div class="container text-center">
-                    <h1>Total spending by category</h1>
-                    <pie-chart class ="user" width=500px :data=
-    "categoryDict" ></pie-chart >
+                    <h1>Proportion of Spending By Category</h1>
+                    <pie-chart class ="user" width=500px :data="pieChartData" ></pie-chart >
                 </div>
                  
                 <!-- Bar Chart -->
-                <div class="container text-center">
-                    <h1>Spending by category from past 7 days </h1>
-                    <line-chart class="user" width=500px :data="spendingPerDayDict">
+                <!-- <div class="container text-center">
+                    <h1>Total Spending By Category</h1>
+                    <bar-chart class="user" width=500px :data="categoryDict">
 
-                    </line-chart>
-                </div> 
+                    </bar-chart>
+                </div>  -->
             </div>
+            <!-- <div class="container text-center">
+                <h1>Spending Insights By Day</h1>
+                <line-chart class ="user" width="500px" :data="spendingPerDayDict"></line-chart>
+            </div> -->
         </div>
     </section>
 
@@ -137,7 +140,6 @@
     // import BudgetBar from '@/components/BudgetBar.vue';
     import { collection, doc, getDoc, getDocs, query, where} from "firebase/firestore";
     import moment from 'moment'
-    //import {diff} from moment
 
     export default {
     name: "PersonalPage",
@@ -158,8 +160,22 @@
             people: "",
             currency: "",
             componentKey: 0,
-            //categoryDict:{},
+            spendingPerDayDict:{},
+            pieChartData: {
+            "Shopping": "",
+            "Food": "",
+            "Leisure": "",
+            "Travel": "",
+            "Accomodation":"",
+            },
             categoryDict: {
+            "Shopping": 0,
+            "Food": 0,
+            "Leisure": 0,
+            "Travel": 0,
+            "Accomodation":0,
+            },
+            categoryPercentageDict:{
             "Shopping": 0,
             "Food": 0,
             "Leisure": 0,
@@ -175,10 +191,11 @@
         this.updateCharts()
         this.getBudget()
         this.getTripExpenses()
-        //this.getBudget()
+        //this.getSpendingPerDayDict()
     },
     methods: { 
         async updateCharts() { 
+            //Pie chart
             let trip = await getDoc(doc(db, "Trip", this.tripCode))
             let currentTripExpenses = trip.data().Expenses
             let uid = this.userid
@@ -189,23 +206,48 @@
                 "Travel": 0,
                 "Accomodation":0,
             }
-
-            // console.log("TEST", uid)
+            let categoryPercentageDict = { 
+                "Shopping":0,
+                "Food": 0,
+                "Leisure": 0,
+                "Travel": 0,
+                "Accomodation":0,
+            }
+            let formattedForPieChart = {
+            "Shopping": "",
+            "Food": "",
+            "Leisure": "",
+            "Travel": "",
+            "Accomodation":"",
+            }
+            //let catergories = ["Shopping", "Food"]
             let allExpenses = await getDocs(collection(db, "Expense")) //all expenses
+            var totalAmount = 0
             allExpenses.forEach((expense) => {
                 let users = expense.data().Users;
             if (users.includes(String(uid)) && currentTripExpenses.includes(expense.id)) {
                 let cat = expense.data().Category
                 let amt = expense.data().Amount
+                totalAmount += amt
                 categoryDict[cat] += amt
-                console.log(categoryDict)
+                for (let c in categoryPercentageDict) {
+                    if (c == cat) {
+                        categoryPercentageDict[cat] = (categoryDict[cat]/totalAmount)*100
+                        formattedForPieChart[cat] = String(categoryPercentageDict[cat].toFixed(2)) + "%"
+                    } else {
+                        categoryPercentageDict[c] = (categoryDict[c]/totalAmount)*100
+                        formattedForPieChart[c] = String(categoryPercentageDict[c].toFixed(2)) + "%"
+                    }
+                }
+                //categoryPercentageDict[cat] = (categoryDict[cat]/totalAmount)*100
+                //formattedForPieChart[cat] = String(categoryPercentageDict[cat].toFixed(2)) + "%"
+                // console.log(formattedForPieChart)
                 }
             })
             this.categoryDict = categoryDict
-
-        },
-        forceRerender() {
-            this.componentKey += 1;
+            this.categoryPercentageDict = categoryPercentageDict
+            this.pieChartData = formattedForPieChart
+            //console.log(this.categoryDict)
         },
         forceRerender() {
             this.componentKey += 1;
@@ -240,7 +282,50 @@
         redirectToGroup() {
             this.$router.push({name:'GroupPage', query:{
                 tripCode: this.tripCode, tripName: this.tripName}})
-        },
+        },  
+        // async getSpendingPerDayDict() {
+        //     //DICTIONARY FOR DAILY SPENDINGS
+        //     const auth=getAuth()
+        //     const uid = auth.currentUser.uid
+        //     var spendingPerDayDict = {}
+        //     let days = []
+        //     let currentTrip = await getDoc(doc(db, "Trip", this.tripCode)) 
+        //     const startDate = moment(currentTrip.data().Start_Date);
+        //     const endDate = moment(currentTrip.data().End_Date);
+        //     var Difference_In_Days = endDate.diff(startDate, 'days')
+        //     let d = startDate
+        //     days.push(d.format('YYYY-MM-DD')) //start date
+        //     for (var i = 0; i < Difference_In_Days; i++) {
+        //         d = d.add(1, 'days')
+        //         //var d = new Date();
+        //         //d.setDate(startDate.toDate() + i + 1);
+        //         days.push(d.format('YYYY-MM-DD'));
+        //     }
+        //     days.forEach((day)=> {
+        //         spendingPerDayDict[day] = 0
+        //     })
+
+        //     let currentTripExpenses = currentTrip.data().Expenses //all expenses of this specific trip (string)
+        //     let allExpenses = await getDocs(collection(db, "Expense")) //all expenses
+        //     allExpenses.forEach((expense) => {
+        //         let users = expense.data().Users;
+        //         if (users.includes(String(uid)) && currentTripExpenses.includes(expense.id)) {
+        //             var date = expense.data().Date
+        //             var amount = expense.data().Amount
+
+        //             //DATA FOR DAILY SPENDINGS 
+        //             if (date in spendingPerDayDict===false) {
+        //                 spendingPerDayDict[date] = amount
+        //             } else {
+        //                 spendingPerDayDict[date] += amount
+        //             }
+        //         }
+        //     })
+        //     this.spendingPerDayDict = spendingPerDayDict
+        //     //console.log(this.spendingPerDayDict)
+        //     //console.log("method called")
+        // },
+
         // getDays() {
         //     // let days = []
         //     // var date1 = this.startDate;
@@ -268,6 +353,7 @@
         })
 
         async function fetchAndUpdateData(tripCode){
+            //console.log(this.spendingPerDayDict)
             let index = 1
             // let index2 = 1
             const auth=getAuth()
@@ -302,13 +388,6 @@
                 spendingPerDayDict[day] = 0
             })
                 
-            // console.log(spendingPerDayDict)
-            // var date1 = new Date(currentTrip.data().Start_Date);
-            // var date2 = new Date(endDate);
-            //var Difference_In_Time = date2.getTime() - date1.getTime();
-            //var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
-    
-
             //DICTIONARY FOR SPENDINGS BY CATEGORY
             var categoryDict = {
                 "Shopping":0,
