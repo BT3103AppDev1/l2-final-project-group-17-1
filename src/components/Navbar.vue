@@ -209,9 +209,9 @@
   .dropdown {
     position: absolute;
     top: 100%;
-    /* left: 0; */
-    /* z-index: 3; */
-    /* list-style: none; */
+    left: 0;
+    z-index: 3;
+    list-style: none;
     padding: 0;
     margin: 0;
     background-color:grey;

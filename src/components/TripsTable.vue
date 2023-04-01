@@ -20,75 +20,64 @@
       <div class="d-flex justify-content-between px-3" style="text-align:justify;">
 
         <div class="d-flex flex-row">
-          <div class = "dropdown px-3">
-            <div class = "currencyButton" style="padding-left: 1250px;">
+          <div class="scrollable">
+            <table id="fullTable" class="table table-bordered  table-scroll text-center" cellspacing="0"
+            width="100%" style="background-color: floralwhite; margin-left: 70px; z-index: 0; position: relative; margin-top: 50px" v-if="haveTrips">
+            <thead style="background-color: rgb(156, 201, 215); ">
+                <tr>
+                <th class="th-sm">Select Trip
+                </th>
+                <th class="th-sm">Date
+                </th>
+                <th class="th-sm">People
+                </th>
+                <th class="th-sm">Currency
+                </th>
+                <th class="th-sm">Net owed to you
+                </th>
+                <th class="th-sm">Your Expenses
+                </th>
+                <th class="th-sm">Your Budget
+                </th>
+                <th id = "tripcode">Trip Code
+                </th>
+                <th>Options</th>
+                </tr>
+            </thead>
+            </table>
+        </div>
+        
+        <div class = "dropdown px-3">
+        <div style="padding-left: 10px; z-index: 1; position: relative; ">
               <button class = "btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: rgb(52, 146, 175); margin-bottom: 5px;">
                   Currency
               </button>
-
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   <a class="dropdown-item" href="#">SGD</a>
                   <a class="dropdown-item" href="#">Original</a>
               </div>
             </div>
-            </div>
           </div>
+           
+          <!-- <div class = "dropdown px-3">
+            <div class = "currencyButton" style="padding-left: 1250px;">
+              <button class = "btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: rgb(52, 146, 175); margin-bottom: 5px;">
+                  Currency
+              </button>
+    
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="#">SGD</a>
+                  <a class="dropdown-item" href="#">Original</a>
+              </div>
+            </div>
+            
+            </div> -->
+            
+          </div>
+          
       </div>
     </section>
 
-      <div class="scrollable">
-        <table id="fullTable" class="table table-bordered  table-scroll text-center" cellspacing="0"
-        width="100%" style="background-color: floralwhite; margin-left: 100px;" v-if="haveTrips">
-        <thead style="background-color: rgb(156, 201, 215); ">
-            <tr>
-            <th class="th-sm">Select Trip
-            </th>
-            <th class="th-sm">Date
-            </th>
-            <th class="th-sm">People
-            </th>
-            <th class="th-sm">Currency
-            </th>
-            <th class="th-sm">Net owed to you
-            </th>
-            <th class="th-sm">Your Expenses
-            </th>
-            <th class="th-sm">Your Budget
-            </th>
-            <th id = "tripcode">Trip Code
-            </th>
-            <th>Options</th>
-            </tr>
-        </thead>
-
-        <!-- Data -->
-        <!-- <tbody>
-            <tr>
-              <td><button type="button" class="btn btn-sm btn-dark" style="background-color: rgb(52, 146, 175);">Japan</button></td>
-              <td>1 May 22 - 9 May 22</td>
-              <td>Timothy, Chancy, Abby, ZhiQi</td>
-              <td>JPY</td>
-              <td>-50</td>
-              <td>1000</td>
-              <td>1200</td>
-              <td>udhcbyvd#!</td>
-              <td><button type="button" class="btn btn-sm btn-danger" style="border-radius: 50%;">Leave</button></td>
-            </tr>
-            <tr>
-              <td><button type="button" class="btn btn-sm btn-dark" style="background-color: rgb(52, 146, 175);">Thailand</button></td>
-              <td>20 May 22 - 29 May 22</td>
-              <td>Timothy, Chancy, Abby, ZhiQi</td>
-              <td>THB</td>
-              <td>-50</td>
-              <td>5000</td>
-              <td>1000</td>
-              <td>udhcbyvfsdsdd#!</td>
-              <td><button type="button" class="btn btn-sm btn-danger" style="border-radius: 50%;">Leave</button></td>
-            </tr>
-        </tbody> -->
-        </table>
-        </div>
-    <!-- </section> -->
   </div>
 </template>
 
@@ -337,7 +326,7 @@
 </script>
 
 <style scoped>
-  body {
+      body {
         background-color: floralwhite;
       }
       table {
@@ -349,47 +338,53 @@
                 border-top-left-radius: 20px;
                 border-bottom-right-radius: 20px;
                 border-bottom-left-radius: 20px;
-                table-layout: fixed;
-            }
+                /* table-layout: fixed; */
+                position: auto
+      }
 
-            th,
-            td {
-                padding: 15px;
-                background-color: rgba(255,255,255,0.2);
-                color: black;
-                font-family: Arial, Helvetica, sans-serif;
-                height: 10px;
-            }
+      th, td {
+          padding: 15px;
+          background-color: rgba(255,255,255,0.2);
+          color: black;
+          font-family: Arial, Helvetica, sans-serif;
+          height: 10px;
+      }
 
-            thead th {
-                background-color: #55608f;
-                color: white;
+      thead th {
+          background-color: #55608f;
+          color: white;
 
-            }
+      }
 
-            table td.scroll {
-              overflow-x: auto;
-            }
+      table td.scroll {
+        overflow-x: auto;
+      }
 
-            #fullTableSection h1 {
-                    color: #111;
-                    font-family: 'Helvetica Neue', sans-serif;
-                    font-size: 50px;
-                    /* font-weight: bold;  */
-                    letter-spacing: -1px;
-                    line-height: 1;
-                    text-align: left;
-                }
+      #fullTableSection h1 {
+              color: #111;
+              font-family: 'Helvetica Neue', sans-serif;
+              font-size: 50px;
+              /* font-weight: bold;  */
+              letter-spacing: -1px;
+              line-height: 1;
+              text-align: left;
+      }
 
-            th {
-                text-align: center;
-                color:white;
-            }
+      th {
+          text-align: center;
+          color:white;
+      }
 
-            #dropdownMenuButton {
-              /* margin: 0;
-              padding: 0; */
-              bottom: 30px;
-              left: 50px;
-            }
+      #dropdownMenuButton {
+        /* margin: 0;
+        padding: 0; */
+        bottom: 30px;
+        left: 70px;
+      }
+
+      #topBar {
+        margin-bottom: 0;
+        bottom: 0;
+        display: inline
+      }
 </style>
