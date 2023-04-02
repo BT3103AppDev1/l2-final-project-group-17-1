@@ -1,9 +1,7 @@
 <template>
 
-  <section class="vh-100" >
-      <div class="container py-5">
 
-        <div class="d-flex flex-row justify-content-center align-items-center margin-auto">
+      <div id="page" class="container py-5 d-flex flex-row align-items-center ">
 
 
           <div class="container d-flex flex-column align-items-center">
@@ -88,9 +86,7 @@
             </div>
           </div>
         </div>
-      </div>
 
-  </section>
 
 </template>
 
@@ -303,10 +299,14 @@
 
 
 <style>
-  section {
-    /* WHERE */
+  #page {
     background-color: floralwhite;
-    background-image: url('picture/input1.jpg');
-    margin:auto;
+    /* background-image: url('picture/input1.jpg'); */
+
+    position: absolute;
+/* top: 0;
+left: 0; */
+  height: 100vh;
+  width: 100vw;
   }
 </style>
