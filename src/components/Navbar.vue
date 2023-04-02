@@ -114,7 +114,7 @@
   nav {
     color:rgb(248, 241, 210);
     background-color: rgb(156, 201, 215);
-    font-family: Arial, Helvetica, sans-serif;
+    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
   .displayFlexRow {

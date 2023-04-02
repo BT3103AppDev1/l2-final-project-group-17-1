@@ -1,6 +1,6 @@
 <template>
   <div :key="componentKey">
-   <section class="text-dark" id="topBar" style="background-color: floralwhite;">
+   <!-- <section class="text-dark" id="topBar" style="background-color: floralwhite;">
       <div class="container">
           <div class="d-flex justify-content-between">
               <div class="text-center py-5" style= "width: 40rem;">
@@ -9,14 +9,39 @@
                         Your Trips
                         <img src="src/assets/images/planecropped.PNG" width="100px" style="object-position: right; margin-left: 20px; height: 100px;">
                       </h1>
-
                   </div>
               </div>
           </div>
       </div>
-  </section>
+    </section> -->
 
-  <section id = "currency" style = "background-color: floralwhite;">
+
+    <h1 style = "text-shadow: 2px 2px 7px grey; margin-left: 5%; margin-top: 50px;">
+      Your Trips
+      <img src="src/assets/images/planecropped.PNG" style="object-position: right; margin-left: 20px; height: 100px;">
+    </h1>
+
+    <div class="scrollable">
+        <table id="fullTable" class="table table-bordered  table-scroll text-center" v-if="haveTrips">
+        <thead style="background-color: rgb(156, 201, 215); ">
+            <tr>
+            <th class="th-sm">Select Trip</th>
+            <th class="th-sm">Date</th>
+            <th class="th-sm">People</th>
+            <th class="th-sm">Currency</th>
+            <th class="th-sm">Net owed to you</th>
+            <th class="th-sm">Your Expenses</th>
+            <th class="th-sm">Your Budget</th>
+            <th id = "tripcode">Trip Code</th>
+            <th>Options</th>
+            </tr>
+        </thead>
+        </table>
+    </div>
+
+
+
+  <!-- <section id = "currency" style = "background-color: floralwhite;">
       <div class="d-flex justify-content-between px-3" style="text-align:justify;">
 
         <div class="d-flex flex-row">
@@ -46,7 +71,7 @@
             </thead>
             </table>
         </div>
-        
+
         <div class = "dropdown px-3">
         <div style="padding-left: 10px; z-index: 1; position: relative; ">
               <button class = "btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: rgb(52, 146, 175); margin-bottom: 5px;">
@@ -58,28 +83,31 @@
               </div>
             </div>
           </div>
-           
-          <!-- <div class = "dropdown px-3">
+
+          <div class = "dropdown px-3">
             <div class = "currencyButton" style="padding-left: 1250px;">
               <button class = "btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: rgb(52, 146, 175); margin-bottom: 5px;">
                   Currency
               </button>
-    
+
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   <a class="dropdown-item" href="#">SGD</a>
                   <a class="dropdown-item" href="#">Original</a>
               </div>
             </div>
-            
-            </div> -->
-            
+
+            </div>
+
           </div>
-          
+
       </div>
-    </section>
+    </section> -->
 
   </div>
 </template>
+
+
+
 
 <script>
 
@@ -98,14 +126,14 @@
           return {
             userid : "",
             componentKey: 0,
-          }  
+          }
         },
         computed: {
           haveTrips() {
             const collectionRef = getDocs(collection(db, "Trip"));
             return collectionRef.size != 0;
           }
-        }, 
+        },
         updated() {
           this.displayTrips();
         },
@@ -169,7 +197,7 @@
                     // people.forEach(user => {
                     //   let ref = doc(db, 'User', user);
                     //   getDoc(ref)
-                    //     .then((doc) => { 
+                    //     .then((doc) => {
                     //       let name = doc.data().Name;
                     //       namesArray.push(name)
                     //     })
@@ -195,7 +223,7 @@
                     let cell7 = row.insertCell(6);
                     let cell8 = row.insertCell(7);
                     let cell9 = row.insertCell(8);
-                  
+
                     const resultPromise = this.loadExpenses(tripExpenses);
                     resultPromise.then((result) => {
                       const expense = result.expense;
@@ -222,10 +250,10 @@
                     tripButton.innerHTML = tripName
                     tripButton.onclick = function() {
                       //router.push('/PersonalPage')
-                      try { 
-                        router.push({name:'PersonalPage', 
+                      try {
+                        router.push({name:'PersonalPage',
                           // params:{
-                          // tripCode:tripCode, 
+                          // tripCode:tripCode,
                           // budget:budget,
                           // tripName:tripName,
                           // startDate:startDate,
@@ -245,7 +273,7 @@
 
 
                     let deleteTripButton = document.createElement("button")
-                    deleteTripButton.id = String(tripName) 
+                    deleteTripButton.id = String(tripName)
                     deleteTripButton.className = "bwt"
                     deleteTripButton.innerHTML = "Leave"
 
@@ -261,7 +289,7 @@
                     index +=1
                   }
               })
-            })  
+            })
             },
             async deleteTrip(tripCode){
               alert("You are going to delete " + tripCode)
@@ -322,24 +350,30 @@
         }
 
     }
-    
+
 </script>
 
 <style scoped>
       body {
         background-color: floralwhite;
       }
-      table {
-                width: 1200px;
-                border-collapse: collapse;
-                overflow: hidden;
-                box-shadow: 0 0 20px rgba(0,0,0,0.1);
-                border-top-right-radius: 20px;
-                border-top-left-radius: 20px;
-                border-bottom-right-radius: 20px;
-                border-bottom-left-radius: 20px;
-                /* table-layout: fixed; */
-                position: auto
+
+      #fullTable {
+        width: 90%;
+        border-collapse: collapse;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        border-top-right-radius: 15px;
+        border-top-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+        border-bottom-left-radius: 15px;
+        /* table-layout: fixed; */
+        position: auto;
+        background-color: floralwhite;
+        margin-left: 70px;
+        margin-top: 50px;
+        z-index: 0;
+        position: relative;
       }
 
       th, td {

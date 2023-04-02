@@ -1,10 +1,10 @@
 <template>
 <div class = "page">
   <TripsTable ref="table"/>
-  <div class = "container">
-    <div id = "create"> <CreateTrip v-on:update="refresh"/> </div>
+  <!-- <div class = "container"> -->
+    <div id = "create"><CreateTrip v-on:update="refresh"/> </div>
     <div id = "join"><JoinTrip v-on:update="refresh"/> </div>
-  </div>
+  <!-- </div> -->
 </div>
 </template>
 
@@ -39,7 +39,7 @@ export default {
         this.name = user.Name
       }
     })
-    
+
   },
   methods: {
     refresh() {
@@ -49,7 +49,7 @@ export default {
     }
   }
 }
-</script> 
+</script>
 
 <style scoped>
     .container{
@@ -57,20 +57,20 @@ export default {
         flex-direction: row;
     }
 
-    #create {
+    /* #create {
         flex: 1;
 
     }
 
     #join {
         flex: 2;
-        padding-top: 50px; 
+        padding-top: 50px;
         right: 0;
         width: 100%;
-    } 
+    }  */
     .page {
         background-color: floralwhite;
-        
+
     }
         /* position: auto; */
     /* }

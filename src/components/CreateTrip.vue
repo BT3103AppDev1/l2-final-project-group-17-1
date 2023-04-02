@@ -4,11 +4,10 @@
     <div class="container" id="createtripform">
       <div class="justify-content-center h-100">
 
-        <div class="align-items-center ">
-          <div class="text-center">
+
+        <div class="text-center align-items-center ">
           <h1>Create a new Trip!</h1>
           <p>Create a new Trip and share with your friends!</p>
-          </div>
         </div>
 
         <div class="container">
@@ -69,8 +68,8 @@ export default {
       components: {
           Navbar,
           TripsTable
-      }, 
-      
+      },
+
       data() {
         return {
           tripName: "",
@@ -103,13 +102,13 @@ export default {
           //let people = tripData.userIds  //array
           //let currency = this.currency
           //alert("Saving your new trip details!");
-      
+
           try {
             const docRef = await addDoc(collection(db, "Trip"), {
               Name: this.tripName,
               Currency: this.currency,
               // Budget: this.budget,
-              Start_Date: this.startDate, 
+              Start_Date: this.startDate,
               End_Date: this.endDate,
               Users : arrayUnion(String(this.userid)),
               Expenses: []
@@ -140,6 +139,6 @@ export default {
 }
 </script>
 
-<!-- "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" 
-  integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" 
+<!-- "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
   crossorigin="anonymous" -->
