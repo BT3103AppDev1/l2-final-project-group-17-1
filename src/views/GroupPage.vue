@@ -15,7 +15,7 @@
             </div>
 
     <section class="container p-3" >
-        <h2 class="py-3">Outstanding Payments</h2>
+        <h2 class="py-3">Outstanding Debts</h2>
         <h6>Owed to You: {{ currency }}</h6>
         <div class="scrollable">
             <table id="fulltable" class="table-sm table table-bordered table-scroll text-center" cellspacing="0"
@@ -26,9 +26,10 @@
                 </tr>
             </thead>
                 <tr>
-                    <td v-for="user in oweDict" :key="user">{{ user.toFixed(2) }}</td>
+                    <td v-for="(value, user) in oweDict" :key="user">{{ value.toFixed(2) }}</td>
                 </tr>
             </table>
+            <h1 v-show="noDebts" style = "text-align: center;">No Outstanding Debts! </h1>
         </div>
     </section>
     <!-- <div>
@@ -119,6 +120,12 @@ export default {
         this.getEndDate()
     },
 
+    computed: {
+        noDebts() {
+            return Object.keys(this.oweDict).length === 0
+        }
+    },
+
     methods: {
         async getStartDate() {
             let trip = await getDoc(doc(db, "Trip", this.tripCode))
@@ -169,18 +176,12 @@ export default {
                                     this.oweDict[username] -= exp.Amount / people.length
                                 }
                             })
-                            // if (!(username in this.oweDict)) {
-                            //     this.oweDict[username] = 0
-                            // }
-                            // this.oweDict[username] -= exp.Amount / people.length
                         }
                     }
                   }
                 }
                 delete this.oweDict[this.name]
                 console.log(this.oweDict)
-                // const result = {expense: expense.toFixed(2),
-                //                 netowe: netowe.toFixed(2)}
             } catch (error) {
                 console.log("Error calculating money owed", error);
             }
