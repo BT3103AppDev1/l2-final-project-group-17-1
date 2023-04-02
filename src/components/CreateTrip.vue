@@ -1,6 +1,6 @@
 <template>
   <section class="py-5" style="background-color: floralwhite">
-  <section class="d-flex flex-row container">
+  <section >
     <div class="container" id="createtripform">
       <div class="justify-content-center h-100">
 

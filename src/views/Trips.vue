@@ -43,7 +43,6 @@ export default {
   },
   methods: {
     refresh() {
-        console.log('refresh')
         const tripsTable = this.$refs.table;
         tripsTable.refresh();
         // tripsTable.displayTrips();
@@ -53,31 +52,51 @@ export default {
 </script> 
 
 <style scoped>
-
-    .page {
-        background-color: floralwhite;
-    }
-    .container {
+    .container{
         display: flex;
         flex-direction: row;
-        background-color: floralwhite;
-        /* margin: 0; */
-        padding: 0;
-        right: 0;
-        text-align: justify;
-        justify-content: space-around;
-        left: 100px;
     }
 
     #create {
-        flex: 2;
-        width: 100%;
+        flex: 1;
+
     }
 
     #join {
         flex: 2;
-        padding-top: 50px;
+        padding-top: 50px; 
         right: 0;
         width: 100%;
+    } 
+    .page {
+        background-color: floralwhite;
+        
     }
+        /* position: auto; */
+    /* }
+    .container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        display: flex;
+        flex-direction: row;
+        background-color: floralwhite;
+        margin: 0;
+        padding: 0;
+        right: 0;
+        text-align: justify;
+        justify-content: space-between;
+        left: 100px;
+    }
+
+    #create {
+        flex: 1;
+        width: 50px
+    }
+
+    #join {
+        flex: 1;
+        padding-top: 50px; */
+        /* right: 0;
+        width: 100%;
+    }  */
 </style>

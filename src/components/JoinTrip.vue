@@ -1,5 +1,6 @@
 <template>
-    <div class="container" style="background-color: floralwhite;">
+    <section class="container" style="background-color: floralwhite;">
+        <section class="d-flex flex-row container">
         <div class="justify-content-center h-100">
 
           <div class="align-items-center ">
@@ -31,7 +32,8 @@
             </div>
           </div>
         </div>
-      </div>
+        </section>
+    </section>
 </template>
 
 <script>
