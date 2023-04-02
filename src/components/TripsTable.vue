@@ -23,7 +23,7 @@
         </thead>
         </table>
     </div>
-
+    <h1 v-if="!haveTrips" style="text-align: center;">You Have No Trips! </h1>
 
    <!-- <section class="text-dark" id="topBar" style="background-color: floralwhite;">
       <div class="container">
