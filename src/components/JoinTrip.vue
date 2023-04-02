@@ -1,39 +1,31 @@
 <template>
-    <section class="container" style="background-color: floralwhite;">
-        <section class="d-flex flex-row container">
-        <div class="justify-content-center h-100">
+        <div class="justify-content-center" style="background-color: floralwhite;">
 
-          <div class="align-items-center ">
-            <div class="text-center">
+          <div class="align-items-center text-center">
             <h1>Join existing Trip!</h1>
-
             <p>Join a Trip created by your friend!</p>
-            </div>
           </div>
 
-          <div class="container">
-            <div class="card shadow-2-strong" style="border-radius: 1rem; border-color: #3d6d9e; background-color: rgb(179, 214, 214);">
-              <div class="card-body p-4 text-center">
-                <form>
-                <div class="form-outline mb-4" style="width: 500px">
-                  <input type="email" id="typeEmail" class="form-control form-control-lg" v-model = "tripCode"/>
-                  <label class="form-label" for="typeEmail">Trip Code</label>
-                </div>
 
-                <div class="form-outline mb-4">
-                  <input type="email" id="typeEmail" class="form-control form-control-lg" v-model = "budget"/>
-                  <label class="form-label" for="typeEmail">Budget</label>
-                </div>
-
-                <button class="btn btn-lg btn-block shadow text-light" style="background-color: #3d6d9e;" type="submit" v-on:click="joinTrip">Save</button>
-                <!-- style="background-color: #2196F3; -->
-                </form>
+          <div class="container card shadow-2-strong card-body p-5 text-center" style="border-radius: 1rem; border-color: #3d6d9e; background-color: rgb(179, 214, 214);">
+            <form>
+              <div class="form-outline mb-4">
+                <input type="text" id="typeEmail" class="form-control form-control-lg" v-model = "tripCode"/>
+                <label class="form-label" for="typeEmail">Trip Code</label>
               </div>
-            </div>
+
+              <div class="form-outline mb-4">
+                <input type="number" id="typeEmail" class="form-control form-control-lg" v-model = "budget"/>
+                <label class="form-label" for="typeEmail">Budget</label>
+              </div>
+
+              <button class="btn btn-lg btn-block shadow text-light" style="background-color: #3d6d9e;" type="submit" v-on:click="joinTrip">Save</button>
+              <!-- style="background-color: #2196F3; -->
+            </form>
           </div>
+
         </div>
-        </section>
-    </section>
+
 </template>
 
 <script>
@@ -97,7 +89,7 @@
                         })
                         const tripRef = await updateDoc(doc(db, "Trip", this.tripCode), {
                             Users: arrayUnion(this.userid)
-                        }) 
+                        })
                         Promise.all([userRef, tripRef]).then(() => {
                             this.tripCode = '';
                             this.budget = '';
@@ -105,7 +97,7 @@
                     }
                     catch(error) {
                         console.error("Error adding document: ", error);
-                    } 
+                    }
                 } else {
                     alert("Already joined trip! ");
                     this.tripCode = '';

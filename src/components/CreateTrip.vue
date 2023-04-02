@@ -1,54 +1,48 @@
 <template>
-  <section class="py-5" style="background-color: floralwhite">
-  <section >
-    <div class="container" id="createtripform">
-      <div class="justify-content-center h-100">
 
+    <div class="" id="createtripform" style="background-color: floralwhite; width: 100%;">
 
         <div class="text-center align-items-center ">
           <h1>Create a new Trip!</h1>
           <p>Create a new Trip and share with your friends!</p>
         </div>
 
-        <div class="container">
-          <div class="card shadow-2-strong" style="border-radius: 1rem; background-color: rgb(179, 214, 214);">
-            <div class="card-body p-4 text-center">
-              <form>
-              <div class="form-outline mb-4">
-                <input type="email" id="typeEmail" class="form-control form-control-lg" v-model = "tripName"/>
-                <label class="form-label" for="typeEmail">Trip Name</label>
-              </div>
-              <div class="form-outline mb-4">
-                <input type="email" id="typeEmail" class="form-control form-control-lg" v-model = "budget"/>
-                <label class="form-label" for="typeEmail">Budget</label>
-              </div>
-
-              <div class="form-outline mb-4">
-                <div class="bfh-selectbox bfh-currencies" data-currency="EUR" data-flags="true">
-                  <label for="cars">Currency:</label>
-                  <select v-model="currency" id = "currency">
-                    <option v-for="currency in currencies" :key = "currency" :value = "currency">{{ currency }}</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-outline mb-4">
-                <label for="date">Start Date: </label>
-                <input type="date" id="startdate" name="date" v-model = "startDate">
-              </div>
-              <div class="form-outline mb-4">
-                <label for="date">End Date: </label>
-                <input type="date" id="enddate" name="date" v-model = "endDate">
-              </div>
-              <button class="btn btn-lg btn-block shadow text-light" type="submit" v-on:click="createTrip" style="background-color: #3d6d9e;">Save</button>
-            </form>
+        <div class="card shadow-2-strong card-body p-5 text-center" style="border-radius: 1rem; background-color: rgb(179, 214, 214);">
+          <form>
+            <div class="form-outline mb-4">
+              <input type="text" id="typeEmail" class="form-control form-control-lg" v-model = "tripName"/>
+              <label class="form-label" for="typeEmail">Trip Name</label>
             </div>
-          </div>
+
+            <div class="form-outline mb-4">
+              <input type="number" id="typeEmail" class="form-control form-control-lg" v-model = "budget"/>
+              <label class="form-label" for="typeEmail">Budget</label>
+            </div>
+
+            <div class="form-outline mb-4">
+              <div class="bfh-selectbox bfh-currencies" data-currency="EUR" data-flags="true">
+                <label for="cars">Currency:</label>
+                <select v-model="currency" id = "currency">
+                  <option v-for="currency in currencies" :key = "currency" :value = "currency">{{ currency }}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-outline mb-4">
+              <label for="date">Start Date: </label>
+              <input type="date" id="startdate" name="date" v-model = "startDate">
+            </div>
+            <div class="form-outline mb-4">
+              <label for="date">End Date: </label>
+              <input type="date" id="enddate" name="date" v-model = "endDate">
+            </div>
+            <button class="btn btn-lg btn-block shadow text-light" type="submit" v-on:click="createTrip" style="background-color: #3d6d9e;">Save</button>
+          </form>
         </div>
-      </div>
+
     </div>
-  </section>
-</section>
+
+
 </template>
 
 <script>

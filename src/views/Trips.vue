@@ -1,10 +1,10 @@
-<template>
+<template style="">
 <div class = "page">
   <TripsTable ref="table"/>
-  <!-- <div class = "container"> -->
-    <div id = "create"><CreateTrip v-on:update="refresh"/> </div>
-    <div id = "join"><JoinTrip v-on:update="refresh"/> </div>
-  <!-- </div> -->
+  <div style="display: flex; flex-direction: row; justify-content: center; margin-top: 100px;">
+    <div id = "create" style="width:30%; margin-right: 5%;"><CreateTrip v-on:update="refresh"/> </div>
+    <div id = "join" style="width:30%; margin-left: 5%;"><JoinTrip v-on:update="refresh"/> </div>
+  </div>
 </div>
 </template>
 
@@ -52,10 +52,6 @@ export default {
 </script>
 
 <style scoped>
-    .container{
-        display: flex;
-        flex-direction: row;
-    }
 
     /* #create {
         flex: 1;
@@ -63,14 +59,11 @@ export default {
     }
 
     #join {
-        flex: 2;
-        padding-top: 50px;
-        right: 0;
-        width: 100%;
+
     }  */
     .page {
         background-color: floralwhite;
-
+        min-height: 100vh;
     }
         /* position: auto; */
     /* }
@@ -87,16 +80,5 @@ export default {
         justify-content: space-between;
         left: 100px;
     }
-
-    #create {
-        flex: 1;
-        width: 50px
-    }
-
-    #join {
-        flex: 1;
-        padding-top: 50px; */
-        /* right: 0;
-        width: 100%;
-    }  */
+*/
 </style>
