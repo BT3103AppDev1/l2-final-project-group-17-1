@@ -25,7 +25,7 @@ export default {
     }
   },
   components:{
-    Navbar,
+    // Navbar,
     TripsTable,
     CreateTrip,
     JoinTrip

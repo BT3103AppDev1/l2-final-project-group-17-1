@@ -15,6 +15,33 @@
                     <button class = "btn btn-light" id = "Personal" @click="redirectToPersonal()"><b>Personal</b></button>
                     </div>
             </div>
+
+    <section class="container p-3" >
+        <h2 class="py-3">Outstanding Payments</h2>
+        <h6>Owed to You: {{ currency }}</h6>
+        <div class="scrollable">
+            <table id="fulltable" class="table-sm table table-bordered table-scroll text-center" cellspacing="0"
+            width="80%" style="background-color: white; color:#111; margin-top: 20px;">
+            <thead style="background-color: rgb(156, 201, 215); font-family:Arial, Helvetica, sans-serif;"> 
+                <tr>
+                <th v-for="(value, user) in oweDict" :key="user" class="th-sm" style="color: #111;" > {{ user }}</th>
+                </tr>
+            </thead>
+                <tr>
+                    <td v-for="user in oweDict" :key="user">{{ user.toFixed(2) }}</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+    <!-- <div>
+        <h2>Debts</h2>
+        <ul>
+        <li v-for="(user, amount) in oweDict" :key="user">
+            {{ user }}: {{ amount }}
+            {{ user }}: {{ calculateOwedAmount(user) }} 
+        </li>
+        </ul>
+  </div> -->
         
             <!-- Table with all group expenses -->
     <section class="container p-3" id="fullTableSection" style="background-color: floralwhite;"> 
@@ -83,7 +110,9 @@ export default {
             endDate: "",
             tripExpenses: "",
             people: "",
-            currency: "",
+            currency: this.$route.query.currency,
+            oweDict: {},
+            name: ""
           }  
     },
 
@@ -103,7 +132,60 @@ export default {
         },
         redirectToPersonal() {
             this.$router.push({name:'PersonalPage', query:{
-            tripCode: this.tripCode, tripName: this.tripName}})
+            tripCode: this.tripCode, tripName: this.tripName, currency: this.currency}})
+        },
+        async loadExpenses(expRefs) {
+            console.log(expRefs)
+            let allUsers = await getDocs(collection(db, "User"))
+              try {
+                for (const expRef of expRefs) {
+                  const docRef = doc(db, "Expense", expRef);
+                  const docSnap = await getDoc(docRef);
+                  if (docSnap.exists()) {
+                    const exp = docSnap.data()
+                    if (exp.Users.includes(this.userid)) {
+                        let people = exp.Users //array
+                        if (exp.Paid_By == this.userid) {
+                            for (const userRef of people) {
+                                if (userRef != this.userid) {
+                                console.log(allUsers)
+                                    allUsers.forEach((user) => {
+                                        if (user.id == userRef) {
+                                            let username = user.data().Name
+                                            if (!(username in this.oweDict)) {
+                                                this.oweDict[username] = 0
+                                            }
+                                            this.oweDict[username] += exp.Amount / people.length
+                                        }
+                                    })
+                                }
+                            }
+                        } else {
+                            let userRef = exp.Paid_By
+                            allUsers.forEach((user) => {
+                                if (user.id == userRef) {
+                                    let username = user.data().Name
+                                    if (!(username in this.oweDict)) {
+                                        this.oweDict[username] = 0
+                                    }
+                                    this.oweDict[username] -= exp.Amount / people.length
+                                }
+                            })
+                            // if (!(username in this.oweDict)) {
+                            //     this.oweDict[username] = 0
+                            // }
+                            // this.oweDict[username] -= exp.Amount / people.length
+                        }
+                    }
+                  }
+                }
+                delete this.oweDict[this.name]
+                console.log(this.oweDict)
+                // const result = {expense: expense.toFixed(2),
+                //                 netowe: netowe.toFixed(2)}
+            } catch (error) {
+                console.log("Error calculating money owed", error);
+            }
         }
     },
 
@@ -119,12 +201,26 @@ export default {
             console.log("logged out")
             }
         })
-        console.log("logged in", this.tripCode)
         //console.log(this.$route.query.tripCode)
         async function displayDates(tripCode) {
-
         }
-
+        // console.log(this.tripCode)
+        // async function calculateOweAmount(tripCode) {
+        //     let currentTrip = await getDoc(doc(db, "Trip", tripCode)) 
+        //     let currentTripExpenses = currentTrip.data().Expenses
+        //     this.loadExpenses(currentTripExpenses)
+        // }
+        //calculateOweAmount(this.tripCode);
+        async function getExpenses(tripCode){
+            let currentTrip = await getDoc(doc(db, "Trip", tripCode)) 
+            let currentTripExpenses = currentTrip.data().Expenses 
+            console.log(currentTripExpenses)
+            return currentTripExpenses
+        }
+        getExpenses(this.tripCode).then((result) => {
+            this.loadExpenses(result);
+            //console.log(this.oweDict)
+        })
         async function displayGroupExpenses(tripCode){
             let index = 1
             let index2 = 1
@@ -134,7 +230,7 @@ export default {
             let currentTripExpenses = currentTrip.data().Expenses //all expenses of this specific trip
             let allExpenses = await getDocs(collection(db, "Expense")) //all expenses
             let allUsers = await getDocs(collection(db, "User"))
-
+            
             var totalCost = 0
             var spendingPerDayDict = {}
             var categoryDict = {
@@ -145,6 +241,7 @@ export default {
                 "Accomodation":0
             }
             console.log(currentTripExpenses)
+            // this.loadExpenses(currentTripExpenses)
             currentTripExpenses.forEach((expenseID) => { //for each expenseID in trip, get expense data
                 let userNames = ""
                 allExpenses.forEach((expense)=> {

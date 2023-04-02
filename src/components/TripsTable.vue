@@ -115,13 +115,15 @@
     import { collection, doc, getDocs, getDoc, addDoc, updateDoc, arrayUnion, Timestamp, deleteDoc, getFirestore, onSnapshot} from "firebase/firestore";
     //import Navbar from '@/components/Navbar.vue';
     // const db = getFirestore(app);
-    //import CreateTrip from '@/components/CreateTrip.vue';
     import router from "../router"
     import {getAuth, onAuthStateChanged} from 'firebase/auth'
 
 
     export default {
         name: 'Trips',
+        components: {
+
+        },
         data() {
           return {
             userid : "",
@@ -262,7 +264,7 @@
                           // people: JSON.stringify(people),
                           // currency:currency,
                           query: {
-                            tripCode: tripCode, tripName: tripName
+                            tripCode: tripCode, tripName: tripName, currency: currency
                           }})
                         //showTrip(tripCode)
                       } catch(e) {

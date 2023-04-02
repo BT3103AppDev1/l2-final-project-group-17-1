@@ -162,7 +162,7 @@
             tripExpenses: "",
             totalSpent: "",
             people: "",
-            currency: "",
+            currency: this.$route.query.currency,
             componentKey: 0,
             spendingPerDayDict:{},
             pieChartData: {
@@ -286,7 +286,7 @@
         },
         redirectToGroup() {
             this.$router.push({name:'GroupPage', query:{
-                tripCode: this.tripCode, tripName: this.tripName}})
+                tripCode: this.tripCode, tripName: this.tripName, currency: this.currency}})
         },  
         async getSpendingPerDayDict() {
             //DICTIONARY FOR DAILY SPENDINGS

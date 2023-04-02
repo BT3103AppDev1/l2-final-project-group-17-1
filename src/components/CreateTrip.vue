@@ -1,6 +1,6 @@
 <template>
 
-    <div class="" id="createtripform" style="background-color: floralwhite; width: 100%;">
+    <div id="createtripform" style="background-color: floralwhite;">
 
         <div class="text-center align-items-center ">
           <h1>Create a new Trip!</h1>
