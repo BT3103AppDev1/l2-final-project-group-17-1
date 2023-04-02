@@ -1,11 +1,12 @@
 <template>
-<div class = "page">
-  <TripsTable ref="table"/>
-  <div class = "container">
-    <div id = "create"> <CreateTrip v-on:update="refresh"/> </div>
-    <div id = "join"><JoinTrip v-on:update="refresh"/> </div>
-  </div>
-</div>
+    <div class = "trippage">
+        <TripsTable ref="table"/>
+       
+        <div class = "container">
+            <div id = "create"> <CreateTrip v-on:update="refresh"/> </div>
+        </div>
+        <div id = "join"><JoinTrip v-on:update="refresh"/> </div>
+    </div>
 </template>
 
 <script>
@@ -25,7 +26,7 @@ export default {
     }
   },
   components:{
-    Navbar,
+    // Navbar,
     TripsTable,
     CreateTrip,
     JoinTrip
@@ -68,7 +69,7 @@ export default {
         right: 0;
         width: 100%;
     } 
-    .page {
+    .trippage {
         background-color: floralwhite;
         
     }

@@ -1,6 +1,7 @@
 <template>
+  <h1> create</h1>
   <section class="py-5" style="background-color: floralwhite">
-  <section >
+  <section class="d-flex flex-row container">
     <div class="container" id="createtripform">
       <div class="justify-content-center h-100">
 
@@ -67,7 +68,7 @@ import {getAuth, onAuthStateChanged} from 'firebase/auth'
 export default {
       name: 'Trips',
       components: {
-          Navbar,
+          // Navbar,
           TripsTable
       }, 
       
