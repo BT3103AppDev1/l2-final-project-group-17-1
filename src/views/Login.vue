@@ -131,16 +131,12 @@
 
 
  <style scoped>
-   #trackTripImg {
-    margin-left: 20px;
-    height: 70px;
-  }
 
   .bg-image {
   background-image: url('src/assets/images/beach.jpeg');
   background-size: cover;
   background-position: center;
   height: 100vh;
-}
+  }
 
  </style>
