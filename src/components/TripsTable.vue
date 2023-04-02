@@ -1,22 +1,7 @@
 <template>
   <div :key="componentKey">
-   <!-- <section class="text-dark" id="topBar" style="background-color: floralwhite;">
-      <div class="container">
-          <div class="d-flex justify-content-between">
-              <div class="text-center py-5" style= "width: 40rem;">
-                  <div id="tripName" class="card-body px-5 d-flex flex-row">
-                      <h1 style = "text-shadow: 2px 2px 7px grey">
-                        Your Trips
-                        <img src="src/assets/images/planecropped.PNG" width="100px" style="object-position: right; margin-left: 20px; height: 100px;">
-                      </h1>
-                  </div>
-              </div>
-          </div>
-      </div>
-    </section> -->
 
-
-    <h1 style = "text-shadow: 2px 2px 7px grey; margin-left: 5%; margin-top: 50px;">
+    <h1 style = "text-shadow: 2px 2px 7px grey; margin-left: 5%; margin-top: 0px; padding-top: 70px;">
       Your Trips
       <img src="src/assets/images/planecropped.PNG" style="object-position: right; margin-left: 20px; height: 100px;">
     </h1>
@@ -39,6 +24,21 @@
         </table>
     </div>
 
+
+   <!-- <section class="text-dark" id="topBar" style="background-color: floralwhite;">
+      <div class="container">
+          <div class="d-flex justify-content-between">
+              <div class="text-center py-5" style= "width: 40rem;">
+                  <div id="tripName" class="card-body px-5 d-flex flex-row">
+                      <h1 style = "text-shadow: 2px 2px 7px grey">
+                        Your Trips
+                        <img src="src/assets/images/planecropped.PNG" width="100px" style="object-position: right; margin-left: 20px; height: 100px;">
+                      </h1>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </section> -->
 
 
   <!-- <section id = "currency" style = "background-color: floralwhite;">
