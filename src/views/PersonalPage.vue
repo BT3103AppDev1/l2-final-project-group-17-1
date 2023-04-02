@@ -11,7 +11,7 @@
       </div> -->
     
         <!-- Trip Name, Dropdown buttons, water tank, radio to switch indiv and group pages -->
-    <section class="p-4 text-dark" id="topBar" style="background-color: floralwhite;">
+    <section class="p-4 text-dark" id="topBar" style="background-color: floralwhite; top:0px;">
         <div class="container">
             <div class="d-flex justify-content-between">
                 <!-- TripName -->
@@ -24,11 +24,7 @@
                 </div>
 
                 <div class="d-flex justify-content-end p-5">
-                    <div class="d-flex flex-columnn">
-                    <!-- <router-link to="{name: 'GroupPage', params: {id: tripCode.value}}"><button class = "btn btn-light" id = "Group"><b>Group</b></button></router-link> -->
-                    <button class = "btn btn-light" id = "Group" @click="redirectToGroup()"><b>Group</b></button>
-                </div>
-
+                    <input type="checkbox" id="switch" class="inputbtn" @click="redirectToGroup()" /><label for="switch" class="labelbtn"><h1>Personal</h1></label>
                 </div>
             </div>
             <!-- Water tank -->
@@ -538,6 +534,61 @@
               text-align: center;
               color:white;
           }
+
+        .inputbtn[type=checkbox]{
+            height: 0;
+            width: 0;
+            visibility: hidden;
+        }
+
+        .labelbtn {
+            cursor: pointer;
+            /* text-indent: -9999px; */
+            width: 200px;
+            height: 80px;
+            background: #bada55;
+            display: block;
+            border-radius: 100px;
+            position: relative;
+            margin-left: 20px;
+            left:30px;
+        
+        }
+
+        .labelbtn h1 {
+            position: absolute;
+            top: 40%;
+            left: 27.5%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            font-size:23px;
+            color: white;
+        }
+
+        .labelbtn:after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 105px;
+            width: 90px;
+            height: 70px;
+            background: #fff;
+            border-radius: 90px;
+            transition: 0.3s;
+        }
+
+        .inputbtn:checked + .labelbtn {
+            background: grey;
+        }
+
+        .inputbtn:checked + .labelbtn:after {
+            left: calc(100% - 5px);
+            transform: translateX(-100%);
+        }
+
+        .labelbtn:active:after {
+            width: 130px;
+        }
     
     </style>
     

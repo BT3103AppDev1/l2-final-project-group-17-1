@@ -1,7 +1,7 @@
 <template>
     <section style="background-color: floralwhite;">
-    <h1>GROUP PAGE </h1>
-    <p>{{ tripCode }}</p>
+    <!-- <h1>GROUP PAGE </h1>
+    <p>{{ tripCode }}</p> -->
     <div class="container" style="background-color: floralwhite;">
             <div class="d-flex justify-content-between">
                 <div class="text-center py-5" style= "width: 40rem;">
@@ -11,9 +11,7 @@
                       <span style="font-family:monospace;">{{ startDate }} - {{endDate}}</span>
                     </div>
                 </div>
-                <div class="d-flex flex-columnn">
-                    <button class = "btn btn-light" id = "Personal" @click="redirectToPersonal()"><b>Personal</b></button>
-                    </div>
+                <input type="checkbox" id="switch" class="inputbtn" @click="redirectToPersonal()" /><label for="switch" class="labelbtn"><h1>Group</h1></label>
             </div>
 
     <section class="container p-3" >
@@ -352,4 +350,58 @@ export default {
           margin-left: auto;
           margin-right: auto;
         }
+
+        .inputbtn[type=checkbox]{
+            height: 0;
+            width: 0;
+            visibility: hidden;
+        }
+
+        .labelbtn {
+            cursor: pointer;
+            /* text-indent: -9999px; */
+            width: 200px;
+            height: 80px;
+            background: rgb(241, 126, 241);
+            display: block;
+            border-radius: 100px;
+            position: relative;
+            margin-top: 30px;
+        }
+
+        .labelbtn h1 {
+            position: absolute;
+            top: 40%;
+            left: 72%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            font-size:23px;
+            color: white;
+        }
+
+        .labelbtn:after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 90px;
+            height: 70px;
+            background: #fff;
+            border-radius: 90px;
+            transition: 0.3s;
+        }
+
+        .inputbtn:checked + .labelbtn {
+            background: #bada55;
+        }
+
+        .inputbtn:checked + .labelbtn:after {
+            left: calc(100% - 5px);
+            transform: translateX(-100%);
+        }
+
+        .labelbtn:active:after {
+            width: 130px;
+        }
+
 </style>
