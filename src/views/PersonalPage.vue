@@ -29,7 +29,10 @@
             </div>
             <!-- Water tank -->
             <div class="container text-center card py-3" style="border-color: #55608f;">
-                <h1>Status of Budget</h1>
+                <div style="display: flex; flex-direction: row; margin-bottom: 10px;">
+                    <h1 style="margin-left: 500px;">Status of Budget</h1>
+                    <button @click = "editBudget" style=" width: 150px; border-radius: 15px; margin-left:350px;">Edit Budget</button>
+                </div>
                 <div class="w3-light-grey w3-xlarge">
                     <div id="waterTank" class="w3-container w3-green w3-center" style=""></div>
                 </div>
