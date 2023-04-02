@@ -2,8 +2,8 @@
 <div class = "page">
   <TripsTable ref="table"/>
   <div style="display: flex; flex-direction: row; justify-content: center; margin-top: 150px;">
-    <div id = "create" style="width:30%; margin-right: 5%;"><CreateTrip v-on:update="refresh"/> </div>
-    <div id = "join" style="width:30%; margin-left: 5%;"><JoinTrip v-on:update="refresh"/> </div>
+    <div id = "create" style="width:500px; margin-right: 5%;"><CreateTrip v-on:update="refresh"/> </div>
+    <div id = "join" style="width:500px; margin-left: 5%;"><JoinTrip v-on:update="refresh"/> </div>
   </div>
 </div>
 </template>
