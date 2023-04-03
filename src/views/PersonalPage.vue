@@ -11,7 +11,7 @@
       </div> -->
     
         <!-- Trip Name, Dropdown buttons, water tank, radio to switch indiv and group pages -->
-    <section class="p-4 text-dark" id="topBar" style="background-color: floralwhite; top:0px;">
+    <div class="p-4 text-dark" id="topBar" style="background-color: floralwhite; top:0px;">
         <div class="container">
             <div class="d-flex justify-content-between">
                 <!-- TripName -->
@@ -40,10 +40,10 @@
                 <span> Your Budget: {{budget}}</span>
             </div>
         </div>
-    </section>
+    </div>
         <!-- Table with all personal expenses -->
     <section class="py-5">
-    <section class="container p-3" id="fullTableSection"> 
+    <div class="container p-3" id="fullTableSection"> 
         
         <div class="d-flex justify-content-between px-3">
             <h2 class="py-3 d-flex justify-content-start">Personal Expenses</h2>
@@ -63,7 +63,7 @@
         <div class="scrollable" style="background-color: white;">
             <table id="fullTable" class="table table-striped table-bordered table-sm table-scroll text-center" cellspacing="0"
             width="100%">
-            <thead style="background-color: rgb(156, 201, 215); font-family:Arial, Helvetica, sans-serif;">
+            <thead style="background-color: white; font-family:Arial, Helvetica, sans-serif;">
                 <tr>
                 <th class="th-sm" style="color:#111;">Day
                 </th>
@@ -82,12 +82,12 @@
 
             </table>
         </div>
-    </section>
-    <section class="p-5" id="totalSumTable">
+    </div>
+    <div class="p-5" id="totalSumTable" style="background-color:floralwhite;">
         <div class = "container" style="background-color: floralwhite;">
         <MyComponent :key="componentKey" />
         <table id="dayExpenseTable" class="table table-bordered" style="background-color: white;">
-            <thead style="background-color: rgb(156, 201, 215); font-family:Arial, Helvetica, sans-serif;">
+            <thead style="background-color: white; font-family:Arial, Helvetica, sans-serif;">
             <tr>
                 <th scope="col" style="color:black">Day</th>
                 <th scope="col" style="color:black">Total Spent For Each Day</th>
@@ -96,7 +96,7 @@
            
         </table>
         </div>
-    </section>
+    </div>
 
      <!-- Charts -->
     <section style="background-color: floralwhite;">
@@ -501,7 +501,7 @@
             background-color: floralwhite;
         }
            table {
-              width: 1000px;
+              width: 1300px;
               border-collapse: collapse;
               overflow: hidden;
               box-shadow: 0 0 20px rgba(0,0,0,0.1);
@@ -519,7 +519,8 @@
           }
   
           thead th {
-              background-color: #55608f;
+              /* background-color: #55608f; */
+              background-color: rgb(156, 201, 215);
   
           }
           
