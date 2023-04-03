@@ -460,7 +460,9 @@
             for (var day in spendingPerDayDict) {
                 // console.log(dayExpenseTable.rows.length)
                 var dayExpense = spendingPerDayDict[day]
-
+                if (dayExpense == 0) {
+                    continue;
+                }
                 let dayRow = dayExpenseTable.insertRow(index2)
                 let dayCell1 = dayRow.insertCell(0);
                 let dayCell2 = dayRow.insertCell(1);

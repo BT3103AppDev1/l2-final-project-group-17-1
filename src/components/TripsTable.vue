@@ -8,7 +8,7 @@
 
     <div class="scrollable">
         <table id="fullTable" class="table table-bordered  table-scroll text-center" v-if="haveTrips">
-        <thead style="background-color: rgb(156, 201, 215); ">
+        <thead>
             <tr>
             <th class="th-sm">Select Trip</th>
             <th class="th-sm">Date</th>
@@ -105,8 +105,6 @@
 
   </div>
 </template>
-
-
 
 
 <script>
@@ -388,7 +386,7 @@
 
       thead th {
           background-color: #55608f;
-          color: white;
+          color: black;
 
       }
 
