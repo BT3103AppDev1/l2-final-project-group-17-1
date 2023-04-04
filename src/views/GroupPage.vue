@@ -1,5 +1,5 @@
 <template>
-    <section style="background-color: floralwhite;">
+    <section style="background-color: floralwhite; height: 100%; min-height: 100vh;">
     <!-- <h1>GROUP PAGE </h1>
     <p>{{ tripCode }}</p> -->
     <div class="container" style="background-color: floralwhite;">
@@ -14,13 +14,13 @@
                 <input type="checkbox" id="switch" class="inputbtn" @click="redirectToPersonal()" /><label for="switch" class="labelbtn"><h1>Group</h1></label>
             </div>
 
-    <section class="container p-3" >
+    <div class="container p-5" >
         <h2 class="py-3">Outstanding Debts</h2>
         <h6>Owed to You: {{ currency }}</h6>
         <div class="scrollable">
             <table id="fulltable" class="table-sm table table-bordered table-scroll text-center" cellspacing="0"
             width="80%" style="background-color: white; color:#111; margin-top: 20px;">
-            <thead style="background-color: rgb(156, 201, 215); font-family:Arial, Helvetica, sans-serif;"> 
+            <thead style="background-color: rgb(156, 201, 215); font-family:Arial, Helvetica, sans-serif;">
                 <tr>
                 <th v-for="(value, user) in oweDict" :key="user" class="th-sm" style="color: #111;" > {{ user }}</th>
                 </tr>
@@ -31,23 +31,23 @@
             </table>
             <h1 v-show="noDebts" style = "text-align: center;">No Outstanding Debts! </h1>
         </div>
-    </section>
+      </div>
     <!-- <div>
         <h2>Debts</h2>
         <ul>
         <li v-for="(user, amount) in oweDict" :key="user">
             {{ user }}: {{ amount }}
-            {{ user }}: {{ calculateOwedAmount(user) }} 
+            {{ user }}: {{ calculateOwedAmount(user) }}
         </li>
         </ul>
   </div> -->
-        
+
             <!-- Table with all group expenses -->
-    <section class="container p-3" id="fullTableSection" style="background-color: floralwhite;"> 
-        
+    <div class="container p-5" id="fullTableSection" style="background-color: floralwhite;">
+
         <div class="d-flex justify-content-between px-3">
             <h2 class="py-3 d-flex justify-content-start">Group Expenses</h2>
-    
+
             <div class="d-flex flex-row" style="padding:0px;">
               <div class = "dropdown px-3">
                   <button class = "btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -82,7 +82,7 @@
 
             </table>
         </div>
-    </section>
+      </div>
             </div>
         </section>
 </template>
@@ -112,7 +112,7 @@ export default {
             currency: this.$route.query.currency,
             oweDict: {},
             name: ""
-          }  
+          }
     },
 
     created() {
@@ -205,14 +205,14 @@ export default {
         }
         // console.log(this.tripCode)
         // async function calculateOweAmount(tripCode) {
-        //     let currentTrip = await getDoc(doc(db, "Trip", tripCode)) 
+        //     let currentTrip = await getDoc(doc(db, "Trip", tripCode))
         //     let currentTripExpenses = currentTrip.data().Expenses
         //     this.loadExpenses(currentTripExpenses)
         // }
         //calculateOweAmount(this.tripCode);
         async function getExpenses(tripCode){
-            let currentTrip = await getDoc(doc(db, "Trip", tripCode)) 
-            let currentTripExpenses = currentTrip.data().Expenses 
+            let currentTrip = await getDoc(doc(db, "Trip", tripCode))
+            let currentTripExpenses = currentTrip.data().Expenses
             console.log(currentTripExpenses)
             return currentTripExpenses
         }
@@ -225,11 +225,11 @@ export default {
             let index2 = 1
             const auth=getAuth()
             //const uid = auth.currentUser.uid
-            let currentTrip = await getDoc(doc(db, "Trip", tripCode)) 
+            let currentTrip = await getDoc(doc(db, "Trip", tripCode))
             let currentTripExpenses = currentTrip.data().Expenses //all expenses of this specific trip
             let allExpenses = await getDocs(collection(db, "Expense")) //all expenses
             let allUsers = await getDocs(collection(db, "User"))
-            
+
             var totalCost = 0
             var spendingPerDayDict = {}
             var categoryDict = {
@@ -279,7 +279,7 @@ export default {
                         }
                     }
                 })
-            
+
             })
             }
         displayGroupExpenses(this.tripCode)
@@ -296,7 +296,7 @@ export default {
     //             })
     //         })
     //         return userNames
-    //     }, 
+    //     },
     // }
 
 
@@ -329,12 +329,12 @@ export default {
 
         #fullTableSection h1 {
                 color: #111;
-                font-family: 'Helvetica Neue', sans-serif; 
-                font-size: 50px; 
-                font-weight: bold; 
-                letter-spacing: -1px; 
-                line-height: 1; 
-                text-align: left; 
+                font-family: 'Helvetica Neue', sans-serif;
+                font-size: 50px;
+                font-weight: bold;
+                letter-spacing: -1px;
+                line-height: 1;
+                text-align: left;
             }
 
         th {
