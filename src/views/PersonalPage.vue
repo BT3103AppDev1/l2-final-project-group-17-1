@@ -140,7 +140,7 @@
     import {toRef, ref, onBeforeMount} from 'vue' 
     // import PersonalExp from '@/components/PersonalExp.vue'
     // import BudgetBar from '@/components/BudgetBar.vue';
-    import { collection, doc, getDoc, getDocs, query, where} from "firebase/firestore";
+    import { arrayRemove, collection, doc, getDoc, getDocs, query, where, deleteDoc, updateDoc} from "firebase/firestore";
     import moment from 'moment'
 
     export default {
@@ -405,7 +405,6 @@
             let allExpenses = await getDocs(collection(db, "Expense")) //all expenses
             allExpenses.forEach((expense) => {
                 let users = expense.data().Users;
-
             if (users.includes(String(uid)) && currentTripExpenses.includes(expense.id)) {
                 let expenseTable = document.getElementById("fullTable")
                 let row = expenseTable.insertRow(index)
@@ -445,7 +444,12 @@
                     cell5.innerHTML = "Individual"
                 }
                 let deleteExpenseButton = document.createElement("button")
+                deleteExpenseButton.id = expense.id
+                deleteExpenseButton.innerHTML = "Delete"
                 cell6.appendChild(deleteExpenseButton)
+                deleteExpenseButton.onclick = function() {
+                    deleteExpense(expense.id, tripCode)
+                }
                 index +=1
             }
             })
@@ -490,9 +494,24 @@
             waterTank.style.width = waterTankNum + "%"
             waterTank.innerHTML = Math.ceil(waterTankNum) + "%"
             // this.updatePieChart(categoryDict)
+            // this.updateCharts()
         }  
         // this.updatePieChart(this.categoryDict)
         fetchAndUpdateData(this.tripCode)
+
+        async function deleteExpense(expenseID, tripCode) {
+            alert("You are going to delete " + expenseID)
+            await deleteDoc(doc(db, "Expense", expenseID))
+            await updateDoc(doc(db, "Trip",tripCode), {
+                Expenses: arrayRemove(expenseID)
+            })
+            let tb = document.getElementById("fullTable")
+            while (tb.rows.length>1){
+                tb.deleteRow(1)
+            }
+            fetchAndUpdateData(tripCode)
+            
+        }
     } 
     } 
 </script> 
@@ -503,7 +522,7 @@
             background-color: floralwhite;
         }
            table {
-              width: 1300px;
+              width: 1000px;
               border-collapse: collapse;
               overflow: hidden;
               box-shadow: 0 0 20px rgba(0,0,0,0.1);
