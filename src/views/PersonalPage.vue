@@ -4,12 +4,12 @@
         <!-- <BudgetBar :tripCode = 'tripCode'/> -->
         <!-- <PersonalExp :tripCode = 'tripCode'/>  -->
         <!-- <p>tripCode is : {{tripCode}}  {{people}}</p> -->
-        
+
       <!-- <div class = "container">
         <div id = "budget"> <Budget/> </div>
         <div id = "expenses"><PersonalExpenses/> </div>
       </div> -->
-    
+
         <!-- Trip Name, Dropdown buttons, water tank, radio to switch indiv and group pages -->
     <div class="p-4 text-dark" id="topBar" style="background-color: floralwhite; top:0px;">
         <div class="container">
@@ -17,7 +17,7 @@
                 <!-- TripName -->
                 <div class="text-center py-5" style= "width: 40rem;">
                     <div id="tripName" class="card-body px-5" style="text-align:justify; padding:5px">
-                        <img src="globe.png" style="float:left;" width="120" height="auto"> 
+                        <img src="globe.png" style="float:left;" width="120" height="auto">
                         <h1>Trip to {{tripName}}</h1>
                         <span style="font-family:monospace;">{{startDate}} - {{endDate}}</span>
                     </div>
@@ -43,11 +43,11 @@
     </div>
         <!-- Table with all personal expenses -->
     <section class="py-5">
-    <div class="container p-3" id="fullTableSection"> 
-        
+    <div class="container p-3" id="fullTableSection">
+
         <div class="d-flex justify-content-between px-3">
             <h2 class="py-3 d-flex justify-content-start">Personal Expenses</h2>
-    
+
             <div class="d-flex flex-row" style="padding:0px;">
               <div class = "dropdown px-3">
                   <button class = "btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -63,23 +63,16 @@
         <div class="scrollable" style="background-color: white;">
             <table id="fullTable" class="table table-striped table-bordered table-sm table-scroll text-center" cellspacing="0"
             width="100%">
-            <thead style="background-color: white; font-family:Arial, Helvetica, sans-serif;">
-                <tr>
-                <th class="th-sm" style="color:#111;">Day
-                </th>
-                <th class="th-sm" style="color:#111;">Description
-                </th>
-                <th class="th-sm" style="color:#111;">Category
-                </th>
-                <th class="th-sm" style="color:#111;">Cost
-                </th>
-                <th class="th-sm" style="color:#111;">Type
-                </th>
-                <th class="th-sm" style="color:#111;">Option
-                </th>
-                </tr>
-            </thead>
-
+              <thead style="background-color: white; font-family:Arial, Helvetica, sans-serif;">
+                  <tr>
+                  <th class="th-sm" style="color:#111;">Day</th>
+                  <th class="th-sm" style="color:#111;">Description</th>
+                  <th class="th-sm" style="color:#111;">Category</th>
+                  <th class="th-sm" style="color:#111;">Cost</th>
+                  <th class="th-sm" style="color:#111;">Type</th>
+                  <th class="th-sm" style="color:#111;">Option</th>
+                  </tr>
+              </thead>
             </table>
         </div>
     </div>
@@ -93,7 +86,6 @@
                 <th scope="col" style="color:black">Total Spent For Each Day</th>
             </tr>
             </thead>
-           
         </table>
         </div>
     </div>
@@ -103,22 +95,22 @@
         <div class="container">
             <div class="d-md-flex justify-content-center">
                 <!-- Pie Chart -->
-                <div class="container text-center">
+                <div class="container text-center graph-background">
                     <h1>Proportion of Spending By Category</h1>
                     <pie-chart class ="user" width=500px :data="pieChartData" ></pie-chart >
                 </div>
-                 
+
                 <!-- Bar Chart -->
-                <div class="container text-center">
+                <div class="container text-center graph-background">
                     <h1>Overall Spending By Category</h1>
                     <bar-chart class="user" width=500px :data="categoryDict">
 
                     </bar-chart>
-                </div> 
+                </div>
             </div>
             <!-- Line Chart -->
             <div class="d-md-flex justify-content-center">
-            <div class="container text-center">
+            <div class="container text-center graph-background">
                 <h1>Spending Insights By Day</h1>
                 <line-chart class ="user" width="500px" :data="spendingPerDayDict"></line-chart>
             </div></div>
@@ -130,14 +122,14 @@
 
     </div>
 </template>
-    
+
 <script>
     import db from '../firebase.js';
     import Navbar from '@/components/Navbar.vue'
     import firebaseApp from '@/firebase.js'
     import {getAuth, onAuthStateChanged} from 'firebase/auth'
     import {useRoute} from 'vue-router'
-    import {toRef, ref, onBeforeMount} from 'vue' 
+    import {toRef, ref, onBeforeMount} from 'vue'
     // import PersonalExp from '@/components/PersonalExp.vue'
     // import BudgetBar from '@/components/BudgetBar.vue';
     import { collection, doc, getDoc, getDocs, query, where} from "firebase/firestore";
@@ -145,7 +137,7 @@
 
     export default {
     name: "PersonalPage",
-    
+
 
     components:{
         Navbar,
@@ -185,8 +177,8 @@
             "Travel": 0,
             "Accomodation":0,
             }
-            
-        } 
+
+        }
     },
     created() {
         this.getStartDate(),
@@ -196,20 +188,20 @@
         this.getTripExpenses()
         this.getSpendingPerDayDict()
     },
-    methods: { 
-        async updateCharts() { 
+    methods: {
+        async updateCharts() {
             //Pie chart
             let trip = await getDoc(doc(db, "Trip", this.tripCode))
             let currentTripExpenses = trip.data().Expenses
             let uid = this.userid
-            let categoryDict = { 
+            let categoryDict = {
                 "Shopping":0,
                 "Food": 0,
                 "Leisure": 0,
                 "Travel": 0,
                 "Accomodation":0,
             }
-            let categoryPercentageDict = { 
+            let categoryPercentageDict = {
                 "Shopping":0,
                 "Food": 0,
                 "Leisure": 0,
@@ -286,14 +278,14 @@
         redirectToGroup() {
             this.$router.push({name:'GroupPage', query:{
                 tripCode: this.tripCode, tripName: this.tripName, currency: this.currency}})
-        },  
+        },
         async getSpendingPerDayDict() {
             //DICTIONARY FOR DAILY SPENDINGS
             const auth=getAuth()
             const uid = auth.currentUser.uid
             var spendingPerDayDict = {}
             let days = []
-            let currentTrip = await getDoc(doc(db, "Trip", this.tripCode)) 
+            let currentTrip = await getDoc(doc(db, "Trip", this.tripCode))
             const startDate = moment(currentTrip.data().Start_Date);
             const endDate = moment(currentTrip.data().End_Date);
             var Difference_In_Days = endDate.diff(startDate, 'days')
@@ -317,7 +309,7 @@
                     var date = expense.data().Date
                     var amount = expense.data().Amount
 
-                    //DATA FOR DAILY SPENDINGS 
+                    //DATA FOR DAILY SPENDINGS
                     if (date in spendingPerDayDict===false) {
                         spendingPerDayDict[date] = amount
                     } else {
@@ -376,7 +368,7 @@
             //DICTIONARY FOR DAILY SPENDINGS
             var spendingPerDayDict = {}
             let days = []
-            let currentTrip = await getDoc(doc(db, "Trip", tripCode)) 
+            let currentTrip = await getDoc(doc(db, "Trip", tripCode))
             const startDate = moment(currentTrip.data().Start_Date);
             const endDate = moment(currentTrip.data().End_Date);
             var Difference_In_Days = endDate.diff(startDate, 'days')
@@ -391,7 +383,7 @@
             days.forEach((day)=> {
                 spendingPerDayDict[day] = 0
             })
-                
+
             //DICTIONARY FOR SPENDINGS BY CATEGORY
             var categoryDict = {
                 "Shopping":0,
@@ -416,7 +408,7 @@
                 let cell5 = row.insertCell(4);
                 let cell6 = row.insertCell(5);
 
-            
+
                 var date = expense.data().Date
                 var amount = expense.data().Amount
                 var cat = expense.data().Category
@@ -428,7 +420,7 @@
                 totalCost += Number(amount)
 
 
-                //DATA FOR DAILY SPENDINGS 
+                //DATA FOR DAILY SPENDINGS
 
                 if (date in spendingPerDayDict===false) {
                     spendingPerDayDict[date] = amount
@@ -437,7 +429,7 @@
                 }
 
                 // categoryDict[cat] += amount
-               
+
 
                 if (users.length>1) {
                     cell5.innerHTML = "Group"
@@ -490,15 +482,15 @@
             waterTank.style.width = waterTankNum + "%"
             waterTank.innerHTML = Math.ceil(waterTankNum) + "%"
             // this.updatePieChart(categoryDict)
-        }  
+        }
         // this.updatePieChart(this.categoryDict)
         fetchAndUpdateData(this.tripCode)
-    } 
-    } 
-</script> 
-    
+    }
+    }
+</script>
+
     <style scoped>
-    
+
         .page {
             background-color: floralwhite;
         }
@@ -512,30 +504,30 @@
               border-bottom-right-radius: 25px;
               border-bottom-left-radius: 25px;
           }
-  
+
           th,
           td {
               padding: 15px;
               background-color: rgba(255,255,255,0.2);
               color: black
           }
-  
+
           thead th {
               /* background-color: #55608f; */
               background-color: rgb(156, 201, 215);
-  
+
           }
-          
+
           #fullTableSection h1 {
                   color: #111;
-                  font-family: 'Helvetica Neue', sans-serif; 
-                  font-size: 50px; 
-                  font-weight: bold; 
-                  letter-spacing: -1px; 
-                  line-height: 1; 
-                  text-align: left; 
+                  font-family: 'Helvetica Neue', sans-serif;
+                  font-size: 50px;
+                  font-weight: bold;
+                  letter-spacing: -1px;
+                  line-height: 1;
+                  text-align: left;
               }
-  
+
           th {
               text-align: center;
               color:white;
@@ -558,7 +550,7 @@
             position: relative;
             margin-left: 20px;
             left:30px;
-        
+
         }
 
         .labelbtn h1 {
@@ -595,6 +587,11 @@
         .labelbtn:active:after {
             width: 130px;
         }
-    
+
+        .graph-background {
+          background-color: rgba(255, 255, 255, 0.6);
+          border-radius: 20px;
+        }
+
+
     </style>
-    
