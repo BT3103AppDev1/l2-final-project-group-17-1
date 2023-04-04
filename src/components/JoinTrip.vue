@@ -19,7 +19,7 @@
                 <label class="form-label" for="typeEmail">Budget</label>
               </div>
 
-              <button class="btn btn-lg btn-block shadow text-light" style="background-color: #3d6d9e;" type="submit" v-on:click="joinTrip">Save</button>
+              <button class="btn btn-lg btn-block shadow text-light" style="background-color: #3d6d9e;" type="submit" v-on:click.prevent="joinTrip">Save</button>
               <!-- style="background-color: #2196F3; -->
             </form>
           </div>
@@ -59,13 +59,13 @@
             async joinTrip() {
                 console.log(this.tripCode);
                 console.log(this.userid)
-
+      
                 let allTrips = await getDocs(collection(db, "Trip"))
                 let existingTrips = []
                 allTrips.forEach((trip) => {
                     existingTrips.push(trip.id)
                 })
-                if (!existingTrips.includes(this.tripCode)) {
+                if (!(existingTrips.includes(this.tripCode))) {
                     alert("Trip does not exist! ");
                     this.tripCode = '';
                     this.budget = '';
@@ -80,8 +80,9 @@
                         })
                     }
                 })
-                if (!tripsArray.includes(this.tripCode)) {
+                if (!(tripsArray.includes(this.tripCode))) {
                     try {
+                        console.log(this.userid)
                         const userRef = await updateDoc(doc(db, "User", this.userid), {
                             Trips: arrayUnion({
                                 Trip_Code: this.tripCode,
@@ -91,6 +92,7 @@
                             Users: arrayUnion(this.userid)
                         })
                         Promise.all([userRef, tripRef]).then(() => {
+                            console.log(this.tripCode)
                             this.tripCode = '';
                             this.budget = '';
                         })

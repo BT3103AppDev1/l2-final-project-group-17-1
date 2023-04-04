@@ -10,7 +10,7 @@
         <div class="card shadow-2-strong card-body p-5 text-center" style="border-radius: 1rem; background-color: rgb(179, 214, 214);">
           <form>
             <div class="form-outline mb-4">
-              <input type="text" id="typeEmail" class="form-control form-control-lg" v-model = "tripName"/>
+                <input type="text" id="typeEmail" class="form-control form-control-lg" v-model = "tripName"/>
               <label class="form-label" for="typeEmail">Trip Name</label>
             </div>
 
@@ -36,7 +36,7 @@
               <label for="date">End Date: </label>
               <input type="date" id="enddate" name="date" v-model = "endDate">
             </div>
-            <button class="btn btn-lg btn-block shadow text-light" type="submit" v-on:click="createTrip" style="background-color: #3d6d9e;">Save</button>
+            <button class="btn btn-lg btn-block shadow text-light" type="submit" v-on:click.prevent="createTrip" style="background-color: #3d6d9e;">Save</button>
           </form>
         </div>
 
@@ -88,15 +88,7 @@ export default {
       },
       methods: {
         async createTrip(){
-          // let tripName = document.getElementById("typeEmail").value
-          // let startDate = document.getElementById("startdate").value
-          // let endDate = document.getElementById("enddate").value
-          // let currency = document.getElementById("currency").value
-          //currency = currency
-          //let people = tripData.userIds  //array
-          //let currency = this.currency
-          //alert("Saving your new trip details!");
-
+          console.log('inside create trip')
           try {
             const docRef = await addDoc(collection(db, "Trip"), {
               Name: this.tripName,
