@@ -28,6 +28,8 @@
               </div>
             </div>
 
+            <div class="bfh-selectbox bfh-currencies" data-currency="EUR" data-flags="true"></div>
+
             <div class="form-outline mb-4">
               <label for="date">Start Date: </label>
               <input type="date" id="startdate" name="date" v-model = "startDate">
@@ -52,11 +54,7 @@ import Navbar from '@/components/Navbar.vue';
 import TripsTable from '@/components/TripsTable.vue'
 import firebaseApp from '@/firebase.js'
 import {getAuth, onAuthStateChanged} from 'firebase/auth'
-//import firebaseApp from "../firebase.js";
-//import { getFirestore } from "firebase/firestore";
-//import {setDoc } from "firebase/firestore";
-// const db = getFirestore(firebaseApp);
-// const {uid} = useUid();
+
 export default {
       name: 'Trips',
       components: {
@@ -71,7 +69,7 @@ export default {
           startDate: "",
           endDate: "",
           currency: "",
-          currencies: ["USD", "JPY", "GBP", "EUR", "SGD"],
+          currencies: ["USD", "JPY", "GBP", "EUR", "CHF", "CAD", "CNY", "HKD", "SGD"],
           users: [],
           expenses: []
         }
