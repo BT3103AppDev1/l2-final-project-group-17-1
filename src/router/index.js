@@ -65,4 +65,19 @@ const router = createRouter({
   ]
 })
 
+
+// //Navigation guard to prevent unauthenticated users from accessing pages like InputPage and Trips
+// router.beforeEach((to, from, next) => {
+//   const publicPages = ['/','/register'];
+//   const authRequired = !publicPages.includes(to.path);
+//   //wait till the user is loaded
+
+//   const loggedIn = localStorage.getItem('user');
+//   if (authRequired && !loggedIn) {
+//     alert("You must be logged in to access this page")
+//     return next('/');
+//   }
+//   next();
+// })
+
 export default router
