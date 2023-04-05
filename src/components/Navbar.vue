@@ -39,7 +39,7 @@
             <button style="width:100%; color:white; background-color: black;" @click="showMenu = !showMenu;" >Edit Profile</button>
           </router-link>
           <router-link to="/" id = "signoutRouter">
-            <button style="width:100%; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; color:white; background-color: black;"  @click="signOut()" v-if="user">Sign Out</button>
+            <button style="width:100%; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; color:white; background-color: black;"  @click="signOut()">Sign Out</button>
           </router-link>
         </ul>
       </div>
@@ -88,11 +88,11 @@
             const confirmLogout = window.confirm('Are you sure you want to log out?');
             if (confirmLogout) {
               console.log("signing out")
-              const auth = getAuth()
-              const user = auth.currentUser
-              signOut(auth, user)
-              //this.$router.push('/')
-              ui.start("#firebaseui-auth-container", uiConfig)
+              // const auth = getAuth()
+              // const user = auth.currentUser
+              // signOut(auth, user)
+              // this.$router.push('/')
+              // ui.start("#firebaseui-auth-container", uiConfig)
             } else {
               console.log("cancelled log out")
               //window.history.back();

@@ -71,7 +71,6 @@
                           // })
                           setUser(email, uid, name)
                               .then(() => {
-                                  // console.log("success")
                                   window.location.href = "/InputPage"
                               })
                               .catch(error => {
@@ -95,6 +94,14 @@
 
             ui.start("#firebaseui-auth-container", uiConfig)
          },
+
+         created() { //sign user out everytime they go to login page
+            firebase.auth().signOut().then(() => {
+              // Sign-out successful.
+            }).catch((error) => {
+              // An error happened.
+            });
+         }
 
         //   async createUser(){
         //     try {
