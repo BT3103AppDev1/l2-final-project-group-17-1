@@ -16,8 +16,8 @@
             <div class="d-flex justify-content-between">
                 <!-- TripName -->
                 <div class="text-center py-5" style= "width: 40rem;">
-                    <div id="tripName" class="card-body px-5" style="text-align:justify; padding:5px">
-                        <img src="globe.png" style="float:left;" width="120" height="auto">
+                    <div id="tripName" class="card-body px-3" style="text-align:justify; padding:5px">
+                        <img src="src/assets/images/globe.png" style="float:left;" width="120">
                         <h1>Trip to {{tripName}}</h1>
                         <span style="font-family:monospace;">{{startDate}} - {{endDate}}</span>
                     </div>
@@ -34,7 +34,7 @@
                     <button @click = "editBudget" style=" width: 150px; border-radius: 15px; margin-left:350px;">Edit Budget</button>
                 </div>
                 <div class="w3-light-grey w3-xlarge">
-                    <div id="waterTank" class="w3-container w3-green w3-center" style=""></div>
+                    <div id="waterTank" class="w3-container w3-center" style=""></div>
                 </div>
                 <span>Total Spent: {{totalSpent}}</span>
                 <span> Your Budget: {{budget}}</span>
@@ -217,20 +217,23 @@
             }
             //let catergories = ["Shopping", "Food"]
             let allExpenses = await getDocs(collection(db, "Expense")) //all expenses
-            var totalAmount = 0
+            var totalAmountPersonal = 0
             allExpenses.forEach((expense) => {
                 let users = expense.data().Users;
             if (users.includes(String(uid)) && currentTripExpenses.includes(expense.id)) {
                 let cat = expense.data().Category
                 let amt = expense.data().Amount
-                totalAmount += amt
+                if (users.length>1) {
+                    amt = amt/users.length
+                }
+                totalAmountPersonal += amt
                 categoryDict[cat] += amt
                 for (let c in categoryPercentageDict) {
                     if (c == cat) {
-                        categoryPercentageDict[cat] = (categoryDict[cat]/totalAmount)*100
+                        categoryPercentageDict[cat] = (categoryDict[cat]/totalAmountPersonal)*100
                         formattedForPieChart[cat] = String(categoryPercentageDict[cat].toFixed(2)) + "%"
                     } else {
-                        categoryPercentageDict[c] = (categoryDict[c]/totalAmount)*100
+                        categoryPercentageDict[c] = (categoryDict[c]/totalAmountPersonal)*100
                         formattedForPieChart[c] = String(categoryPercentageDict[c].toFixed(2)) + "%"
                     }
                 }
@@ -242,8 +245,13 @@
             this.categoryDict = categoryDict
             this.categoryPercentageDict = categoryPercentageDict
             this.pieChartData = formattedForPieChart
-            this.totalSpent = "$" + totalAmount
+            this.totalSpent = "$" + totalAmountPersonal
             //console.log(this.categoryDict)
+            // if (this.totalSpent > this.budget) {
+            //     var bar = document.getElementById("waterTank")
+            //     bar.style.backgroundColor = "red"
+            //     console.log("EXCEED BUDGET")
+            // }
         },
         forceRerender() {
             this.componentKey += 1;
@@ -403,8 +411,7 @@
                 cell3.innerHTML = cat
                 cell4.innerHTML = amount
 
-                totalCost += Number(amount)
-
+                totalCost += (Number(amount)/users.length)
 
                 //DATA FOR DAILY SPENDINGS
 
@@ -432,11 +439,31 @@
                 index +=1
             }
             })
-            var waterTankNum = totalCost/budget * 100
+            var waterTankNum = 0
             var waterTank = document.getElementById("waterTank")
             // console.log('TOTALCOST', totalCost)
             // console.log("SPENDING DICT", spendingPerDayDict)
             // console.log("CAT DICT", categoryDict)
+            
+            if (totalCost > budget) {
+                waterTank.style.backgroundColor = "red"
+                waterTankNum = ((totalCost - budget)/budget) * 100
+                console.log("EXCEED BUDGET")
+                waterTank.innerHTML = "EXCEED BY " + Math.ceil(waterTankNum) + "%"
+                if (waterTankNum>100) {
+                    waterTank.style.width = 100 + "%"
+                }
+
+            } else {
+                waterTank.style.backgroundColor = "green"
+                console.log("TOTALCOST",totalCost)
+                waterTankNum = totalCost/budget * 100
+                waterTank.innerHTML = Math.ceil(waterTankNum) + "%"
+                waterTank.style.width = waterTankNum + "%"
+
+            }
+
+
 
             let dayExpenseTable = document.getElementById("dayExpenseTable")
             let index2 = 1
@@ -470,8 +497,8 @@
             //     "Accomodation": categoryDict["Accomodation"]
             // }
 
-            waterTank.style.width = waterTankNum + "%"
-            waterTank.innerHTML = Math.ceil(waterTankNum) + "%"
+         
+
             // this.updatePieChart(categoryDict)
             // this.updateCharts()
         }  

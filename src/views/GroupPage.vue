@@ -6,7 +6,7 @@
             <div class="d-flex justify-content-between">
                 <div class="text-center py-5" style= "width: 40rem;">
                     <div id="tripName" class="card-body px-5" style="text-align:justify; padding:0px">
-                      <!-- <img src="globe.png" style="float:left;" width="120" height="auto">  -->
+                      <img src="src/assets/images/globe.png" style="float:left;" width="120" > 
                       <h1>Trip to {{ tripName }}</h1>
                       <span style="font-family:monospace;">{{ startDate }} - {{endDate}}</span>
                     </div>

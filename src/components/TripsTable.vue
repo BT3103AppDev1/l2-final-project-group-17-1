@@ -369,7 +369,7 @@
         border-bottom-left-radius: 15px;
         /* table-layout: fixed; */
         position: auto;
-        background-color: floralwhite;
+        background-color: white;
         margin-left: 70px;
         margin-top: 50px;
         z-index: 0;
@@ -385,7 +385,7 @@
       }
 
       thead th {
-          background-color: #55608f;
+          background-color:rgb(156, 201, 215);
           color: black;
 
       }
