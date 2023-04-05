@@ -57,7 +57,7 @@
                   </div>
                 </div>
 
-                <div class="form-outline mb-4" v-if="isGroupTrip">Spending type:
+                <!-- <div class="form-outline mb-4" v-if="isGroupTrip">Spending type:
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Individual" v-model="spendingType">
                     <label class="form-check-label" for="inlineRadio1">Individual</label>
@@ -66,10 +66,10 @@
                     <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="Group" v-model="spendingType">
                     <label class="form-check-label" for="inlineRadio2">Group</label>
                   </div>
-                </div>
+                </div> -->
 
 
-                <div class="form-outline mb-4" v-if="isGroupTrip && isGroup">
+                <div class="form-outline mb-4" v-if="isGroupTrip">
                   <p class="mb-0">Who ELSE needs to pay?</p>
                   <div v-for="user in usersArray">
                     <div class="form-check form-check-inline" v-if="user.id!=uid">
@@ -108,7 +108,7 @@
           amount:"",
           category:"",
           date: new Date().toISOString().substr(0, 10), //autofill today's date
-          spendingType: "Individual",
+          // spendingType: "Individual",
           trip:"",
           tripsArray: [],
           minDate: "",
@@ -141,18 +141,18 @@
 
 
     computed: {
-      isGroup() {
-        return this.spendingType == "Group"; //CHECK EQUALITY SYMBOL
-      },
+      // isGroup() {
+      //   return this.spendingType == "Group"; //CHECK EQUALITY SYMBOL
+      // },
       allFieldsFilled() {
-        return !!this.description && !!this.amount && !!this.category && !!this.date && !!this.spendingType && !!this.trip;
+        return !!this.description && !!this.amount && !!this.category && !!this.date && !!this.trip;
       },
     },
 
     methods: {
       async savetofs(){
         if (!this.allFieldsFilled) {
-          alert("Please fill all fields!")
+          alert("Please fill all required fields!\nDescription, Amount, Trip, Category, Date")
           return
         }
 
@@ -269,28 +269,6 @@
                 console.log("logged out")
               }
           })
-
-      // if (auth.currentUser) { //probably true
-      //   console.log(auth.currentUser)
-      //   this.uid = auth.currentUser.uid;
-      //   // this.uid = "5CymwvZ7sORrKGB8CzkTuHfeKdJ2";
-
-      //   this.populateTripsArray();
-      // }
-
-    //  this.populateTripsArray();
-    //  const auth = getAuth()
-    //  onAuthStateChanged(auth, (user) => {
-    //     if (user) {
-    //       this.user = user
-    //       this.userid = user.uid
-    //       console.log("logged in")
-    //     }
-    //     else {
-    //       console.log("logged out")
-    //     }
-    //
-    //   })
     }
   }
 
