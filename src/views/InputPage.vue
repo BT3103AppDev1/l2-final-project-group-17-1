@@ -1,8 +1,7 @@
 <template>
 
-
-      <div id="page" class="container py-5 d-flex flex-row align-items-center ">
-
+      <div class="page">
+      <div id="page" class="container py-5 d-flex flex-row align-items-center">
 
           <div class="container d-flex flex-column align-items-center">
             <!-- <div class="container py-5"></div> -->
@@ -86,6 +85,7 @@
             </div>
           </div>
         </div>
+      </div>
 
 
 </template>
@@ -277,14 +277,17 @@
 
 
 <style>
-  #page {
+  .page {
     background-color: floralwhite;
-    /* background-image: url('picture/input1.jpg'); */
+    min-height: 100vh;
 
-    position: absolute;
-/* top: 0;
-left: 0; */
-  height: 100vh;
-  width: 100vw;
-  }
+    /* background-image: url('picture/input1.jpg'); */
+    /* bottom: 0; */
+    /* position: fixed; */
+    /* top: 0; */
+    /* left: 0;  */
+    /* right:0; */
+    /* height: 100%; */
+    /* width: 100%; */
+      }
 </style>
