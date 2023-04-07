@@ -6,7 +6,7 @@
             <div class="d-flex justify-content-between">
                 <div class="text-center py-5" style= "width: 40rem;">
                     <div id="tripName" class="card-body px-5" style="text-align:justify; padding:0px">
-                      <img src="src/assets/images/globe.png" style="float:left;" width="120" > 
+                      <img src="src/assets/images/globe.png" style="float:left;" width="120" >
                       <h1>Trip to {{ tripName }}</h1>
                       <span style="font-family:monospace;">{{ startDate }} - {{endDate}}</span>
                     </div>
@@ -196,8 +196,8 @@ export default {
             this.userid = user.uid
             this.name = user.Name
             }
-            else {
-            console.log("logged out")
+            else { //redirect to login page if not logged in
+              this.$router.push('/')
             }
         })
         //console.log(this.$route.query.tripCode)

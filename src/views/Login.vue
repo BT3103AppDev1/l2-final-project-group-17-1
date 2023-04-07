@@ -98,10 +98,20 @@
          created() { //sign user out everytime they go to login page
             firebase.auth().signOut().then(() => {
               // Sign-out successful.
+              alert('Please log in to continue');
             }).catch((error) => {
-              // An error happened.
             });
-         }
+         },
+
+        //  async created() {
+        //     if (await firebase.auth().currentUser) { //check if a user is currently signed in
+        //       firebase.auth().signOut().then(() => { //sign user out if they are currently signed in
+        //         alert('You have been signed out');
+        //       }).catch((error) => {
+        //         console.log(error);
+        //       });
+        //     }
+        //   },
 
         //   async createUser(){
         //     try {

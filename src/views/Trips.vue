@@ -37,6 +37,8 @@ export default {
         this.user = user
         this.userid = user.uid
         this.name = user.Name
+      } else { //redirect to login page if not logged in
+        this.$router.push('/')
       }
     })
 
