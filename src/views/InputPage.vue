@@ -257,7 +257,7 @@
 
     },
 
-    mounted() {
+    created() {
       const auth = getAuth()
           onAuthStateChanged(auth, (user) => {
               if (user) {
@@ -265,11 +265,11 @@
                 console.log(this.uid)
                 this.populateTripsArray();
               }
-              else {
-                console.log("logged out")
+              else { //redirect to login page if not logged in
+                this.$router.push('/')
               }
           })
-    }
+    },
   }
 
 </script>

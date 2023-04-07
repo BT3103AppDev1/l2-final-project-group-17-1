@@ -46,8 +46,8 @@
                     displayNameInput.value = this.displayName
                     console.log("logged in", this.displayName)
                 }
-                else {
-                console.log("logged out")
+                else { //redirect to login page if not logged in
+                  this.$router.push('/')
                 }
             })
 //
