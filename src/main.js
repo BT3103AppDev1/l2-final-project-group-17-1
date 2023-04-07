@@ -13,5 +13,4 @@ import moment from 'moment'
 const app = createApp(App).use(VueChartkick)
 
 app.use(router)
-
 app.mount('#app')

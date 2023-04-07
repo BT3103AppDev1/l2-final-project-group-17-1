@@ -42,7 +42,7 @@
         </div>
     </div>
         <!-- Table with all personal expenses -->
-    <section class="py-5">
+    <!-- <section class="py-5"> -->
     <div class="container p-3" id="fullTableSection">
 
         <div class="d-flex justify-content-between px-3">
@@ -91,16 +91,15 @@
     </div>
 
      <!-- Charts -->
-    <section style="background-color: floralwhite;">
+    <!-- <section style="background-color: floralwhite;">
         <div class="container">
             <div class="d-md-flex justify-content-center">
-                <!-- Pie Chart -->
+
                 <div class="container text-center graph-background">
                     <h1>Proportion of Spending By Category</h1>
                     <pie-chart class ="user" width=500px :data="pieChartData" ></pie-chart >
                 </div>
 
-                <!-- Bar Chart -->
                 <div class="container text-center graph-background">
                     <h1>Overall Spending By Category</h1>
                     <bar-chart class="user" width=500px :data="categoryDict">
@@ -108,17 +107,60 @@
                     </bar-chart>
                 </div>
             </div>
-            <!-- Line Chart -->
+
             <div class="d-md-flex justify-content-center">
             <div class="container text-center graph-background">
                 <h1>Spending Insights By Day</h1>
                 <line-chart class ="user" width="500px" :data="spendingPerDayDict"></line-chart>
             </div></div>
         </div>
-    </section>
+    </section> -->
 
-    </section>
+    <!-- </section> -->
 
+    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="container p-5">
+                        <div class="justify-content-center">
+                            <div class="container text-center graph-background justify-content-center">
+                                <h1>Proportion of Spending By Category</h1>
+                                <pie-chart class ="user" :data="pieChartData" ></pie-chart >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                     <div class="container p-5">
+                        <div class="justify-content-center">
+                            <div class="container text-center graph-background justify-content-center">
+                                <h1>Overall Spending By Category</h1>
+                                <bar-chart class="user" :data="categoryDict"></bar-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="container p-5">
+                        <div class="justify-content-center">
+                            <div class="container text-center graph-background justify-content-center">
+                                <h1>Spending Insights By Day</h1>
+                                <line-chart class ="user" :data="spendingPerDayDict"></line-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+    <span style= "background-color:black" class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+    <span style= "background-color:black" class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
 
     </div>
 </template>
@@ -144,6 +186,9 @@
     },
     data () {
         return {
+            slide: 0,
+            sliding: null,
+            selected : "",
             userid : "",
             tripCode: this.$route.query.tripCode,
             budget: "",
@@ -189,6 +234,12 @@
         this.getSpendingPerDayDict()
     },
     methods: {
+    onSlideStart(slide) {
+        this.sliding = true
+      },
+      onSlideEnd(slide) {
+        this.sliding = false
+      },
         async updateCharts() {
             //Pie chart
             let trip = await getDoc(doc(db, "Trip", this.tripCode))
@@ -527,9 +578,11 @@
 
         .page {
             background-color: floralwhite;
+            min-height: 100vh;
         }
            table {
-              width: 1000px;
+              width: 1300px;
+              /* width:1000px; */
               border-collapse: collapse;
               overflow: hidden;
               box-shadow: 0 0 20px rgba(0,0,0,0.1);
