@@ -50,9 +50,9 @@
 
             <div class="d-flex flex-row" style="padding:0px;">
               <div class = "dropdown px-3">
-                  <button class = "btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                  <!-- <button class = "btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                       Currency
-                  </button>
+                  </button> -->
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                       <a class="dropdown-item" href="#">SGD</a>
                       <a class="dropdown-item" href="#">Original</a>
@@ -62,7 +62,7 @@
           </div>
         <div class="scrollable" style="background-color: white;">
             <table id="fullTable" class="table table-striped table-bordered table-sm table-scroll text-center" cellspacing="0"
-            width="100%">
+            width="100%" style="background-color: white; color:#111; margin-top: 20px;">
             <thead style="background-color: rgb(156, 201, 215); font-family:Arial, Helvetica, sans-serif;">
                 <tr>
                 <th class="th-sm" style="color:#111;">Day
@@ -322,11 +322,6 @@ export default {
             color: black
         }
 
-        thead th {
-            background-color: #3d6d9e;
-
-        }
-
         #fullTableSection h1 {
                 color: #111;
                 font-family: 'Helvetica Neue', sans-serif;
@@ -337,10 +332,12 @@ export default {
                 text-align: left;
             }
 
-        th {
-            text-align: center;
-            color:white;
-        }
+
+        thead th {
+              /* background-color: #55608f; */
+              background-color: rgb(156, 201, 215);
+
+          }
 
         #fulltable {
           justify-content: space-between;
@@ -350,6 +347,7 @@ export default {
           border-radius: 25px;
           margin-left: auto;
           margin-right: auto;
+          color: white;
         }
 
         .inputbtn[type=checkbox]{

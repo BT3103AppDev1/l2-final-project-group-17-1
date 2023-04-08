@@ -48,7 +48,7 @@
         <div class="d-flex justify-content-between px-3">
             <h2 class="py-3 d-flex justify-content-start">Personal Expenses</h2>
 
-            <div class="d-flex flex-row" style="padding:0px;">
+            <!-- <div class="d-flex flex-row" style="padding:0px;">
               <div class = "dropdown px-3">
                   <button class = "btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                       Currency
@@ -58,7 +58,7 @@
                       <a class="dropdown-item" href="#">Original</a>
                   </div>
                 </div>
-              </div>
+              </div> -->
           </div>
         <div class="scrollable" style="background-color: white;">
             <table id="fullTable" class="table table-striped table-bordered table-sm table-scroll text-center" cellspacing="0"
@@ -296,7 +296,7 @@
             this.categoryDict = categoryDict
             this.categoryPercentageDict = categoryPercentageDict
             this.pieChartData = formattedForPieChart
-            this.totalSpent = "$" + totalAmountPersonal
+            this.totalSpent = "$" + totalAmountPersonal.toFixed(2)
             //console.log(this.categoryDict)
             // if (this.totalSpent > this.budget) {
             //     var bar = document.getElementById("waterTank")
@@ -597,6 +597,7 @@
               padding: 15px;
               background-color: rgba(255,255,255,0.2);
               color: black
+              
           }
 
           thead th {
