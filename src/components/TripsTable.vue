@@ -152,6 +152,20 @@
           this.displayTrips()
         },
         methods: {
+          deleteTrip(tripCode) {
+              alert("You are going to delete " + tripCode)
+                //await deleteDoc(doc(db, "Trip", tripCode))
+
+              console.log("Trip successfully deleted!", tripCode)
+              let tb = document.getElementById("fullTable")
+              for (var i = 0; i < tb.rows.length; i++) {
+                var row = tb.rows[i];
+                var value = row.cells[7].innerHTML;
+                if (value == tripCode) {
+                  tb.deleteRow(i);
+                }
+              }
+            },
             async displayTrips() {
               let allTrips = await getDocs(collection(db, "Trip"))
               let allUsers = await getDocs(collection(db, "User"))
@@ -252,15 +266,6 @@
                       //router.push('/PersonalPage')
                       try {
                         router.push({name:'PersonalPage',
-                          // params:{
-                          // tripCode:tripCode,
-                          // budget:budget,
-                          // tripName:tripName,
-                          // startDate:startDate,
-                          // endDate:endDate,
-                          // tripExpenses: JSON.stringify(tripExpenses),
-                          // people: JSON.stringify(people),
-                          // currency:currency,
                           query: {
                             tripCode: tripCode, tripName: tripName, currency: currency
                           }})
@@ -278,25 +283,18 @@
                     deleteTripButton.innerHTML = "Leave"
 
                     cell9.appendChild(deleteTripButton)
-                    deleteTripButton.onclick = function() {
-                      try {
-                        //deleteTrip(tripName)
-                        deleteTrip(tripCode)
-                      } catch(e) {
-                        console.error(e.message)
-                      }
-                    }
+                    
                     index +=1
                   }
               })
             })
             },
-            async deleteTrip(tripCode){
+            // async deleteRow(index) {
+            //   this.rows.splice(index, 1)
+            // },
+            deleteTrip(tripCode){
               alert("You are going to delete " + tripCode)
-
-
-                await deleteDoc(doc(db, "Trip", tripCode))
-                // await db.collection("Trip").doc(tripNme).delete()
+                //await deleteDoc(doc(db, "Trip", tripCode))
 
               console.log("Trip successfully deleted!", tripCode)
               let tb = document.getElementById("fullTable")
@@ -307,11 +305,11 @@
                   tb.deleteRow(i);
                 }
               }
+            },
               // while (tb.rows.length>1){
               //   //tb.deleteRow(1)
               // }
               //displayTrips()
-            },
             refresh() {
               this.componentKey += 1;
             },

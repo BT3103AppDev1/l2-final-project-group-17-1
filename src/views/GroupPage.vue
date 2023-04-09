@@ -91,7 +91,7 @@
     import db from '../firebase.js';
     import Navbar from '@/components/Navbar.vue'
     import {getAuth, onAuthStateChanged} from 'firebase/auth'
-    import { collection, doc, getDocs, getDoc, query, where} from "firebase/firestore";
+    import { collection, doc, getDocs, getDoc, deleteDoc, arrayRemove, updateDoc, query, where} from "firebase/firestore";
     import moment from 'moment'
 
 export default {
@@ -215,11 +215,13 @@ export default {
             let currentTripExpenses = currentTrip.data().Expenses
             console.log(currentTripExpenses)
             return currentTripExpenses
+
         }
         getExpenses(this.tripCode).then((result) => {
             this.loadExpenses(result);
             //console.log(this.oweDict)
         })
+
         async function displayGroupExpenses(tripCode){
             let index = 1
             let index2 = 1
@@ -268,13 +270,18 @@ export default {
                                 allUsers.forEach((user)=> {
                                     if (user.id == userID) {
                                         userNames = userNames + ", " + user.data().Name
-                                        userNames = userNames.substring(1,)
+                                        // userNames = userNames.substring(1,)
                                     }
                                 })
                             })
-                            cell5.innerHTML = userNames
+                            cell5.innerHTML = userNames.substring(1,)
                             let deleteExpenseButton = document.createElement("button")
+                            deleteExpenseButton.id = expense.id
+                            deleteExpenseButton.innerHTML = "Delete"
                             cell6.appendChild(deleteExpenseButton)
+                            deleteExpenseButton.onclick = function() {
+                                deleteExpense(expense.id, tripCode);
+                            }
                             index +=1
                         }
                     }
@@ -283,6 +290,18 @@ export default {
             })
             }
         displayGroupExpenses(this.tripCode)
+        async function deleteExpense(expenseID, tripCode) {
+            alert("You are going to delete " + expenseID)
+            await deleteDoc(doc(db, "Expense", expenseID))
+            await updateDoc(doc(db, "Trip",tripCode), {
+                Expenses: arrayRemove(expenseID)
+            })
+            let tb = document.getElementById("fullTable")
+            while (tb.rows.length>1){
+                tb.deleteRow(1)
+            }
+            displayGroupExpenses(tripCode)
+        }
     },
     // methods: {
     //     async getUserNames(users) {
@@ -318,7 +337,7 @@ export default {
         th,
         td {
             padding: 15px;
-            background-color: rgba(255,255,255,0.2);
+            background-color: white;
             color: black
         }
 
@@ -338,7 +357,9 @@ export default {
               background-color: rgb(156, 201, 215);
 
           }
-
+        td {
+            background-color: white;
+        }
         #fulltable {
           justify-content: space-between;
           text-align: center;
@@ -348,6 +369,7 @@ export default {
           margin-left: auto;
           margin-right: auto;
           color: white;
+          background-color: white;
         }
 
         .inputbtn[type=checkbox]{

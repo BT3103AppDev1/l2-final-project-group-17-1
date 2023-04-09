@@ -29,6 +29,7 @@
             </div>
             <!-- Water tank -->
             <div class="container text-center card py-3" style="border-color: #55608f;">
+                <MyComponent :key="componentKey2" />
                 <div style="display: flex; flex-direction: row; margin-bottom: 10px;">
                     <h1 style="margin-left: 500px;">Status of Budget</h1>
                     <button @click = "editBudget" style=" width: 150px; border-radius: 15px; margin-left:350px;">Edit Budget</button>
@@ -76,8 +77,10 @@
             </table>
         </div>
     </div>
-    <div class="p-5" id="totalSumTable" style="background-color:floralwhite;">
+
+    <div id="totalSumTable" class="table table-striped table-bordered table-sm table-scroll text-center" style="background-color:floralwhite;">
         <div class = "container" style="background-color: floralwhite;">
+            <h2 class="py-3 d-flex justify-content-start">Amount Spent Per Day</h2>
         <MyComponent :key="componentKey" />
         <table id="dayExpenseTable" class="table table-bordered" style="background-color: white;">
             <thead style="background-color: white; font-family:Arial, Helvetica, sans-serif;">
@@ -125,7 +128,7 @@
                         <div class="justify-content-center">
                             <div class="container text-center graph-background justify-content-center">
                                 <h1>Proportion of Spending By Category</h1>
-                                <pie-chart class ="user" :data="pieChartData" ></pie-chart >
+                                <pie-chart class ="user" :data="pieChartData" />
                             </div>
                         </div>
                     </div>
@@ -176,6 +179,8 @@
     // import BudgetBar from '@/components/BudgetBar.vue';
     import { arrayRemove, collection, doc, getDoc, getDocs, query, where, deleteDoc, updateDoc} from "firebase/firestore";
     import moment from 'moment'
+    import VueChartkick from 'vue-chartkick';
+    // import Chart from 'chart.js';   
 
     export default {
     name: "PersonalPage",
@@ -200,6 +205,7 @@
             people: "",
             currency: this.$route.query.currency,
             componentKey: 0,
+            componentKey2: 0,
             spendingPerDayDict:{},
             pieChartData: {
             "Shopping": "",
@@ -306,6 +312,7 @@
         },
         forceRerender() {
             this.componentKey += 1;
+            this.componentKey2 += 1;
         },
         async getStartDate() {
             let trip = await getDoc(doc(db, "Trip", this.tripCode))
@@ -377,8 +384,6 @@
                 }
             })
             this.spendingPerDayDict = spendingPerDayDict
-            //console.log(this.spendingPerDayDict)
-            //console.log("method called")
         },
        
     },
@@ -463,6 +468,7 @@
                 cell4.innerHTML = amount
 
                 totalCost += (Number(amount)/users.length)
+
 
                 //DATA FOR DAILY SPENDINGS
 
@@ -616,6 +622,7 @@
                   text-align: left;
               }
 
+        total
           th {
               text-align: center;
               color:white;
