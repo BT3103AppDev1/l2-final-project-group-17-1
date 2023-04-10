@@ -92,8 +92,6 @@ export default {
           return {
             userid : "",
             budget: "",
-            startDate: "",
-            endDate: "",
             tripExpenses: "",
             people: "",
             oweDict: {},
@@ -229,6 +227,7 @@ export default {
                         if (users.length > 1) {
                             let expenseTable = document.getElementById("fullTable")
                             let row = expenseTable.insertRow(index)
+                            row.style.backgroundColor = "white";
                             let cell1 = row.insertCell(0);
                             let cell2 = row.insertCell(1);
                             let cell3 = row.insertCell(2);

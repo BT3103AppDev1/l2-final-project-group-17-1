@@ -1,6 +1,6 @@
 <template>
     <section style="background-color: floralwhite; height: 100%; min-height: 100vh;">
-    <!-- <h1>GROUP PAGE </h1>
+     <h1>GROUP PAGE </h1>
     <p>{{ tripCode }}</p> -->
     <div class="container" style="background-color: floralwhite;">
     <div class="container p-5" >

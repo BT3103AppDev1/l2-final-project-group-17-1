@@ -178,7 +178,6 @@
               // let currUser = await getDoc(doc(db, "User", this.userid))
 
               Promise.all([allTrips, allUsers, allExpenses]).then(results => {
-                console.log(tripsArray)
                 let currentUser = this.userid
                 let index = 1
                 allTrips.forEach((d) => {
@@ -275,7 +274,6 @@
                     // tripButton.id  = String(tripName)
                     tripButton.className= "bwt"
                     tripButton.innerHTML = tripName
-                    console.log(this.spent)
                     tripButton.onclick = function() {
                       //router.push('/PersonalPage')
                       try {

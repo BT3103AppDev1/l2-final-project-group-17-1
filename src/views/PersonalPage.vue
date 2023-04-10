@@ -583,7 +583,7 @@
             this.userid = user.uid
             this.name = user.Name
             this.isLoading = false
-            //this.spent = this.fetchAndUpdateData(this.tripCode)
+            this.spent = this.fetchAndUpdateData(this.tripCode)
             //this.getBudget()
         } else {
             this.userid = undefined

@@ -19,7 +19,7 @@
             <!-- Water tank -->
             <div class="container text-center card py-3" style="border-color: #55608f;">
                 <div style="display: flex; flex-direction: row; margin-bottom: 10px;">
-                    <h1 style="margin-left: 500px;">Status of Budget</h1>
+                    <h1 style="margin-left: 500px;">Status of Budget <h5>Currency: {{ this.currency }}</h5> </h1> 
                     <button @click = "this.showPopup = true" style=" width: 120px; border-radius: 15px; margin-left:380px; height: 55px;">Edit Budget</button>
                     <div v-if="showPopup" class="modal">
                         <div class="modal-content">
@@ -575,7 +575,7 @@
 
             } else {
                 waterTank.style.backgroundColor = "green"
-                console.log("TOTALCOST",totalCost)
+                //console.log("TOTALCOST",totalCost)
                 waterTankNum = totalCost/this.newBudget * 100
                 waterTank.innerHTML = Math.ceil(waterTankNum) + "%"
                 waterTank.style.width = waterTankNum + "%"
@@ -661,14 +661,14 @@
           }
 
           #fullTableSection h1 {
-                  color: #111;
-                  font-family: 'Helvetica Neue', sans-serif;
-                  font-size: 50px;
-                  font-weight: bold;
-                  letter-spacing: -1px;
-                  line-height: 1;
-                  text-align: center;
-              }
+                color: #111;
+                font-family: 'Helvetica Neue', sans-serif;
+                font-size: 50px;
+                font-weight: bold;
+                letter-spacing: -1px;
+                line-height: 1;
+                text-align: center;
+          }
 
           th {
               text-align: center;
