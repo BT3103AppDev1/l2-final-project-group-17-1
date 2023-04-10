@@ -126,7 +126,6 @@
           return {
             userid : "",
             componentKey: 0,
-            spent: 0
           }
         },
         computed: {
@@ -159,7 +158,7 @@
               let allUsers = await getDocs(collection(db, "User"))
               let allExpenses = await getDocs(collection(db, "Expense"))
               const userRef = doc(db, 'User', this.userid);
-              
+              console.log(this.userid)
               let tripsArray = [];
               let budgetArray = [];
               await getDoc(userRef)
@@ -179,6 +178,7 @@
               // let currUser = await getDoc(doc(db, "User", this.userid))
 
               Promise.all([allTrips, allUsers, allExpenses]).then(results => {
+                console.log(tripsArray)
                 let currentUser = this.userid
                 let index = 1
                 allTrips.forEach((d) => {
@@ -236,7 +236,7 @@
                       cell6.innerHTML = expense; //expenses
                     });
 
-                    cell2.innerHTML = startDate + " - "+ endDate ;
+                    cell2.innerHTML = startDate + " - " + endDate ;
                     cell3.innerHTML = namesArray; //people;
                     cell4.innerHTML = currency;
                     cell7.innerHTML = budget;
@@ -267,19 +267,34 @@
                           // currency:currency,
 
                           query: {
-                            tripCode: tripCode, tripName: tripName, currency: currency, expense: this.spent
+                            tripCode: tripCode, tripName: tripName, currency: currency
                           }})
                         //showTrip(tripCode)
                       } catch(e) {
                         console.error(e.message)
                       }
                     }
+                    tripButton.style.backgroundColor = "#E2FAB5";
+                    tripButton.style.borderRadius = "10px";
+                    tripButton.style.width = "100%"
+                    tripButton.style.height = "40px"
+                    tripButton.style.justifyContent = "center"
+                    tripButton.style.alignItems = "center"
+                    tripButton.addEventListener('mouseover', function() {
+                      //tripButton.style.fontWeight = 'bold';
+                      tripButton.style.backgroundColor = '#62b57d';
+                    });
+                    tripButton.addEventListener('mouseout', function() {
+                      tripButton.style.fontWeight = 'normal';
+                      tripButton.style.backgroundColor = "#E2FAB5";
+                    });
                     cell1.appendChild(tripButton)
                 
 
                     let deleteTripButton = document.createElement("button")
                     deleteTripButton.id = String(tripName)
                     deleteTripButton.className = "bwt"
+                    deleteTripButton.style.backgroundColor = "#f76f7c";
                     deleteTripButton.innerHTML = "Leave"
 
                     cell9.appendChild(deleteTripButton)
@@ -427,6 +442,7 @@
 <style scoped>
       body {
         background-color: floralwhite;
+        margin: 0;
       }
 
       #fullTable {

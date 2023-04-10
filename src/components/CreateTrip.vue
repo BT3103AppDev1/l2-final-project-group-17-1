@@ -7,7 +7,7 @@
           <p>Create a new Trip and share with your friends!</p>
         </div>
 
-        <div class="card shadow-2-strong card-body p-5 text-center" style="border-radius: 1rem; background-color: rgb(179, 214, 214);">
+        <div class="card shadow-2-strong card-body p-5 text-center" style="border-radius: 1rem; background-color: rgb(156, 201, 215);">
           <form>
             <div class="form-outline mb-4">
                 <input type="text" id="typeEmail" class="form-control form-control-lg" v-model = "tripName"/>

@@ -34,7 +34,7 @@
             <div class="container text-center card py-3" style="border-color: #55608f;">
                 <div style="display: flex; flex-direction: row; margin-bottom: 10px;">
                     <h1 style="margin-left: 500px;">Status of Budget</h1>
-                    <button @click = "this.showPopup = true" style=" width: 150px; border-radius: 15px; margin-left:350px;">Edit Budget</button>
+                    <button @click = "this.showPopup = true" style=" width: 120px; border-radius: 15px; margin-left:380px; height: 55px;">Edit Budget</button>
                     <div v-if="showPopup" class="modal">
                         <div class="modal-content">
                             <input id="budgetInput" type="text" class="form-control form-control-lg" v-model="newBudget"/>
@@ -211,7 +211,6 @@ import { delay } from 'q';
             tripCode: this.$route.query.tripCode,
             budget: "",
             tripName: this.$route.query.tripName,
-            expense: this.$route.query.expense, 
             startDate: "",
             endDate: "",
             tripExpenses: "",
@@ -428,8 +427,6 @@ import { delay } from 'q';
             }
             var waterTankNum = 0
             var waterTank = document.getElementById("waterTank")  
-            console.log(this.spent)
-
             let totalCost =  this.spent
             if (totalCost > this.newBudget) {
                 waterTank.style.backgroundColor = "red"
@@ -449,7 +446,6 @@ import { delay } from 'q';
 
             }
         }
-       
     },
 
     async mounted() {
@@ -633,7 +629,7 @@ import { delay } from 'q';
             return totalCost
         }  
         // this.updatePieChart(this.categoryDict)
-        this.spent = await fetchAndUpdateData(this.tripCode)
+        this.spent = await fetchAndUpdateData(this.tripCode) 
         // var input = document.getElementById("budgetInput")
         // input.value = this.budget
 
@@ -779,7 +775,7 @@ import { delay } from 'q';
             margin: 15% auto;
             padding: 20px;
             border: 1px solid #888;
-            width: 50%;
+            width: 30%;
         }
 
         .close {

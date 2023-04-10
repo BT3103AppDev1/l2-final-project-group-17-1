@@ -1,6 +1,6 @@
 <template>
   <section>
-    <button class="btn btn-lg btn-block shadow text-light" id = "back" style="background-color: maroon" @click="goBack">Go Back</button>
+    <button class="btn btn-lg btn-block shadow text-light" id = "back" style="background-color: maroon" @click="goBack">Back</button>
     <div class="contain">
         <div style="border-radius: 1rem; background-color: rgb(179, 214, 214);">
 
@@ -61,8 +61,8 @@
                 Name : this.displayName
                 });
                 alert("Name Updated Successfully!")
-                //window.history.back();
-                window.location.href = '/InputPage'
+                window.history.back();
+                //window.location.href = '/InputPage'
             } else {
                 alert("Please enter a valid name!")
             }
@@ -98,11 +98,12 @@
   #back {
       margin-top: 20px;;
       margin-left: 30px;
-      height: 60px;
-      width: 120px;
+      height: 50px;
+      width: 90px;
       border-top-left-radius: 200px;
       border-bottom-left-radius: 200px;
       border-top-right-radius: 30px;
       border-bottom-right-radius: 30px;
+      text-align: center;
   }
   </style>

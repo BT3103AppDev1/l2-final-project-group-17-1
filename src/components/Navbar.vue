@@ -39,7 +39,7 @@
             <button style="width:100%; color:white; background-color: black;" @click="showMenu = !showMenu;" >Edit Profile</button>
           </router-link>
           <router-link to="/" id = "signoutRouter">
-            <button style="width:100%; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; color:white; background-color: black;"  @click="signOut()">Sign Out</button>
+            <button style="width:100%; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; color:white; background-color: black;"  @click="signOut()">Log Out</button>
           </router-link>
         </ul>
       </div>
@@ -214,9 +214,8 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    background-color:grey;
     /* box-shadow: 0 2px 2px black; */
-    width: 89%;
+    width: 78%;
     text-align: center;
     color: white;
     border-bottom-left-radius: 10px;
