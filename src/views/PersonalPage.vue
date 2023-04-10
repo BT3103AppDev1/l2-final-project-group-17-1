@@ -29,10 +29,17 @@
             </div>
             <!-- Water tank -->
             <div class="container text-center card py-3" style="border-color: #55608f;">
-                <MyComponent :key="componentKey2" />
                 <div style="display: flex; flex-direction: row; margin-bottom: 10px;">
                     <h1 style="margin-left: 500px;">Status of Budget</h1>
-                    <button @click = "editBudget" style=" width: 150px; border-radius: 15px; margin-left:350px;">Edit Budget</button>
+                    <button @click = "this.showPopup = true" style=" width: 150px; border-radius: 15px; margin-left:350px;">Edit Budget</button>
+                    <div v-if="showPopup" class="modal">
+                        <div class="modal-content">
+                            <input id="budgetInput" type="text" class="form-control form-control-lg" v-model="newBudget"/>
+                            <label class="form-label" for="budgetInput">Edit Budget</label>
+                            <button class="btn btn-lg btn-block shadow text-light" @click="showPopup = false" style="background-color: red; margin-top:40px">Cancel</button>
+                            <button class="btn btn-lg btn-block shadow text-light"  style="background-color: #2196F3; margin-top:10px" @click.prevent="saveBudget">Save</button>
+                        </div>
+                    </div>
                 </div>
                 <div class="w3-light-grey w3-xlarge">
                     <div id="waterTank" class="w3-container w3-center" style=""></div>
@@ -49,7 +56,7 @@
         <div class="d-flex justify-content-between px-3">
             <h2 class="py-3 d-flex justify-content-start">Personal Expenses</h2>
 
-            <!-- <div class="d-flex flex-row" style="padding:0px;">
+            <div class="d-flex flex-row" style="padding:0px;">
               <div class = "dropdown px-3">
                   <button class = "btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                       Currency
@@ -59,7 +66,7 @@
                       <a class="dropdown-item" href="#">Original</a>
                   </div>
                 </div>
-              </div> -->
+              </div>
           </div>
         <div class="scrollable" style="background-color: white;">
             <table id="fullTable" class="table table-striped table-bordered table-sm table-scroll text-center" cellspacing="0"
@@ -77,10 +84,8 @@
             </table>
         </div>
     </div>
-
-    <div id="totalSumTable" class="table table-striped table-bordered table-sm table-scroll text-center" style="background-color:floralwhite;">
+    <div class="p-5" id="totalSumTable" style="background-color:floralwhite;">
         <div class = "container" style="background-color: floralwhite;">
-            <h2 class="py-3 d-flex justify-content-start">Amount Spent Per Day</h2>
         <MyComponent :key="componentKey" />
         <table id="dayExpenseTable" class="table table-bordered" style="background-color: white;">
             <thead style="background-color: white; font-family:Arial, Helvetica, sans-serif;">
@@ -128,7 +133,7 @@
                         <div class="justify-content-center">
                             <div class="container text-center graph-background justify-content-center">
                                 <h1>Proportion of Spending By Category</h1>
-                                <pie-chart class ="user" :data="pieChartData" />
+                                <pie-chart class ="user" :data="pieChartData" ></pie-chart >
                             </div>
                         </div>
                     </div>
@@ -179,8 +184,6 @@
     // import BudgetBar from '@/components/BudgetBar.vue';
     import { arrayRemove, collection, doc, getDoc, getDocs, query, where, deleteDoc, updateDoc} from "firebase/firestore";
     import moment from 'moment'
-    import VueChartkick from 'vue-chartkick';
-    // import Chart from 'chart.js';   
 
     export default {
     name: "PersonalPage",
@@ -198,6 +201,7 @@
             tripCode: this.$route.query.tripCode,
             budget: "",
             tripName: this.$route.query.tripName,
+            expense: this.$route.query.expense, 
             startDate: "",
             endDate: "",
             tripExpenses: "",
@@ -205,7 +209,6 @@
             people: "",
             currency: this.$route.query.currency,
             componentKey: 0,
-            componentKey2: 0,
             spendingPerDayDict:{},
             pieChartData: {
             "Shopping": "",
@@ -227,8 +230,10 @@
             "Leisure": 0,
             "Travel": 0,
             "Accomodation":0,
-            }
-
+            },
+            showPopup: false,
+            newBudget: "",
+            spent: 0
         }
     },
     created() {
@@ -302,7 +307,7 @@
             this.categoryDict = categoryDict
             this.categoryPercentageDict = categoryPercentageDict
             this.pieChartData = formattedForPieChart
-            this.totalSpent = "$" + totalAmountPersonal.toFixed(2)
+            this.totalSpent = "$" + totalAmountPersonal
             //console.log(this.categoryDict)
             // if (this.totalSpent > this.budget) {
             //     var bar = document.getElementById("waterTank")
@@ -312,7 +317,6 @@
         },
         forceRerender() {
             this.componentKey += 1;
-            this.componentKey2 += 1;
         },
         async getStartDate() {
             let trip = await getDoc(doc(db, "Trip", this.tripCode))
@@ -384,7 +388,55 @@
                 }
             })
             this.spendingPerDayDict = spendingPerDayDict
+            //console.log(this.spendingPerDayDict)
+            //console.log("method called")
         },
+
+        async saveBudget() {
+            if (!Number.isInteger(this.newBudget)) {
+                const userRef = doc(db, "User", this.userid);
+                const docSnap = await getDoc(userRef);
+                console.log("new budget", this.newBudget)
+                if (docSnap.exists()) {
+                    let userTrips = docSnap.data().Trips
+                    for (var i = 0; i < userTrips.length; i++) {
+                        if (userTrips[i].Trip_Code == this.tripCode) {
+                            userTrips[i].Budget = this.newBudget
+                            this.budget = this.newBudget
+                            await updateDoc(userRef, {
+                                Trips: userTrips
+                            }).then(() => {
+                                alert("Budget Updated Successfully!")
+                            })
+                        }
+                    }
+                }
+                this.showPopup = false;
+            } else {
+                alert("Please enter a valid integer!")
+            }
+            // var waterTankNum = 0
+            // var waterTank = document.getElementById("waterTank")  
+            // console.log(this.expense)
+            // let totalCost =  this.expense  
+            // if (totalCost > this.budget) {
+            //     waterTank.style.backgroundColor = "red"
+            //     waterTankNum = ((totalCost - this.budget)/this.budget) * 100
+            //     console.log("EXCEED BUDGET")
+            //     waterTank.innerHTML = "EXCEED BY " + Math.ceil(waterTankNum) + "%"
+            //     if (waterTankNum>100) {
+            //         waterTank.style.width = 100 + "%"
+            //     }
+
+            // } else {
+            //     waterTank.style.backgroundColor = "green"
+            //     console.log("TOTALCOST",totalCost)
+            //     waterTankNum = totalCost/this.budget * 100
+            //     waterTank.innerHTML = Math.ceil(waterTankNum) + "%"
+            //     waterTank.style.width = waterTankNum + "%"
+
+            // }
+        }
        
     },
 
@@ -398,7 +450,6 @@
             //this.getBudget()
         }
         })
-
         async function fetchAndUpdateData(tripCode){
             //console.log(this.spendingPerDayDict)
             let index = 1
@@ -412,10 +463,10 @@
             currentUserTrips.forEach((trip)=> {
                 if(trip.Trip_Code == tripCode) {
                     budget = trip.Budget
+                    //budgetInput.value = this.budget //add to input field for update budget
                 }
             })
             var totalCost = 0
-
             //DICTIONARY FOR DAILY SPENDINGS
             var spendingPerDayDict = {}
             let days = []
@@ -469,7 +520,6 @@
 
                 totalCost += (Number(amount)/users.length)
 
-
                 //DATA FOR DAILY SPENDINGS
 
                 if (date in spendingPerDayDict===false) {
@@ -501,7 +551,6 @@
             // console.log('TOTALCOST', totalCost)
             // console.log("SPENDING DICT", spendingPerDayDict)
             // console.log("CAT DICT", categoryDict)
-            
             if (totalCost > budget) {
                 waterTank.style.backgroundColor = "red"
                 waterTankNum = ((totalCost - budget)/budget) * 100
@@ -519,8 +568,7 @@
                 waterTank.style.width = waterTankNum + "%"
 
             }
-
-
+        
 
             let dayExpenseTable = document.getElementById("dayExpenseTable")
             let index2 = 1
@@ -537,7 +585,6 @@
                 dayCell2.innerHTML = dayExpense
                 index2 += 1
             }
-
             // for (var cat in categoryDict) {
             //     var catExpense = categoryDict[cat]
             //     this.pieChartData = {
@@ -560,7 +607,9 @@
             // this.updateCharts()
         }  
         // this.updatePieChart(this.categoryDict)
-        fetchAndUpdateData(this.tripCode)
+        await fetchAndUpdateData(this.tripCode)
+        // var input = document.getElementById("budgetInput")
+        // input.value = this.budget
 
         async function deleteExpense(expenseID, tripCode) {
             alert("You are going to delete " + expenseID)
@@ -603,7 +652,6 @@
               padding: 15px;
               background-color: rgba(255,255,255,0.2);
               color: black
-              
           }
 
           thead th {
@@ -622,7 +670,6 @@
                   text-align: left;
               }
 
-        total
           th {
               text-align: center;
               color:white;
@@ -688,5 +735,37 @@
           border-radius: 20px;
         }
 
+        .modal {
+            display: block;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
 
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+        }
+
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus, .save {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>

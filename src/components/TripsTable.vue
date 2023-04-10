@@ -126,6 +126,7 @@
           return {
             userid : "",
             componentKey: 0,
+            spent: 0
           }
         },
         computed: {
@@ -175,20 +176,6 @@
           this.displayTrips()
         },
         methods: {
-          deleteTrip(tripCode) {
-              alert("You are going to delete " + tripCode)
-                //await deleteDoc(doc(db, "Trip", tripCode))
-
-              console.log("Trip successfully deleted!", tripCode)
-              let tb = document.getElementById("fullTable")
-              for (var i = 0; i < tb.rows.length; i++) {
-                var row = tb.rows[i];
-                var value = row.cells[7].innerHTML;
-                if (value == tripCode) {
-                  tb.deleteRow(i);
-                }
-              }
-            },
             async displayTrips() {
               let allTrips = await getDocs(collection(db, "Trip"))
               let allUsers = await getDocs(collection(db, "User"))
@@ -281,18 +268,28 @@
                     // // code.style.content = "fit"
                     // cell8.appendChild(code)
                     cell8.innerHTML = tripCode;
-
-
+              
                     let tripButton = document.createElement("button")
                     // tripButton.id  = String(tripName)
                     tripButton.className= "bwt"
                     tripButton.innerHTML = tripName
+                    console.log(this.spent)
                     tripButton.onclick = function() {
                       //router.push('/PersonalPage')
                       try {
                         router.push({name:'PersonalPage',
+                          // params:{
+                          // tripCode:tripCode,
+                          // budget:budget,
+                          // tripName:tripName,
+                          // startDate:startDate,
+                          // endDate:endDate,
+                          // tripExpenses: JSON.stringify(tripExpenses),
+                          // people: JSON.stringify(people),
+                          // currency:currency,
+
                           query: {
-                            tripCode: tripCode, tripName: tripName, currency: currency
+                            tripCode: tripCode, tripName: tripName, currency: currency, expense: this.spent
                           }})
                         //showTrip(tripCode)
                       } catch(e) {
@@ -386,7 +383,8 @@
             //NOT IN USE 
             deleteTrip(tripCode){
               alert("You are going to delete " + tripCode)
-                //await deleteDoc(doc(db, "Trip", tripCode))
+                await deleteDoc(doc(db, "Trip", tripCode))
+                // await db.collection("Trip").doc(tripNme).delete()
 
               console.log("Trip successfully deleted!", tripCode)
               let tb = document.getElementById("fullTable")
@@ -397,11 +395,11 @@
                   tb.deleteRow(i);
                 }
               }
-            },
               // while (tb.rows.length>1){
               //   //tb.deleteRow(1)
               // }
               //displayTrips()
+            },
             refresh() {
               this.componentKey += 1;
             },
@@ -430,6 +428,7 @@
                     }
                   }
                 }
+                this.spent = expense.toFixed(2)
                 const result = {expense: expense.toFixed(2),
                                 netowe: netowe.toFixed(2)}
                 return result;
@@ -459,7 +458,7 @@
         border-bottom-left-radius: 15px;
         /* table-layout: fixed; */
         position: auto;
-        background-color: white;
+        background-color: floralwhite;
         margin-left: 70px;
         margin-top: 50px;
         z-index: 0;
@@ -475,7 +474,7 @@
       }
 
       thead th {
-          background-color:rgb(156, 201, 215);
+          background-color: #55608f;
           color: black;
 
       }
