@@ -66,7 +66,12 @@
                 })
                 if (!(existingTrips.includes(this.tripCode))) {
                     alert("Trip does not exist! ");
-                    this.tripCode = '';
+                    this.budget = '';
+                    return;
+                }
+
+                if (this.budget < 0) {
+                    alert("Please enter a valid budget")
                     this.budget = '';
                     return;
                 }
@@ -95,6 +100,7 @@
                             this.tripCode = '';
                             this.budget = '';
                         })
+                        this.$emit('update')
                     }
                     catch(error) {
                         console.error("Error adding document: ", error);
@@ -104,7 +110,7 @@
                     this.tripCode = '';
                     this.budget = '';
                 }
-                this.$emit('update')
+                
             }
         }
     }
