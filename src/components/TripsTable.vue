@@ -275,7 +275,7 @@
                     // tripButton.id  = String(tripName)
                     tripButton.className= "bwt"
                     tripButton.innerHTML = tripName
-                    console.log(this.spent)
+                    // console.log(this.spent)
                     tripButton.onclick = function() {
                       //router.push('/PersonalPage')
                       try {
