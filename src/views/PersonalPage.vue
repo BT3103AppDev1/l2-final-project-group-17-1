@@ -201,9 +201,6 @@ import { delay } from 'q';
     data () {
         return {
             isLoading: true,
-            user: null,
-            userid: null,
-            name: null,
             slide: 0,
             sliding: null,
             selected : "",
@@ -445,36 +442,16 @@ import { delay } from 'q';
                 waterTank.style.width = waterTankNum + "%"
 
             }
-        }
-    },
+        },
 
-    async mounted() {
-        try { const auth = getAuth()
-        onAuthStateChanged(auth, (user) => {
-        if (user) {
-            this.user = user
-            this.userid = user.uid
-            this.name = user.Name
-            this.isLoading = false
-            //this.getBudget()
-        } else {
-            this.userid = undefined
-        }
-        })
-        } catch(error) {
-            console.log("error authenticating")
-        }
-
-        async function fetchAndUpdateData(tripCode){
+        async fetchAndUpdateData(tripCode){
             //console.log(this.spendingPerDayDict)
         
             let index = 1
             // let index2 = 1
-            const auth=getAuth()
-    
-            const uid = auth.currentUser.uid
-            //const uid = userid
- 
+            // const auth=getAuth()
+            // const uid = auth.currentUser.uid
+            const uid = this.userid
             //tripExpenses = JSON.parse(tripExpenses)
             var budget = 0;
             let currentUser = await getDoc(doc(db, "User", uid))
@@ -605,30 +582,193 @@ import { delay } from 'q';
                 dayCell2.innerHTML = dayExpense
                 index2 += 1
             }
-            // for (var cat in categoryDict) {
-            //     var catExpense = categoryDict[cat]
-            //     this.pieChartData = {
-            //         cat:catExpense
-            //     }
-            // }
-            // this.categoryDict = categoryDict
+            return totalCost
+        }
+    },
 
-            // this.pieChartData = {
-            //     "Shopping": categoryDict["Shopping"],
-            //     "Food": categoryDict["Food"],
-            //     "Leisure": categoryDict["Leisure"],
-            //     "Travel": categoryDict["Travel"],
-            //     "Accomodation": categoryDict["Accomodation"]
-            // }
+    async mounted() {
+        try { const auth = getAuth()
+        onAuthStateChanged(auth, (user) => {
+        if (user) {
+            this.user = user
+            this.userid = user.uid
+            this.name = user.Name
+            this.isLoading = false
+            this.spent = this.fetchAndUpdateData(this.tripCode) 
+            //this.getBudget()
+        } else {
+            this.userid = undefined
+        }
+        })
+        } catch(error) {
+            console.log("error authenticating")
+        }
+
+        // async function fetchAndUpdateData(tripCode){
+        //     //console.log(this.spendingPerDayDict)
+        
+        //     let index = 1
+        //     // let index2 = 1
+        //     // const auth=getAuth()
+        //     // const uid = auth.currentUser.uid
+        //     const uid = this.userid
+ 
+        //     //tripExpenses = JSON.parse(tripExpenses)
+        //     var budget = 0;
+        //     let currentUser = await getDoc(doc(db, "User", uid))
+        //     let currentUserTrips = currentUser.data().Trips //trips the user is involved in
+        //     currentUserTrips.forEach((trip)=> {
+        //         if(trip.Trip_Code == tripCode) {
+        //             budget = trip.Budget
+        //             //budgetInput.value = this.budget //add to input field for update budget
+        //         }
+        //     })
+        //     var totalCost = 0
+        //     //DICTIONARY FOR DAILY SPENDINGS
+        //     var spendingPerDayDict = {}
+        //     let days = []
+        //     let currentTrip = await getDoc(doc(db, "Trip", tripCode))
+        //     const startDate = moment(currentTrip.data().Start_Date);
+        //     const endDate = moment(currentTrip.data().End_Date);
+        //     var Difference_In_Days = endDate.diff(startDate, 'days')
+        //     let d = startDate
+        //     days.push(d.format('YYYY-MM-DD')) //start date
+        //     for (var i = 0; i < Difference_In_Days; i++) {
+        //         d = d.add(1, 'days')
+        //         //var d = new Date();
+        //         //d.setDate(startDate.toDate() + i + 1);
+        //         days.push(d.format('YYYY-MM-DD'));
+        //     }
+        //     days.forEach((day)=> {
+        //         spendingPerDayDict[day] = 0
+        //     })
+
+        //     //DICTIONARY FOR SPENDINGS BY CATEGORY
+        //     var categoryDict = {
+        //         "Shopping":0,
+        //         "Food": 0,
+        //         "Leisure":0,
+        //         "Travel":0,
+        //         "Accomodation":0
+        //     }
+
+        //     let currentTripExpenses = currentTrip.data().Expenses //all expenses of this specific trip (string)
+        //     let allExpenses = await getDocs(collection(db, "Expense")) //all expenses
+        //     allExpenses.forEach((expense) => {
+        //         let users = expense.data().Users;
+        //     if (users.includes(String(uid)) && currentTripExpenses.includes(expense.id)) {
+        //         let expenseTable = document.getElementById("fullTable")
+        //         let row = expenseTable.insertRow(index)
+        //         let cell1 = row.insertCell(0);
+        //         let cell2 = row.insertCell(1);
+        //         let cell3 = row.insertCell(2);
+        //         let cell4 = row.insertCell(3);
+        //         let cell5 = row.insertCell(4);
+        //         let cell6 = row.insertCell(5);
+
+
+        //         var date = expense.data().Date
+        //         var amount = expense.data().Amount
+        //         var cat = expense.data().Category
+        //         cell1.innerHTML = date
+        //         cell2.innerHTML = expense.data().Description
+        //         cell3.innerHTML = cat
+        //         cell4.innerHTML = amount
+
+        //         totalCost += (Number(amount)/users.length)
+
+        //         //DATA FOR DAILY SPENDINGS
+
+        //         if (date in spendingPerDayDict===false) {
+        //             spendingPerDayDict[date] = amount
+        //         } else {
+        //             spendingPerDayDict[date] += amount
+        //         }
+
+        //         // categoryDict[cat] += amount
+
+
+        //         if (users.length>1) {
+        //             cell5.innerHTML = "Group"
+        //         } else {
+        //             cell5.innerHTML = "Individual"
+        //         }
+        //         let deleteExpenseButton = document.createElement("button")
+        //         deleteExpenseButton.id = expense.id
+        //         deleteExpenseButton.innerHTML = "Delete"
+        //         cell6.appendChild(deleteExpenseButton)
+        //         deleteExpenseButton.onclick = function() {
+        //             deleteExpense(expense.id, tripCode)
+        //         }
+        //         index +=1
+        //     }
+        //     })
+        //     var waterTankNum = 0
+        //     var waterTank = document.getElementById("waterTank")
+        //     // console.log('TOTALCOST', totalCost)
+        //     // console.log("SPENDING DICT", spendingPerDayDict)
+        //     // console.log("CAT DICT", categoryDict)
+        //     //this.spent = totalCost
+        //     if (totalCost > budget) {
+        //         waterTank.style.backgroundColor = "red"
+        //         waterTankNum = ((totalCost - budget)/budget) * 100
+        //         console.log("EXCEED BUDGET")
+        //         waterTank.innerHTML = "EXCEED BY " + Math.ceil(waterTankNum) + "%"
+        //         if (waterTankNum>100) {
+        //             waterTank.style.width = 100 + "%"
+        //         }
+
+        //     } else {
+        //         waterTank.style.backgroundColor = "green"
+        //         console.log("TOTALCOST",totalCost)
+        //         waterTankNum = totalCost/budget * 100
+        //         waterTank.innerHTML = Math.ceil(waterTankNum) + "%"
+        //         waterTank.style.width = waterTankNum + "%"
+
+        //     }
+        
+
+        //     let dayExpenseTable = document.getElementById("dayExpenseTable")
+        //     let index2 = 1
+        //     for (var day in spendingPerDayDict) {
+        //         // console.log(dayExpenseTable.rows.length)
+        //         var dayExpense = spendingPerDayDict[day]
+        //         if (dayExpense == 0) {
+        //             continue;
+        //         }
+        //         let dayRow = dayExpenseTable.insertRow(index2)
+        //         let dayCell1 = dayRow.insertCell(0);
+        //         let dayCell2 = dayRow.insertCell(1);
+        //         dayCell1.innerHTML = day
+        //         dayCell2.innerHTML = dayExpense
+        //         index2 += 1
+        //     }
+        //     // for (var cat in categoryDict) {
+        //     //     var catExpense = categoryDict[cat]
+        //     //     this.pieChartData = {
+        //     //         cat:catExpense
+        //     //     }
+        //     // }
+        //     // this.categoryDict = categoryDict
+
+        //     // this.pieChartData = {
+        //     //     "Shopping": categoryDict["Shopping"],
+        //     //     "Food": categoryDict["Food"],
+        //     //     "Leisure": categoryDict["Leisure"],
+        //     //     "Travel": categoryDict["Travel"],
+        //     //     "Accomodation": categoryDict["Accomodation"]
+        //     // }
 
          
 
-            // this.updatePieChart(categoryDict)
-            // this.updateCharts()
-            return totalCost
-        }  
+        //     // this.updatePieChart(categoryDict)
+        //     // this.updateCharts()
+        //     return totalCost
+        // }  
         // this.updatePieChart(this.categoryDict)
-        this.spent = await fetchAndUpdateData(this.tripCode) 
+
+        // this.spent = await fetchAndUpdateData(this.tripCode) 
+
         // var input = document.getElementById("budgetInput")
         // input.value = this.budget
 
