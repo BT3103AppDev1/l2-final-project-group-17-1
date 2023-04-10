@@ -219,6 +219,8 @@
                     let row = tripsTable.insertRow(index)
                     row.style.height = "40px"; 
                     row.style.lineHeight = "1.05";
+                    row.style.overflow = "auto"
+                    
             
 
                     let cell1 = row.insertCell(0);
@@ -279,7 +281,7 @@
                     tripButton.onclick = function() {
                       //router.push('/PersonalPage')
                       try {
-                        router.push({name:'PersonalPage',
+                        router.push({name:'Dashboard',
                           // params:{
                           // tripCode:tripCode,
                           // budget:budget,

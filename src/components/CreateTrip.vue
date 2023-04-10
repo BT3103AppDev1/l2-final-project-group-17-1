@@ -87,6 +87,11 @@ export default {
       methods: {
         async createTrip(){
           console.log('inside create trip')
+          if (this.budget < 0) {
+                    alert("Please enter a valid budget")
+                    this.budget = '';
+                    return;
+          }
           try {
             const docRef = await addDoc(collection(db, "Trip"), {
               Name: this.tripName,
@@ -112,12 +117,12 @@ export default {
             //document.getElementById("createtripform").reset();
             // this.$emit("added");
             alert("Creating trip ", this.tripName)
-
+            this.$emit('update')
           }
           catch(error) {
             console.error("Error creating trip: ", error);
           }
-          this.$emit('update')
+          
         },
       },
 }
