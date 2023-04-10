@@ -155,7 +155,6 @@
         methods: {
             async displayTrips() {
               let allTrips = await getDocs(query(collection(db, "Trip"), orderBy("Start_Date", "desc")))
-              //const orderedTrips = allTrips.orderBy('createdAt', 'asc')
               let allUsers = await getDocs(collection(db, "User"))
               let allExpenses = await getDocs(collection(db, "Expense"))
               const userRef = doc(db, 'User', this.userid);
@@ -218,8 +217,8 @@
 
                     let tripsTable = document.getElementById("fullTable")
                     let row = tripsTable.insertRow(index)
-                    row.style.height = "20px"; 
-                    row.style.lineHeight = "1.15";
+                    row.style.height = "40px"; 
+                    row.style.lineHeight = "1.05";
             
 
                     let cell1 = row.insertCell(0);
@@ -256,20 +255,21 @@
                     // // code.style.content = "fit"
                     // cell8.appendChild(code)
                     cell8.innerHTML = tripCode;
+                    cell8.title = "Copy"
                     cell8.addEventListener("click", function() {
-                      let text = this.textContent.trim();
-                      navigator.clipboard.writeText(text);
+                      //let text = this.textContent.trim();
+                      navigator.clipboard.writeText(tripCode);
+                      // alert("Trip Code copied to Clipboard!")
                     });
-
                     cell8.addEventListener("mouseover", function() {
                       cell8.style.textDecoration = "underline";
+                      cell8.innerText = "Click to copy code"
                     });
                     cell8.addEventListener("mouseout", function() {
                       cell8.style.textDecoration = "none";
+                      cell8.innerText = tripCode
                     });
-
-                    cell8.style.cursor = "pointer";
-                    cell8.title = "Click to copy";        
+                    cell8.style.cursor = "pointer";     
 
                     let tripButton = document.createElement("button")
                     // tripButton.id  = String(tripName)
@@ -474,8 +474,8 @@
         border-collapse: collapse;
         /* overflow: hidden; */
         box-shadow: 0 0 20px rgba(0,0,0,0.1);
-        border-top-right-radius: 15px;
-        border-top-left-radius: 15px;
+        border-top-right-radius: 22px;
+        border-top-left-radius: 22px;
         border-bottom-right-radius: 15px;
         border-bottom-left-radius: 15px;
         /* table-layout: fixed; */
