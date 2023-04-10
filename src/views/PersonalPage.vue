@@ -468,8 +468,7 @@ import { delay } from 'q';
         } catch(error) {
             console.log("error authenticating")
         }
-        // console.log(this.userid===undefined)
-        // console.log(this.userid)
+
         async function fetchAndUpdateData(tripCode){
             //console.log(this.spendingPerDayDict)
         
