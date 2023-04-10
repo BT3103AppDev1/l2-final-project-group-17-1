@@ -19,7 +19,7 @@
             <PersonalPage :tripCode="tripCode" :tripName="tripName" :currency="currency" :startDate="startDate" :endDate="endDate"/>
         </div>
         <div v-else>
-            <GroupPage :tripCode="tripCode" :tripName="tripName" :currency="currency"/>
+            <GroupPage :tripCode="tripCode" :tripName="tripName" :currency="currency" :startDate="startDate" :endDate="endDate"/>
         </div>
         <!-- <div id = "personal" style="width:500px; margin-right: 5%;"><PersonalPage v-on:update="refresh"/> </div>
         <div id = "group" style="width:500px; margin-left: 5%;"><GroupPage v-on:update="refresh"/> </div> -->

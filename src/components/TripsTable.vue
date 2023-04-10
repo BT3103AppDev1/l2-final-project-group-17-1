@@ -217,7 +217,7 @@
                     let tripsTable = document.getElementById("fullTable")
                     let row = tripsTable.insertRow(index)
                     row.style.height = "70px"; 
-                    row.style.lineHeight = "1.05";
+                    row.style.lineHeight = "1.15";
                     //row.style.overflow = "auto"
                     
                     let cell1 = row.insertCell(0);
@@ -297,10 +297,13 @@
                     }
                     tripButton.style.backgroundColor = "#E2FAB5";
                     tripButton.style.borderRadius = "10px";
-                    tripButton.style.width = "100%"
-                    tripButton.style.height = "38px"
+                    tripButton.style.width = "110px"
+                    tripButton.style.height = "40px"
                     tripButton.style.justifyContent = "center"
                     tripButton.style.alignItems = "center"
+                    // tripButton.style.padding = "10px"
+                    // tripButton.style.margin = "0 auto";
+                    tripButton.style.display = "flex"
                     tripButton.addEventListener('mouseover', function() {
                       //tripButton.style.fontWeight = 'bold';
                       tripButton.style.backgroundColor = '#62b57d';
@@ -316,6 +319,8 @@
                     deleteTripButton.id = String(tripName)
                     deleteTripButton.className = "bwt"
                     deleteTripButton.style.backgroundColor = "#f76f7c";
+                    deleteTripButton.style.padding = "6px";
+                    deleteTripButton.style.borderRadius = "20px";
                     deleteTripButton.innerHTML = "Leave"
 
                     cell9.appendChild(deleteTripButton)
@@ -324,8 +329,6 @@
                       let date = new Date().getTime()
                       let parts = startDate.split("-")
                       let startdate = new Date(parts[0], parts[1]-1, parts[2]).getTime()
-                      console.log(date)
-                      console.log(startdate)
                       if (date >= startdate) { //if trip has alr commenced, cannot delete
                         console.log("cannot delete")
                         alert("You cannot delete a trip that has already commenced.")

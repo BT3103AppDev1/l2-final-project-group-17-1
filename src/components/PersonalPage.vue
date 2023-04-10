@@ -23,7 +23,7 @@
                     <button @click = "this.showPopup = true" style=" width: 120px; border-radius: 15px; margin-left:380px; height: 55px;">Edit Budget</button>
                     <div v-if="showPopup" class="modal">
                         <div class="modal-content">
-                            <input id="budgetInput" type="text" class="form-control form-control-lg" v-model="newBudget"/>
+                            <input id="budgetInput" type="number" class="form-control form-control-lg" v-model="newBudget"/>
                             <label class="form-label" for="budgetInput">Edit Budget</label>
                             <button class="btn btn-lg btn-block shadow text-light" @click="showPopup = false" style="background-color: red; margin-top:40px">Cancel</button>
                             <button class="btn btn-lg btn-block shadow text-light"  style="background-color: #2196F3; margin-top:10px" @click.prevent="saveBudget">Save</button>
@@ -540,7 +540,7 @@
         },
 
         async saveBudget() {
-            if (!Number.isInteger(this.newBudget)) {
+            if (Number.isInteger(this.newBudget) && this.newBudget >= 0) {
                 const userRef = doc(db, "User", this.userid);
                 const docSnap = await getDoc(userRef);
                 if (docSnap.exists()) {
@@ -559,7 +559,7 @@
                 }
                 this.showPopup = false;
             } else {
-                alert("Please enter a valid integer!")
+                alert("Please enter a valid budget!")
             }
             var waterTankNum = 0
             var waterTank = document.getElementById("waterTank")  
