@@ -1,17 +1,6 @@
 <template>
     <div class = "page">
             <loading-spinner v-if="userid != null"></loading-spinner>
-            <!-- <p>{{ userid }}</p> -->
-            <!-- <i class ="fa fa-spinner fa-spin"></i> Loading... -->
-
-        <!-- <BudgetBar :tripCode = 'tripCode'/> -->
-        <!-- <PersonalExp :tripCode = 'tripCode'/>  -->
-        <!-- <p>tripCode is : {{tripCode}}  {{people}}</p> -->
-
-      <!-- <div class = "container">
-        <div id = "budget"> <Budget/> </div>
-        <div id = "expenses"><PersonalExpenses/> </div>
-      </div> -->
 
         <!-- Trip Name, Dropdown buttons, water tank, radio to switch indiv and group pages -->
     <div class="p-4 text-dark" id="topBar" style="background-color: floralwhite; top:0px;">
@@ -105,20 +94,16 @@
     <!-- <section style="background-color: floralwhite;">
         <div class="container">
             <div class="d-md-flex justify-content-center">
-
                 <div class="container text-center graph-background">
                     <h1>Proportion of Spending By Category</h1>
                     <pie-chart class ="user" width=500px :data="pieChartData" ></pie-chart >
                 </div>
-
                 <div class="container text-center graph-background">
                     <h1>Overall Spending By Category</h1>
                     <bar-chart class="user" width=500px :data="categoryDict">
-
                     </bar-chart>
                 </div>
             </div>
-
             <div class="d-md-flex justify-content-center">
             <div class="container text-center graph-background">
                 <h1>Spending Insights By Day</h1>
@@ -188,12 +173,8 @@
     import { arrayRemove, collection, doc, getDoc, getDocs, query, where, deleteDoc, updateDoc} from "firebase/firestore";
     import moment from 'moment'
     import LoadingSpinner from '@/components/LoadingSpinner.vue';
-// import { delay } from 'q';
-
     export default {
     name: "PersonalPage",
-
-
     components:{
         Navbar,
         LoadingSpinner,
@@ -255,10 +236,7 @@
             //console.log(this.spendingPerDayDict)
         
             let index = 1
-            // let index2 = 1
-            const auth=getAuth()
-    
-            const uid = auth.currentUser.uid
+            const uid = this.userid
             //const uid = userid
  
             //tripExpenses = JSON.parse(tripExpenses)
@@ -290,7 +268,6 @@
             days.forEach((day)=> {
                 spendingPerDayDict[day] = 0
             })
-
             //DICTIONARY FOR SPENDINGS BY CATEGORY
             var categoryDict = {
                 "Shopping":0,
@@ -299,7 +276,6 @@
                 "Travel":0,
                 "Accomodation":0
             }
-
             let currentTripExpenses = currentTrip.data().Expenses //all expenses of this specific trip (string)
             let allExpenses = await getDocs(collection(db, "Expense")) //all expenses
             allExpenses.forEach((expense) => {
@@ -313,8 +289,6 @@
                 let cell4 = row.insertCell(3);
                 let cell5 = row.insertCell(4);
                 let cell6 = row.insertCell(5);
-
-
                 var date = expense.data().Date
                 var amount = expense.data().Amount
                 var cat = expense.data().Category
@@ -322,16 +296,13 @@
                 cell2.innerHTML = expense.data().Description
                 cell3.innerHTML = cat
                 cell4.innerHTML = amount
-
                 totalCost += (Number(amount)/users.length)
-
                 //DATA FOR DAILY SPENDINGS
                 if (date in spendingPerDayDict===false) {
                     spendingPerDayDict[date] = amount
                 } else {
                     spendingPerDayDict[date] += amount
                 }
-
                 // categoryDict[cat] += amount
                 if (users.length>1) {
                     cell5.innerHTML = "Group"
@@ -365,14 +336,12 @@
                 if (waterTankNum>100) {
                     waterTank.style.width = 100 + "%"
                 }
-
             } else {
                 waterTank.style.backgroundColor = "green"
                 // console.log("TOTALCOST",totalCost)
                 waterTankNum = totalCost/budget * 100
                 waterTank.innerHTML = Math.ceil(waterTankNum) + "%"
                 waterTank.style.width = waterTankNum + "%"
-
             }
         
             console.log("spendingPerDayDict", spendingPerDayDict)
@@ -398,41 +367,9 @@
                 dayCell1.innerHTML = day
                 dayCell2.innerHTML = dayExpense
                 index2 += 1
-                // if (dayExpenseTable.rows.length > 0) {
-                //     for (let i=0; i<dayExpenseTable.rows.length;i++) {
-                //         let row = dayExpenseTable.rows[i]
-                //         if (row.cells[0].innerHTML === day) {
-                //             row.cells[1].innerHTML = dayExpense
-                //             break
-                //         }
-                //     }
-                // }
-
             }
-            // for (var cat in categoryDict) {
-            //     var catExpense = categoryDict[cat]
-            //     this.pieChartData = {
-            //         cat:catExpense
-            //     }
-            // }
-            // this.categoryDict = categoryDict
-
-            // this.pieChartData = {
-            //     "Shopping": categoryDict["Shopping"],
-            //     "Food": categoryDict["Food"],
-            //     "Leisure": categoryDict["Leisure"],
-            //     "Travel": categoryDict["Travel"],
-            //     "Accomodation": categoryDict["Accomodation"]
-            // }
-
-         
-
-            // this.updatePieChart(categoryDict)
-            // this.updateCharts()
             return totalCost
-
         },
-
         async deleteExpense(expenseID, tripCode) {
             alert("You are going to delete " + expenseID)
             await deleteDoc(doc(db, "Expense", expenseID))
@@ -444,15 +381,12 @@
                 tb.deleteRow(1)
             }
             const com = this
-
             await com.fetchAndUpdateData(tripCode)
             await this.updateCharts()
             // location.reload()
             // this.updateCharts()
             // window.location.reload();
         },
-
-
     onSlideStart(slide) {
         this.sliding = true
       },
@@ -560,7 +494,6 @@
         },
         async getSpendingPerDayDict() {
             //DICTIONARY FOR DAILY SPENDINGS
-            const auth=getAuth()
             //const uid = auth.currentUser.uid
             const uid = this.userid
             var spendingPerDayDict = {}
@@ -580,7 +513,6 @@
             days.forEach((day)=> {
                 spendingPerDayDict[day] = 0
             })
-
             let currentTripExpenses = currentTrip.data().Expenses //all expenses of this specific trip (string)
             let allExpenses = await getDocs(collection(db, "Expense")) //all expenses
             allExpenses.forEach((expense) => {
@@ -589,7 +521,6 @@
                 if (users.includes(this.userid) && currentTripExpenses.includes(expense.id)) {
                     var date = expense.data().Date
                     var amount = expense.data().Amount
-
                     //DATA FOR DAILY SPENDINGS
                     if (date in spendingPerDayDict===false) {
                         spendingPerDayDict[date] = amount
@@ -602,7 +533,6 @@
             //console.log(this.spendingPerDayDict)
             //console.log("method called")
         },
-
         async saveBudget() {
             if (!Number.isInteger(this.newBudget)) {
                 const userRef = doc(db, "User", this.userid);
@@ -636,159 +566,15 @@
                 if (waterTankNum>100) {
                     waterTank.style.width = 100 + "%"
                 }
-
             } else {
                 waterTank.style.backgroundColor = "green"
                 console.log("TOTALCOST",totalCost)
                 waterTankNum = totalCost/this.newBudget * 100
                 waterTank.innerHTML = Math.ceil(waterTankNum) + "%"
                 waterTank.style.width = waterTankNum + "%"
-
             }
-        },
-
-        async fetchAndUpdateData(tripCode){
-            //console.log(this.spendingPerDayDict)
-        
-            let index = 1
-            // let index2 = 1
-            // const auth=getAuth()
-            // const uid = auth.currentUser.uid
-            const uid = this.userid
-            //tripExpenses = JSON.parse(tripExpenses)
-            var budget = 0;
-            let currentUser = await getDoc(doc(db, "User", uid))
-            let currentUserTrips = currentUser.data().Trips //trips the user is involved in
-            currentUserTrips.forEach((trip)=> {
-                if(trip.Trip_Code == tripCode) {
-                    budget = trip.Budget
-                    //budgetInput.value = this.budget //add to input field for update budget
-                }
-            })
-            var totalCost = 0
-            //DICTIONARY FOR DAILY SPENDINGS
-            var spendingPerDayDict = {}
-            let days = []
-            let currentTrip = await getDoc(doc(db, "Trip", tripCode))
-            const startDate = moment(currentTrip.data().Start_Date);
-            const endDate = moment(currentTrip.data().End_Date);
-            var Difference_In_Days = endDate.diff(startDate, 'days')
-            let d = startDate
-            days.push(d.format('YYYY-MM-DD')) //start date
-            for (var i = 0; i < Difference_In_Days; i++) {
-                d = d.add(1, 'days')
-                //var d = new Date();
-                //d.setDate(startDate.toDate() + i + 1);
-                days.push(d.format('YYYY-MM-DD'));
-            }
-            days.forEach((day)=> {
-                spendingPerDayDict[day] = 0
-            })
-
-            //DICTIONARY FOR SPENDINGS BY CATEGORY
-            var categoryDict = {
-                "Shopping":0,
-                "Food": 0,
-                "Leisure":0,
-                "Travel":0,
-                "Accomodation":0
-            }
-
-            let currentTripExpenses = currentTrip.data().Expenses //all expenses of this specific trip (string)
-            let allExpenses = await getDocs(collection(db, "Expense")) //all expenses
-            allExpenses.forEach((expense) => {
-                let users = expense.data().Users;
-            if (users.includes(String(uid)) && currentTripExpenses.includes(expense.id)) {
-                let expenseTable = document.getElementById("fullTable")
-                let row = expenseTable.insertRow(index)
-                let cell1 = row.insertCell(0);
-                let cell2 = row.insertCell(1);
-                let cell3 = row.insertCell(2);
-                let cell4 = row.insertCell(3);
-                let cell5 = row.insertCell(4);
-                let cell6 = row.insertCell(5);
-
-
-                var date = expense.data().Date
-                var amount = expense.data().Amount
-                var cat = expense.data().Category
-                cell1.innerHTML = date
-                cell2.innerHTML = expense.data().Description
-                cell3.innerHTML = cat
-                cell4.innerHTML = amount
-
-                totalCost += (Number(amount)/users.length)
-
-                //DATA FOR DAILY SPENDINGS
-
-                if (date in spendingPerDayDict===false) {
-                    spendingPerDayDict[date] = amount
-                } else {
-                    spendingPerDayDict[date] += amount
-                }
-
-                // categoryDict[cat] += amount
-
-
-                if (users.length>1) {
-                    cell5.innerHTML = "Group"
-                } else {
-                    cell5.innerHTML = "Individual"
-                }
-                let deleteExpenseButton = document.createElement("button")
-                deleteExpenseButton.id = expense.id
-                deleteExpenseButton.innerHTML = "Delete"
-                cell6.appendChild(deleteExpenseButton)
-                deleteExpenseButton.onclick = function() {
-                    deleteExpense(expense.id, tripCode)
-                }
-                index +=1
-            }
-            })
-            var waterTankNum = 0
-            var waterTank = document.getElementById("waterTank")
-            // console.log('TOTALCOST', totalCost)
-            // console.log("SPENDING DICT", spendingPerDayDict)
-            // console.log("CAT DICT", categoryDict)
-            //this.spent = totalCost
-            if (totalCost > budget) {
-                waterTank.style.backgroundColor = "red"
-                waterTankNum = ((totalCost - budget)/budget) * 100
-                console.log("EXCEED BUDGET")
-                waterTank.innerHTML = "EXCEED BY " + Math.ceil(waterTankNum) + "%"
-                if (waterTankNum>100) {
-                    waterTank.style.width = 100 + "%"
-                }
-
-            } else {
-                waterTank.style.backgroundColor = "green"
-                console.log("TOTALCOST",totalCost)
-                waterTankNum = totalCost/budget * 100
-                waterTank.innerHTML = Math.ceil(waterTankNum) + "%"
-                waterTank.style.width = waterTankNum + "%"
-
-            }
-        
-
-            let dayExpenseTable = document.getElementById("dayExpenseTable")
-            let index2 = 1
-            for (var day in spendingPerDayDict) {
-                // console.log(dayExpenseTable.rows.length)
-                var dayExpense = spendingPerDayDict[day]
-                if (dayExpense == 0) {
-                    continue;
-                }
-                let dayRow = dayExpenseTable.insertRow(index2)
-                let dayCell1 = dayRow.insertCell(0);
-                let dayCell2 = dayRow.insertCell(1);
-                dayCell1.innerHTML = day
-                dayCell2.innerHTML = dayExpense
-                index2 += 1
-            }
-            return totalCost
         }
     },
-
     async mounted() {
         try { const auth = getAuth()
         onAuthStateChanged(auth, (user) => {
@@ -797,7 +583,7 @@
             this.userid = user.uid
             this.name = user.Name
             this.isLoading = false
-            this.spent = this.fetchAndUpdateData(this.tripCode) 
+            this.spent = this.fetchAndUpdateData(this.tripCode)
             //this.getBudget()
         } else {
             this.userid = undefined
@@ -806,182 +592,20 @@
         } catch(error) {
             console.log("error authenticating")
         }
-
-        // async function fetchAndUpdateData(tripCode){
-        //     //console.log(this.spendingPerDayDict)
-        
-        //     let index = 1
-        //     // let index2 = 1
-        //     // const auth=getAuth()
-        //     // const uid = auth.currentUser.uid
-        //     const uid = this.userid
- 
-        //     //tripExpenses = JSON.parse(tripExpenses)
-        //     var budget = 0;
-        //     let currentUser = await getDoc(doc(db, "User", uid))
-        //     let currentUserTrips = currentUser.data().Trips //trips the user is involved in
-        //     currentUserTrips.forEach((trip)=> {
-        //         if(trip.Trip_Code == tripCode) {
-        //             budget = trip.Budget
-        //             //budgetInput.value = this.budget //add to input field for update budget
-        //         }
-        //     })
-        //     var totalCost = 0
-        //     //DICTIONARY FOR DAILY SPENDINGS
-        //     var spendingPerDayDict = {}
-        //     let days = []
-        //     let currentTrip = await getDoc(doc(db, "Trip", tripCode))
-        //     const startDate = moment(currentTrip.data().Start_Date);
-        //     const endDate = moment(currentTrip.data().End_Date);
-        //     var Difference_In_Days = endDate.diff(startDate, 'days')
-        //     let d = startDate
-        //     days.push(d.format('YYYY-MM-DD')) //start date
-        //     for (var i = 0; i < Difference_In_Days; i++) {
-        //         d = d.add(1, 'days')
-        //         //var d = new Date();
-        //         //d.setDate(startDate.toDate() + i + 1);
-        //         days.push(d.format('YYYY-MM-DD'));
-        //     }
-        //     days.forEach((day)=> {
-        //         spendingPerDayDict[day] = 0
-        //     })
-
-        //     //DICTIONARY FOR SPENDINGS BY CATEGORY
-        //     var categoryDict = {
-        //         "Shopping":0,
-        //         "Food": 0,
-        //         "Leisure":0,
-        //         "Travel":0,
-        //         "Accomodation":0
-        //     }
-
-        //     let currentTripExpenses = currentTrip.data().Expenses //all expenses of this specific trip (string)
-        //     let allExpenses = await getDocs(collection(db, "Expense")) //all expenses
-        //     allExpenses.forEach((expense) => {
-        //         let users = expense.data().Users;
-        //     if (users.includes(String(uid)) && currentTripExpenses.includes(expense.id)) {
-        //         let expenseTable = document.getElementById("fullTable")
-        //         let row = expenseTable.insertRow(index)
-        //         let cell1 = row.insertCell(0);
-        //         let cell2 = row.insertCell(1);
-        //         let cell3 = row.insertCell(2);
-        //         let cell4 = row.insertCell(3);
-        //         let cell5 = row.insertCell(4);
-        //         let cell6 = row.insertCell(5);
-
-
-        //         var date = expense.data().Date
-        //         var amount = expense.data().Amount
-        //         var cat = expense.data().Category
-        //         cell1.innerHTML = date
-        //         cell2.innerHTML = expense.data().Description
-        //         cell3.innerHTML = cat
-        //         cell4.innerHTML = amount
-
-        //         totalCost += (Number(amount)/users.length)
-
-        //         //DATA FOR DAILY SPENDINGS
-
-        //         if (date in spendingPerDayDict===false) {
-        //             spendingPerDayDict[date] = amount
-        //         } else {
-        //             spendingPerDayDict[date] += amount
-        //         }
-
-        //         // categoryDict[cat] += amount
-
-
-        //         if (users.length>1) {
-        //             cell5.innerHTML = "Group"
-        //         } else {
-        //             cell5.innerHTML = "Individual"
-        //         }
-        //         let deleteExpenseButton = document.createElement("button")
-        //         deleteExpenseButton.id = expense.id
-        //         deleteExpenseButton.innerHTML = "Delete"
-        //         cell6.appendChild(deleteExpenseButton)
-        //         deleteExpenseButton.onclick = function() {
-        //             deleteExpense(expense.id, tripCode)
-        //         }
-        //         index +=1
-        //     }
-        //     })
-        //     var waterTankNum = 0
-        //     var waterTank = document.getElementById("waterTank")
-        //     // console.log('TOTALCOST', totalCost)
-        //     // console.log("SPENDING DICT", spendingPerDayDict)
-        //     // console.log("CAT DICT", categoryDict)
-        //     //this.spent = totalCost
-        //     if (totalCost > budget) {
-        //         waterTank.style.backgroundColor = "red"
-        //         waterTankNum = ((totalCost - budget)/budget) * 100
-        //         console.log("EXCEED BUDGET")
-        //         waterTank.innerHTML = "EXCEED BY " + Math.ceil(waterTankNum) + "%"
-        //         if (waterTankNum>100) {
-        //             waterTank.style.width = 100 + "%"
-        //         }
-
-        //     } else {
-        //         waterTank.style.backgroundColor = "green"
-        //         console.log("TOTALCOST",totalCost)
-        //         waterTankNum = totalCost/budget * 100
-        //         waterTank.innerHTML = Math.ceil(waterTankNum) + "%"
-        //         waterTank.style.width = waterTankNum + "%"
-
-        //     }
-        
-
-        //     let dayExpenseTable = document.getElementById("dayExpenseTable")
-        //     let index2 = 1
-        //     for (var day in spendingPerDayDict) {
-        //         // console.log(dayExpenseTable.rows.length)
-        //         var dayExpense = spendingPerDayDict[day]
-        //         if (dayExpense == 0) {
-        //             continue;
-        //         }
-        //         let dayRow = dayExpenseTable.insertRow(index2)
-        //         let dayCell1 = dayRow.insertCell(0);
-        //         let dayCell2 = dayRow.insertCell(1);
-        //         dayCell1.innerHTML = day
-        //         dayCell2.innerHTML = dayExpense
-        //         index2 += 1
-        //     }
-        //     // for (var cat in categoryDict) {
-        //     //     var catExpense = categoryDict[cat]
-        //     //     this.pieChartData = {
-        //     //         cat:catExpense
-        //     //     }
-        //     // }
-        //     // this.categoryDict = categoryDict
-
-        //     // this.pieChartData = {
-        //     //     "Shopping": categoryDict["Shopping"],
-        //     //     "Food": categoryDict["Food"],
-        //     //     "Leisure": categoryDict["Leisure"],
-        //     //     "Travel": categoryDict["Travel"],
-        //     //     "Accomodation": categoryDict["Accomodation"]
-        //     // }
-
-         
-
-        //     // this.updatePieChart(categoryDict)
-        //     // this.updateCharts()
-        //     return totalCost
-        // }  
+       
+        // console.log(this.userid===undefined)
+        // console.log(this.userid)
+          
         // this.updatePieChart(this.categoryDict)
-
-        // this.spent = await fetchAndUpdateData(this.tripCode) 
-
+        this.spent = await this.fetchAndUpdateData(this.tripCode) 
         // var input = document.getElementById("budgetInput")
         // input.value = this.budget
-
         
     } 
     } 
 </script> 
     
     <style scoped>
-
         .page {
             background-color: floralwhite;
             min-height: 100vh;
@@ -998,20 +622,16 @@
               border-bottom-left-radius: 25px;
               text-align: center;
           }
-
           th,
           td {
               padding: 15px;
               background-color: rgba(255,255,255,0.2);
               color: black;
           }
-
           thead th {
               /* background-color: #55608f; */
               background-color: rgb(156, 201, 215);
-
           }
-
           #fullTableSection h1 {
                   color: #111;
                   font-family: 'Helvetica Neue', sans-serif;
@@ -1021,18 +641,15 @@
                   line-height: 1;
                   text-align: center;
               }
-
           th {
               text-align: center;
               color:white;
           }
-
         .inputbtn[type=checkbox]{
             height: 0;
             width: 0;
             visibility: hidden;
         }
-
         .labelbtn {
             cursor: pointer;
             /* text-indent: -9999px; */
@@ -1044,9 +661,7 @@
             position: relative;
             margin-left: 20px;
             left:30px;
-
         }
-
         .labelbtn h1 {
             position: absolute;
             top: 40%;
@@ -1056,7 +671,6 @@
             font-size:23px;
             color: white;
         }
-
         .labelbtn:after {
             content: '';
             position: absolute;
@@ -1068,25 +682,20 @@
             border-radius: 90px;
             transition: 0.3s;
         }
-
         .inputbtn:checked + .labelbtn {
             background: grey;
         }
-
         .inputbtn:checked + .labelbtn:after {
             left: calc(100% - 5px);
             transform: translateX(-100%);
         }
-
         .labelbtn:active:after {
             width: 130px;
         }
-
         .graph-background {
           background-color: rgba(255, 255, 255, 0.6);
           border-radius: 20px;
         }
-
         .modal {
             display: block;
             position: fixed;
@@ -1098,7 +707,6 @@
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.4);
         }
-
         .modal-content {
             background-color: white;
             margin: 15% auto;
@@ -1106,14 +714,12 @@
             border: 1px solid #888;
             width: 30%;
         }
-
         .close {
             color: #aaaaaa;
             float: right;
             font-size: 28px;
             font-weight: bold;
         }
-
         .close:hover,
         .close:focus, .save {
             color: #000;
