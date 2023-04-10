@@ -7,7 +7,7 @@
           </div>
 
 
-          <div class="container card shadow-2-strong card-body p-5 text-center" style="border-radius: 1rem; border-color: #3d6d9e; background-color: rgb(179, 214, 214);">
+          <div class="container card shadow-2-strong card-body p-5 text-center" style="border-radius: 1rem; border-color: #3d6d9e; background-color: rgb(156, 201, 215);">
             <form>
               <div class="form-outline mb-4">
                 <input type="text" id="typeEmail" class="form-control form-control-lg" v-model = "tripCode"/>
@@ -59,7 +59,6 @@
             async joinTrip() {
                 console.log(this.tripCode);
                 console.log(this.userid)
-      
                 let allTrips = await getDocs(collection(db, "Trip"))
                 let existingTrips = []
                 allTrips.forEach((trip) => {
@@ -67,7 +66,12 @@
                 })
                 if (!(existingTrips.includes(this.tripCode))) {
                     alert("Trip does not exist! ");
-                    this.tripCode = '';
+                    this.budget = '';
+                    return;
+                }
+
+                if (this.budget < 0) {
+                    alert("Please enter a valid budget")
                     this.budget = '';
                     return;
                 }
@@ -96,6 +100,7 @@
                             this.tripCode = '';
                             this.budget = '';
                         })
+                        this.$emit('update')
                     }
                     catch(error) {
                         console.error("Error adding document: ", error);
@@ -105,7 +110,7 @@
                     this.tripCode = '';
                     this.budget = '';
                 }
-                this.$emit('update')
+                
             }
         }
     }

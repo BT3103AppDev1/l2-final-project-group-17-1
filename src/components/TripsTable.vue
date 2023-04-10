@@ -12,7 +12,7 @@
             <tr>
             <th class="th-sm">Select Trip</th>
             <th class="th-sm">Date</th>
-            <th class="th-sm">People</th>
+            <th >People</th>
             <th class="th-sm">Currency</th>
             <th class="th-sm">Net owed to you</th>
             <th class="th-sm">Your Expenses</th>
@@ -110,7 +110,7 @@
 <script>
 
     import db from '../firebase.js';
-    import { collection, doc, getDocs, getDoc, addDoc, updateDoc, arrayUnion, Timestamp, deleteDoc, getFirestore, onSnapshot, arrayRemove} from "firebase/firestore";
+    import { collection, doc, getDocs, getDoc, addDoc, updateDoc, arrayUnion, Timestamp, deleteDoc, getFirestore, onSnapshot, arrayRemove, orderBy, query} from "firebase/firestore";
     //import Navbar from '@/components/Navbar.vue';
     // const db = getFirestore(app);
     import router from "../router"
@@ -126,7 +126,6 @@
           return {
             userid : "",
             componentKey: 0,
-            spent: 0
           }
         },
         computed: {
@@ -155,11 +154,11 @@
         },
         methods: {
             async displayTrips() {
-              let allTrips = await getDocs(collection(db, "Trip"))
+              let allTrips = await getDocs(query(collection(db, "Trip"), orderBy("Start_Date", "desc")))
               let allUsers = await getDocs(collection(db, "User"))
               let allExpenses = await getDocs(collection(db, "Expense"))
               const userRef = doc(db, 'User', this.userid);
-              
+              console.log(this.userid)
               let tripsArray = [];
               let budgetArray = [];
               await getDoc(userRef)
@@ -179,6 +178,7 @@
               // let currUser = await getDoc(doc(db, "User", this.userid))
 
               Promise.all([allTrips, allUsers, allExpenses]).then(results => {
+                console.log(tripsArray)
                 let currentUser = this.userid
                 let index = 1
                 allTrips.forEach((d) => {
@@ -211,12 +211,15 @@
                       let userid = doc.id;
                       if (people.includes(userid)) {
                         const name = doc.data().Name
-                        namesArray.push(name)
+                        namesArray.push(" " + name)
                       }
                     })
 
                     let tripsTable = document.getElementById("fullTable")
                     let row = tripsTable.insertRow(index)
+                    row.style.height = "40px"; 
+                    row.style.lineHeight = "1.05";
+            
 
                     let cell1 = row.insertCell(0);
                     let cell2 = row.insertCell(1);
@@ -228,6 +231,12 @@
                     let cell8 = row.insertCell(7);
                     let cell9 = row.insertCell(8);
 
+          
+                    let cell3Content = document.createElement('div');
+                    cell3Content.classList.add('people');
+                    cell3Content.innerHTML = namesArray;
+                    cell3.appendChild(cell3Content);    
+
                     const resultPromise = this.loadExpenses(tripExpenses);
                     resultPromise.then((result) => {
                       const expense = result.expense;
@@ -236,8 +245,8 @@
                       cell6.innerHTML = expense; //expenses
                     });
 
-                    cell2.innerHTML = startDate + " - "+ endDate ;
-                    cell3.innerHTML = namesArray; //people;
+                    cell2.innerHTML = startDate + " - " + "<br>" + endDate ;
+                    //cell3.innerHTML = namesArray; //people;
                     cell4.innerHTML = currency;
                     cell7.innerHTML = budget;
 
@@ -246,7 +255,22 @@
                     // // code.style.content = "fit"
                     // cell8.appendChild(code)
                     cell8.innerHTML = tripCode;
-              
+                    cell8.title = "Copy"
+                    cell8.addEventListener("click", function() {
+                      //let text = this.textContent.trim();
+                      navigator.clipboard.writeText(tripCode);
+                      // alert("Trip Code copied to Clipboard!")
+                    });
+                    cell8.addEventListener("mouseover", function() {
+                      cell8.style.textDecoration = "underline";
+                      cell8.innerText = "Click to copy code"
+                    });
+                    cell8.addEventListener("mouseout", function() {
+                      cell8.style.textDecoration = "none";
+                      cell8.innerText = tripCode
+                    });
+                    cell8.style.cursor = "pointer";     
+
                     let tripButton = document.createElement("button")
                     // tripButton.id  = String(tripName)
                     tripButton.className= "bwt"
@@ -267,19 +291,34 @@
                           // currency:currency,
 
                           query: {
-                            tripCode: tripCode, tripName: tripName, currency: currency, expense: this.spent
+                            tripCode: tripCode, tripName: tripName, currency: currency
                           }})
                         //showTrip(tripCode)
                       } catch(e) {
                         console.error(e.message)
                       }
                     }
+                    tripButton.style.backgroundColor = "#E2FAB5";
+                    tripButton.style.borderRadius = "10px";
+                    tripButton.style.width = "100%"
+                    tripButton.style.height = "38px"
+                    tripButton.style.justifyContent = "center"
+                    tripButton.style.alignItems = "center"
+                    tripButton.addEventListener('mouseover', function() {
+                      //tripButton.style.fontWeight = 'bold';
+                      tripButton.style.backgroundColor = '#62b57d';
+                    });
+                    tripButton.addEventListener('mouseout', function() {
+                      tripButton.style.fontWeight = 'normal';
+                      tripButton.style.backgroundColor = "#E2FAB5";
+                    });
                     cell1.appendChild(tripButton)
                 
 
                     let deleteTripButton = document.createElement("button")
                     deleteTripButton.id = String(tripName)
                     deleteTripButton.className = "bwt"
+                    deleteTripButton.style.backgroundColor = "#f76f7c";
                     deleteTripButton.innerHTML = "Leave"
 
                     cell9.appendChild(deleteTripButton)
@@ -427,15 +466,16 @@
 <style scoped>
       body {
         background-color: floralwhite;
+        margin: 0;
       }
 
       #fullTable {
         width: 90%;
         border-collapse: collapse;
-        overflow: hidden;
+        /* overflow: hidden; */
         box-shadow: 0 0 20px rgba(0,0,0,0.1);
-        border-top-right-radius: 15px;
-        border-top-left-radius: 15px;
+        border-top-right-radius: 22px;
+        border-top-left-radius: 22px;
         border-bottom-right-radius: 15px;
         border-bottom-left-radius: 15px;
         /* table-layout: fixed; */
@@ -452,7 +492,11 @@
           /* background-color: rgba(255,255,255,0.2); */
           color: black;
           font-family: Arial, Helvetica, sans-serif;
-          height: 10px;
+          height: 5px;
+      }
+
+      tr {
+        height: 10px;
       }
 
       thead th {
@@ -460,10 +504,6 @@
           /* #55608f */
           color: black;
 
-      }
-
-      table td.scroll {
-        overflow-x: auto;
       }
 
       #fullTableSection h1 {
@@ -487,5 +527,10 @@
         margin-bottom: 0;
         bottom: 0;
         display: inline
+      }
+
+      .people {
+        max-width: 20px;
+        overflow-x: auto;
       }
 </style>
