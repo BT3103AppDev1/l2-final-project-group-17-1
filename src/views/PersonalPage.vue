@@ -1,6 +1,9 @@
 <template>
     <div class = "page">
-        <router-view></router-view>
+            <loading-spinner v-if="userid != null"></loading-spinner>
+            <!-- <p>{{ userid }}</p> -->
+            <!-- <i class ="fa fa-spinner fa-spin"></i> Loading... -->
+
         <!-- <BudgetBar :tripCode = 'tripCode'/> -->
         <!-- <PersonalExp :tripCode = 'tripCode'/>  -->
         <!-- <p>tripCode is : {{tripCode}}  {{people}}</p> -->
@@ -184,6 +187,8 @@
     // import BudgetBar from '@/components/BudgetBar.vue';
     import { arrayRemove, collection, doc, getDoc, getDocs, query, where, deleteDoc, updateDoc} from "firebase/firestore";
     import moment from 'moment'
+    import LoadingSpinner from '@/components/LoadingSpinner.vue';
+import { delay } from 'q';
 
     export default {
     name: "PersonalPage",
@@ -191,9 +196,14 @@
 
     components:{
         Navbar,
+        LoadingSpinner,
     },
     data () {
         return {
+            isLoading: true,
+            user: null,
+            userid: null,
+            name: null,
             slide: 0,
             sliding: null,
             selected : "",
@@ -307,7 +317,7 @@
             this.categoryDict = categoryDict
             this.categoryPercentageDict = categoryPercentageDict
             this.pieChartData = formattedForPieChart
-            this.totalSpent = "$" + totalAmountPersonal
+            this.totalSpent = "$" + totalAmountPersonal.toFixed(2)
             //console.log(this.categoryDict)
             // if (this.totalSpent > this.budget) {
             //     var bar = document.getElementById("waterTank")
@@ -339,7 +349,8 @@
                     let currentUserTrips = currentUser.data().Trips
                     currentUserTrips.forEach((trip)=> {
                         if(trip.Trip_Code == this.tripCode) {
-                            this.budget = "$" + trip.Budget
+                            let tripBudget = parseFloat(trip.Budget).toFixed(2)
+                            this.budget = "$" + tripBudget
                         }
                     })
                 }
@@ -352,7 +363,8 @@
         async getSpendingPerDayDict() {
             //DICTIONARY FOR DAILY SPENDINGS
             const auth=getAuth()
-            const uid = auth.currentUser.uid
+            //const uid = auth.currentUser.uid
+            const uid = this.userid
             var spendingPerDayDict = {}
             let days = []
             let currentTrip = await getDoc(doc(db, "Trip", this.tripCode))
@@ -402,7 +414,7 @@
                     for (var i = 0; i < userTrips.length; i++) {
                         if (userTrips[i].Trip_Code == this.tripCode) {
                             userTrips[i].Budget = this.newBudget
-                            this.budget = this.newBudget
+                            this.budget = "$" + parseFloat(this.newBudget).toFixed(2)
                             await updateDoc(userRef, {
                                 Trips: userTrips
                             }).then(() => {
@@ -441,21 +453,33 @@
     },
 
     async mounted() {
-        const auth = getAuth()
+        try { const auth = getAuth()
         onAuthStateChanged(auth, (user) => {
         if (user) {
             this.user = user
             this.userid = user.uid
             this.name = user.Name
+            this.isLoading = false
             //this.getBudget()
+        } else {
+            this.userid = undefined
         }
         })
+        } catch(error) {
+            console.log("error authenticating")
+        }
+        // console.log(this.userid===undefined)
+        // console.log(this.userid)
         async function fetchAndUpdateData(tripCode){
             //console.log(this.spendingPerDayDict)
+        
             let index = 1
             // let index2 = 1
             const auth=getAuth()
+    
             const uid = auth.currentUser.uid
+            //const uid = userid
+ 
             //tripExpenses = JSON.parse(tripExpenses)
             var budget = 0;
             let currentUser = await getDoc(doc(db, "User", uid))
@@ -645,13 +669,14 @@
               border-top-left-radius: 25px;
               border-bottom-right-radius: 25px;
               border-bottom-left-radius: 25px;
+              text-align: center;
           }
 
           th,
           td {
               padding: 15px;
               background-color: rgba(255,255,255,0.2);
-              color: black
+              color: black;
           }
 
           thead th {
@@ -667,7 +692,7 @@
                   font-weight: bold;
                   letter-spacing: -1px;
                   line-height: 1;
-                  text-align: left;
+                  text-align: center;
               }
 
           th {

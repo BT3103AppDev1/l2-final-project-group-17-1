@@ -150,28 +150,6 @@
                 console.log("logged out")
               }
           })
-          // async function deletefromdatabase(userRef, tripCode) {
-          //    await getDoc(userRef).then((doc) => {
-          //                 if (doc.exists()) {
-          //                   doc.data().Trips.forEach(trip => {
-          //                     if (trip.Trip_Code == tripCode) {
-          //                       var idx = doc.data().Trips.indexOf(trip)
-          //                       doc.data().Trips = doc.data().Trips.splice(idx, 1)
-          //                       var triptodelete = trip
-          //                       updateDoc(userRef, {Trips: arrayRemove(trip)})
-          //                       console.log("In trip in user ")
-          //                     }
-          //                   })
-          //                 } else {
-          //                   console.log('no such user');
-          //                 }
-          //               })
-          //               .catch((error) => {
-          //                 console.log('Error getting document:', error);
-          //               });
-          //   //await updateDoc(userRef, {Trips: arrayRemove(trip)})
-
-          // }
 
           this.displayTrips()
         },
@@ -381,25 +359,28 @@
             // },
             
             //NOT IN USE 
-            deleteTrip(tripCode){
-              alert("You are going to delete " + tripCode)
-                await deleteDoc(doc(db, "Trip", tripCode))
-                // await db.collection("Trip").doc(tripNme).delete()
+            // deleteTrip(tripCode){
+            //   alert("You are going to delete " + tripCode)
+            //     await deleteDoc(doc(db, "Trip", tripCode))
+            //     // await db.collection("Trip").doc(tripNme).delete()
 
-              console.log("Trip successfully deleted!", tripCode)
-              let tb = document.getElementById("fullTable")
-              for (var i = 0; i < tb.rows.length; i++) {
-                var row = tb.rows[i];
-                var value = row.cells[7].innerHTML;
-                if (value == tripCode) {
-                  tb.deleteRow(i);
-                }
-              }
+            //   console.log("Trip successfully deleted!", tripCode)
+            //   let tb = document.getElementById("fullTable")
+            //   for (var i = 0; i < tb.rows.length; i++) {
+            //     var row = tb.rows[i];
+            //     var value = row.cells[7].innerHTML;
+            //     if (value == tripCode) {
+            //       tb.deleteRow(i);
+            //     }
+            //   }
+
+
+
               // while (tb.rows.length>1){
               //   //tb.deleteRow(1)
               // }
               //displayTrips()
-            },
+            //},
             refresh() {
               this.componentKey += 1;
             },
@@ -437,8 +418,9 @@
               }
             }
         }
+      }
 
-    }
+    
 
 </script>
 
@@ -458,7 +440,7 @@
         border-bottom-left-radius: 15px;
         /* table-layout: fixed; */
         position: auto;
-        background-color: floralwhite;
+        background-color: white;
         margin-left: 70px;
         margin-top: 50px;
         z-index: 0;
@@ -467,14 +449,15 @@
 
       th, td {
           padding: 15px;
-          background-color: rgba(255,255,255,0.2);
+          /* background-color: rgba(255,255,255,0.2); */
           color: black;
           font-family: Arial, Helvetica, sans-serif;
           height: 10px;
       }
 
       thead th {
-          background-color: #55608f;
+          background-color: rgb(156, 201, 215); 
+          /* #55608f */
           color: black;
 
       }
@@ -491,11 +474,6 @@
               letter-spacing: -1px;
               line-height: 1;
               text-align: left;
-      }
-
-      th {
-          text-align: center;
-          color:white;
       }
 
       #dropdownMenuButton {
