@@ -110,7 +110,7 @@
 <script>
 
     import db from '../firebase.js';
-    import { collection, doc, getDocs, getDoc, addDoc, updateDoc, arrayUnion, Timestamp, deleteDoc, getFirestore, onSnapshot} from "firebase/firestore";
+    import { collection, doc, getDocs, getDoc, addDoc, updateDoc, arrayUnion, Timestamp, deleteDoc, getFirestore, onSnapshot, arrayRemove} from "firebase/firestore";
     //import Navbar from '@/components/Navbar.vue';
     // const db = getFirestore(app);
     import router from "../router"
@@ -149,6 +149,29 @@
                 console.log("logged out")
               }
           })
+          // async function deletefromdatabase(userRef, tripCode) {
+          //    await getDoc(userRef).then((doc) => {
+          //                 if (doc.exists()) {
+          //                   doc.data().Trips.forEach(trip => {
+          //                     if (trip.Trip_Code == tripCode) {
+          //                       var idx = doc.data().Trips.indexOf(trip)
+          //                       doc.data().Trips = doc.data().Trips.splice(idx, 1)
+          //                       var triptodelete = trip
+          //                       updateDoc(userRef, {Trips: arrayRemove(trip)})
+          //                       console.log("In trip in user ")
+          //                     }
+          //                   })
+          //                 } else {
+          //                   console.log('no such user');
+          //                 }
+          //               })
+          //               .catch((error) => {
+          //                 console.log('Error getting document:', error);
+          //               });
+          //   //await updateDoc(userRef, {Trips: arrayRemove(trip)})
+
+          // }
+
           this.displayTrips()
         },
         methods: {
@@ -171,6 +194,7 @@
               let allUsers = await getDocs(collection(db, "User"))
               let allExpenses = await getDocs(collection(db, "Expense"))
               const userRef = doc(db, 'User', this.userid);
+              
               let tripsArray = [];
               let budgetArray = [];
               await getDoc(userRef)
@@ -190,11 +214,12 @@
               // let currUser = await getDoc(doc(db, "User", this.userid))
 
               Promise.all([allTrips, allUsers, allExpenses]).then(results => {
+                let currentUser = this.userid
                 let index = 1
-                allTrips.forEach((doc) => {
-                  let tripCode = doc.id
+                allTrips.forEach((d) => {
+                  let tripCode = d.id
                   if (tripsArray.includes(tripCode)) {
-                    let tripData = doc.data()
+                    let tripData = d.data()
                     let tripName = tripData.Name
                     let startDate = tripData.Start_Date
                     let endDate = tripData.End_Date
@@ -275,7 +300,7 @@
                       }
                     }
                     cell1.appendChild(tripButton)
-
+                
 
                     let deleteTripButton = document.createElement("button")
                     deleteTripButton.id = String(tripName)
@@ -283,7 +308,72 @@
                     deleteTripButton.innerHTML = "Leave"
 
                     cell9.appendChild(deleteTripButton)
+                    deleteTripButton.onclick = async function() {
+                      //deleteRow(index)
+                      let date = new Date().getTime()
+                      let parts = startDate.split("-")
+                      let startdate = new Date(parts[0], parts[1]-1, parts[2]).getTime()
+                      console.log(date)
+                      console.log(startdate)
+                      if (date >= startdate) { //if trip has alr commenced, cannot delete
+                        console.log("cannot delete")
+                        alert("You cannot delete a trip that has already commenced.")
+                      } else {   //else, delete trip from user document and from trips if there are no other users involved
+                        console.log("can delete")
+                        alert("You are going to delete " + tripCode)
+                        //await deleteDoc(doc(db, "Trip", tripCode))
+                        console.log("Trip successfully deleted!", tripCode)
+                        let tb = document.getElementById("fullTable")
+                        for (var i = 0; i < tb.rows.length; i++) {
+                          var row = tb.rows[i];
+                          var value = row.cells[7].innerHTML;
+                          if (value == tripCode) {
+                            tb.deleteRow(i);
+                          }
+                        }
+                        let user = await getDoc(userRef)
+                        user.data().Trips.forEach(trip => {
+                          if (trip.Trip_Code == tripCode) {
+                            updateDoc(userRef, {Trips: arrayRemove(trip)}) //delete trip from user document
+                          }
+                        })
+
+                        //delete user from trip document and delete doc if no other users left in trip
+                        let tripRef = doc(db, "Trip", tripCode)
+                        let tripDoc = await getDoc(tripRef)
+                        tripDoc.data().Users.forEach((user)=>{
+                          if (user == currentUser && tripDoc.data().Users.length == 1) {
+                            //delete trip doc from trips collection
+                            deleteDoc(tripRef)
+                            console.log("deleted trip doc")
+                          } else if (user == currentUser && tripDoc.data().Users.length > 1) {
+                            //remove user from trip doc 
+                            updateDoc(doc(db, "Trip", tripCode), {Users: arrayRemove(user)})
+                            console.log("removed user from trip doc")
+                          }
+                        })
+
+                        // await getDoc(userRef).then((doc) => {
+                        //   if (doc.exists()) {
+                        //     doc.data().Trips.forEach(trip => {
+                        //       if (trip.Trip_Code == tripCode) {
+                        //         var idx = doc.data().Trips.indexOf(trip)
+                        //         doc.data().Trips = doc.data().Trips.splice(idx, 1)
+                        //         var triptodelete = trip
+                        //         deletefromdatabase(userRef, tripCode)
+                        //         console.log("In trip in user ")
+                        //       }
+                        //     })
+                        //   } else {
+                        //     console.log('no such user');
+                        //   }
+                        // })
+                        // .catch((error) => {
+                        //   console.log('Error getting document:', error);
+                        // });
+                      }
                     
+                    }
                     index +=1
                   }
               })
@@ -292,6 +382,8 @@
             // async deleteRow(index) {
             //   this.rows.splice(index, 1)
             // },
+            
+            //NOT IN USE 
             deleteTrip(tripCode){
               alert("You are going to delete " + tripCode)
                 //await deleteDoc(doc(db, "Trip", tripCode))
