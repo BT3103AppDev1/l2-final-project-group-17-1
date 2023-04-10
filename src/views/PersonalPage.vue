@@ -10,7 +10,7 @@
                 <div class="text-center py-5" style= "width: 40rem;">
                     <div id="tripName" class="card-body px-3" style="text-align:justify; padding:5px">
                         <img src="src/assets/images/globe.png" style="float:left;" width="120">
-                        <h1>Trip to {{tripName}}</h1>
+                        <h1>TRIP ARGHHHHH to {{tripName}}</h1>
                         <span style="font-family:monospace;">{{startDate}} - {{endDate}}</span>
                     </div>
                 </div>
@@ -583,7 +583,7 @@
             this.userid = user.uid
             this.name = user.Name
             this.isLoading = false
-            this.spent = this.fetchAndUpdateData(this.tripCode)
+            //this.spent = this.fetchAndUpdateData(this.tripCode)
             //this.getBudget()
         } else {
             this.userid = undefined
@@ -592,7 +592,6 @@
         } catch(error) {
             console.log("error authenticating")
         }
-       
         // console.log(this.userid===undefined)
         // console.log(this.userid)
           

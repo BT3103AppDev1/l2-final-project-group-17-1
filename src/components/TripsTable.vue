@@ -217,12 +217,10 @@
 
                     let tripsTable = document.getElementById("fullTable")
                     let row = tripsTable.insertRow(index)
-                    row.style.height = "40px"; 
+                    row.style.height = "70px"; 
                     row.style.lineHeight = "1.05";
-                    row.style.overflow = "auto"
+                    //row.style.overflow = "auto"
                     
-            
-
                     let cell1 = row.insertCell(0);
                     let cell2 = row.insertCell(1);
                     let cell3 = row.insertCell(2);
@@ -277,7 +275,7 @@
                     // tripButton.id  = String(tripName)
                     tripButton.className= "bwt"
                     tripButton.innerHTML = tripName
-                    // console.log(this.spent)
+                    console.log(this.spent)
                     tripButton.onclick = function() {
                       //router.push('/PersonalPage')
                       try {
@@ -291,7 +289,6 @@
                           // tripExpenses: JSON.stringify(tripExpenses),
                           // people: JSON.stringify(people),
                           // currency:currency,
-
                           query: {
                             tripCode: tripCode, tripName: tripName, currency: currency
                           }})
