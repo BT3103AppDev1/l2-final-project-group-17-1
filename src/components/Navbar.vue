@@ -27,7 +27,7 @@
 
       <div class = "rightSide">
 
-        <button @click="showMenu = !showMenu" id = "userCard">
+        <button @click="toggleDropdown" id = "userCard">
           <div class="circular-icon mr-2">
             <img src="src/assets/images/snowy.png" alt="Your Image">
           </div>
@@ -82,8 +82,17 @@
           this.user = user
           this.getName()
         })
+      document.addEventListener("click", this.closeDropdown);
     },
     methods: {
+      toggleDropdown() {
+        this.showMenu = !this.showMenu
+      },
+      closeDropdown(event) {
+        if (!this.$el.contains(event.target)) {
+          this.showMenu = false;
+        }
+      },
       signOut: function() {
             const confirmLogout = window.confirm('Are you sure you want to log out?');
             if (confirmLogout) {
