@@ -47,7 +47,8 @@ export default {
     refresh() {
         const tripsTable = this.$refs.table;
         tripsTable.refresh();
-        // tripsTable.displayTrips();
+        console.log("refresh")
+        //tripsTable.displayTrips();
     }
   }
 }

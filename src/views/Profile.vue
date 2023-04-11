@@ -58,10 +58,11 @@
                 this.user.displayName = this.displayName
                 const userRef = doc(db, "User", this.userid);
                 await updateDoc(userRef, {
-                Name : this.displayName
+                  Name : this.displayName
                 });
                 alert("Name Updated Successfully!")
-                window.history.back();
+                //window.history.back();
+                window.location.reload(true);
                 //window.location.href = '/InputPage'
             } else {
                 alert("Please enter a valid name!")
