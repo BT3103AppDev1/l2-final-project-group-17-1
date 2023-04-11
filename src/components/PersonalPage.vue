@@ -249,7 +249,9 @@
             while (tb.rows.length>1){
                 tb.deleteRow(1)
             }
-            this.fetchAndUpdateData(tripCode)
+            const com = this
+            await com.fetchAndUpdateData(tripCode)
+            await this.updateCharts()
             // location.reload()
             // this.updateCharts()
         },
@@ -379,6 +381,9 @@
         
             let dayExpenseTable = document.getElementById("dayExpenseTable")
             let index2 = 1
+            while (dayExpenseTable.rows.length > 1) {
+                dayExpenseTable.deleteRow(1);
+            }
             for (var day in spendingPerDayDict) {
                 // console.log(dayExpenseTable.rows.length)
                 var dayExpense = spendingPerDayDict[day]
