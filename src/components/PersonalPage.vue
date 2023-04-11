@@ -46,7 +46,7 @@
             <h2 class="py-3 d-flex justify-content-start">Personal Expenses</h2>
 
             <div class="d-flex flex-row" style="padding:0px;">
-              <div class = "dropdown px-3">
+              <!-- <div class = "dropdown px-3">
                   <button class = "btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                       Currency
                   </button>
@@ -54,7 +54,7 @@
                       <a class="dropdown-item" href="#">SGD</a>
                       <a class="dropdown-item" href="#">Original</a>
                   </div>
-                </div>
+                </div> -->
               </div>
           </div>
         <div class="scrollable" style="background-color: white;">
@@ -174,7 +174,6 @@
     import { arrayRemove, collection, doc, getDoc, getDocs, query, where, deleteDoc, updateDoc} from "firebase/firestore";
     import moment from 'moment'
     import LoadingSpinner from '@/components/LoadingSpinner.vue';
-    import { delay } from 'q';
 
     export default {
     name: "PersonalPage",
@@ -240,6 +239,20 @@
         this.getSpendingPerDayDict()
     },
     methods: {
+        async deleteExpense(expenseID, tripCode) {
+            alert("You are going to delete " + expenseID)
+            await deleteDoc(doc(db, "Expense", expenseID))
+            await updateDoc(doc(db, "Trip",tripCode), {
+                Expenses: arrayRemove(expenseID)
+            })
+            let tb = document.getElementById("fullTable")
+            while (tb.rows.length>1){
+                tb.deleteRow(1)
+            }
+            this.fetchAndUpdateData(tripCode)
+            // location.reload()
+            // this.updateCharts()
+        },
         async fetchAndUpdateData(tripCode){
             //console.log(this.spendingPerDayDict)
         
@@ -334,8 +347,8 @@
                 deleteExpenseButton.id = expense.id
                 deleteExpenseButton.innerHTML = "Delete"
                 cell6.appendChild(deleteExpenseButton)
-                deleteExpenseButton.onclick = function() {
-                    deleteExpense(expense.id, tripCode)
+                deleteExpenseButton.onclick = () => {
+                    this.deleteExpense(expense.id, tripCode)
                 }
                 index +=1
             }
@@ -439,7 +452,7 @@
             var totalAmountPersonal = 0
             allExpenses.forEach((expense) => {
                 let users = expense.data().Users;
-            if (users.includes(String(uid)) && currentTripExpenses.includes(expense.id)) {
+            if (users.includes(this.userid) && currentTripExpenses.includes(expense.id)) {
                 let cat = expense.data().Category
                 let amt = expense.data().Amount
                 if (users.length>1) {
@@ -522,7 +535,7 @@
             let allExpenses = await getDocs(collection(db, "Expense")) //all expenses
             allExpenses.forEach((expense) => {
                 let users = expense.data().Users;
-                if (users.includes(String(uid)) && currentTripExpenses.includes(expense.id)) {
+                if (users.includes(this.userid) && currentTripExpenses.includes(expense.id)) {
                     var date = expense.data().Date
                     var amount = expense.data().Amount
 
@@ -610,20 +623,6 @@
         // var input = document.getElementById("budgetInput")
         // input.value = this.budget
 
-        async function deleteExpense(expenseID, tripCode) {
-            alert("You are going to delete " + expenseID)
-            await deleteDoc(doc(db, "Expense", expenseID))
-            await updateDoc(doc(db, "Trip",tripCode), {
-                Expenses: arrayRemove(expenseID)
-            })
-            let tb = document.getElementById("fullTable")
-            while (tb.rows.length>1){
-                tb.deleteRow(1)
-            }
-            fetchAndUpdateData(tripCode)
-            // location.reload()
-            // this.updateCharts()
-        }
     } 
     } 
 </script> 

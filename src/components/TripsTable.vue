@@ -4,6 +4,10 @@
     <h1 style = "text-shadow: 2px 2px 7px grey; margin-left: 5%; margin-top: 0px; padding-top: 70px;">
       Your Trips
       <img src="src/assets/images/planecropped.PNG" style="object-position: right; margin-left: 20px; height: 100px;">
+
+      <select id="sort" v-model="selectedSort" @change.prevent="sortTable" style="margin-left:800px; font-size:17px">
+        <option v-for="option in sortOptions" :key="option.value" :value="option.value" >{{ option.name }}</option>
+      </select>
     </h1>
 
     <div class="scrollable">
@@ -25,83 +29,6 @@
     </div>
     <h1 v-if="!haveTrips" style="text-align: center;">You Have No Trips! </h1>
 
-   <!-- <section class="text-dark" id="topBar" style="background-color: floralwhite;">
-      <div class="container">
-          <div class="d-flex justify-content-between">
-              <div class="text-center py-5" style= "width: 40rem;">
-                  <div id="tripName" class="card-body px-5 d-flex flex-row">
-                      <h1 style = "text-shadow: 2px 2px 7px grey">
-                        Your Trips
-                        <img src="src/assets/images/planecropped.PNG" width="100px" style="object-position: right; margin-left: 20px; height: 100px;">
-                      </h1>
-                  </div>
-              </div>
-          </div>
-      </div>
-    </section> -->
-
-
-  <!-- <section id = "currency" style = "background-color: floralwhite;">
-      <div class="d-flex justify-content-between px-3" style="text-align:justify;">
-
-        <div class="d-flex flex-row">
-          <div class="scrollable">
-            <table id="fullTable" class="table table-bordered  table-scroll text-center" cellspacing="0"
-            width="100%" style="background-color: floralwhite; margin-left: 70px; z-index: 0; position: relative; margin-top: 50px" v-if="haveTrips">
-            <thead style="background-color: rgb(156, 201, 215); ">
-                <tr>
-                <th class="th-sm">Select Trip
-                </th>
-                <th class="th-sm">Date
-                </th>
-                <th class="th-sm">People
-                </th>
-                <th class="th-sm">Currency
-                </th>
-                <th class="th-sm">Net owed to you
-                </th>
-                <th class="th-sm">Your Expenses
-                </th>
-                <th class="th-sm">Your Budget
-                </th>
-                <th id = "tripcode">Trip Code
-                </th>
-                <th>Options</th>
-                </tr>
-            </thead>
-            </table>
-        </div>
-
-        <div class = "dropdown px-3">
-        <div style="padding-left: 10px; z-index: 1; position: relative; ">
-              <button class = "btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: rgb(52, 146, 175); margin-bottom: 5px;">
-                  Currency
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" href="#">SGD</a>
-                  <a class="dropdown-item" href="#">Original</a>
-              </div>
-            </div>
-          </div>
-
-          <div class = "dropdown px-3">
-            <div class = "currencyButton" style="padding-left: 1250px;">
-              <button class = "btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: rgb(52, 146, 175); margin-bottom: 5px;">
-                  Currency
-              </button>
-
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" href="#">SGD</a>
-                  <a class="dropdown-item" href="#">Original</a>
-              </div>
-            </div>
-
-            </div>
-
-          </div>
-
-      </div>
-    </section> -->
 
   </div>
 </template>
@@ -126,6 +53,15 @@
           return {
             userid : "",
             componentKey: 0,
+            selectedSort: 'Start_Date-desc',
+            sorter: "Start_Date",
+            order: "desc",
+            sortOptions: [
+              { name: 'Name (ascending)', value: 'Name-asc' },
+              { name: 'Name (descending)', value: 'Name-desc' },
+              { name: 'Date (oldest first)', value: 'Start_Date-asc' },
+              { name: 'Date (newest first)', value: 'Start_Date-desc' }
+            ]
           }
         },
         computed: {
@@ -135,7 +71,7 @@
           }
         },
         updated() {
-          this.displayTrips();
+          //this.displayTrips();
         },
         mounted() {
           const auth = getAuth()
@@ -149,12 +85,26 @@
                 console.log("logged out")
               }
           })
-
           this.displayTrips()
         },
         methods: {
+            async sortTable() {
+              [this.sorter, this.order] = this.selectedSort.split("-");
+              // window.location.reload();
+              //this.displayTrips(sorter, order)
+       
+              let tripsTable = document.getElementById("fullTable")
+              let rows = tripsTable.rows;
+              for (let i = rows.length - 1; i > 0; i--) {
+                tripsTable.deleteRow(i);  
+                console.log(rows)
+              }
+              this.displayTrips()
+            },
+
             async displayTrips() {
-              let allTrips = await getDocs(query(collection(db, "Trip"), orderBy("Start_Date", "desc")))
+              //let allTrips = await getDocs(query(collection(db, "Trip"), orderBy("Start_Date", "desc")))
+              let allTrips = await getDocs(query(collection(db, "Trip"), orderBy(this.sorter, this.order)))
               let allUsers = await getDocs(collection(db, "User"))
               let allExpenses = await getDocs(collection(db, "Expense"))
               const userRef = doc(db, 'User', this.userid);
@@ -419,6 +369,7 @@
             //},
             refresh() {
               this.componentKey += 1;
+              this.displayTrips()
             },
             async loadExpenses(expRefs) {
               let expense = 0;
