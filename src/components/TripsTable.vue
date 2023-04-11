@@ -216,25 +216,24 @@
 
                     let tripsTable = document.getElementById("fullTable")
                     let row = tripsTable.insertRow(index)
-                    row.style.height = "70px"; 
+                    row.style.height = "70px";
                     row.style.lineHeight = "1.15";
                     //row.style.overflow = "auto"
-                    
-                    let cell1 = row.insertCell(0);
-                    let cell2 = row.insertCell(1);
-                    let cell3 = row.insertCell(2);
-                    let cell4 = row.insertCell(3);
-                    let cell5 = row.insertCell(4);
-                    let cell6 = row.insertCell(5);
-                    let cell7 = row.insertCell(6);
-                    let cell8 = row.insertCell(7);
-                    let cell9 = row.insertCell(8);
 
-          
+                    let cell1 = row.insertCell(0); cell1.style.textAlign = "center"; cell1.style.verticalAlign = "middle";
+                    let cell2 = row.insertCell(1); cell2.style.textAlign = "center"; cell2.style.verticalAlign = "middle";
+                    let cell3 = row.insertCell(2); cell3.style.textAlign = "center"; cell3.style.verticalAlign = "middle";
+                    let cell4 = row.insertCell(3); cell4.style.textAlign = "center"; cell4.style.verticalAlign = "middle";
+                    let cell5 = row.insertCell(4); cell5.style.textAlign = "center"; cell5.style.verticalAlign = "middle";
+                    let cell6 = row.insertCell(5); cell6.style.textAlign = "center"; cell6.style.verticalAlign = "middle";
+                    let cell7 = row.insertCell(6); cell7.style.textAlign = "center"; cell7.style.verticalAlign = "middle";
+                    let cell8 = row.insertCell(7); cell8.style.textAlign = "center"; cell8.style.verticalAlign = "middle"; cell8.style.width = "200px";
+                    let cell9 = row.insertCell(8); cell9.style.textAlign = "center"; cell9.style.verticalAlign = "middle";
+
                     let cell3Content = document.createElement('div');
                     cell3Content.classList.add('people');
                     cell3Content.innerHTML = namesArray;
-                    cell3.appendChild(cell3Content);    
+                    cell3.appendChild(cell3Content);
 
                     const resultPromise = this.loadExpenses(tripExpenses);
                     resultPromise.then((result) => {
@@ -268,7 +267,7 @@
                       cell8.style.textDecoration = "none";
                       cell8.innerText = tripCode
                     });
-                    cell8.style.cursor = "pointer";     
+                    cell8.style.cursor = "pointer";
 
                     let tripButton = document.createElement("button")
                     // tripButton.id  = String(tripName)
@@ -296,14 +295,12 @@
                       }
                     }
                     tripButton.style.backgroundColor = "#E2FAB5";
-                    tripButton.style.borderRadius = "10px";
+                    tripButton.style.borderRadius = "15px";
                     tripButton.style.width = "110px"
                     tripButton.style.height = "40px"
-                    tripButton.style.justifyContent = "center"
-                    tripButton.style.alignItems = "center"
+
                     // tripButton.style.padding = "10px"
                     // tripButton.style.margin = "0 auto";
-                    tripButton.style.display = "flex"
                     tripButton.addEventListener('mouseover', function() {
                       //tripButton.style.fontWeight = 'bold';
                       tripButton.style.backgroundColor = '#62b57d';
@@ -313,7 +310,7 @@
                       tripButton.style.backgroundColor = "#E2FAB5";
                     });
                     cell1.appendChild(tripButton)
-                
+
 
                     let deleteTripButton = document.createElement("button")
                     deleteTripButton.id = String(tripName)
@@ -361,7 +358,7 @@
                             deleteDoc(tripRef)
                             console.log("deleted trip doc")
                           } else if (user == currentUser && tripDoc.data().Users.length > 1) {
-                            //remove user from trip doc 
+                            //remove user from trip doc
                             updateDoc(doc(db, "Trip", tripCode), {Users: arrayRemove(user)})
                             console.log("removed user from trip doc")
                           }
@@ -386,7 +383,7 @@
                         //   console.log('Error getting document:', error);
                         // });
                       }
-                    
+
                     }
                     index +=1
                   }
@@ -396,8 +393,8 @@
             // async deleteRow(index) {
             //   this.rows.splice(index, 1)
             // },
-            
-            //NOT IN USE 
+
+            //NOT IN USE
             // deleteTrip(tripCode){
             //   alert("You are going to delete " + tripCode)
             //     await deleteDoc(doc(db, "Trip", tripCode))
@@ -459,7 +456,7 @@
         }
       }
 
-    
+
 
 </script>
 
@@ -500,7 +497,7 @@
       }
 
       thead th {
-          background-color: rgb(156, 201, 215); 
+          background-color: rgb(156, 201, 215);
           /* #55608f */
           color: black;
 

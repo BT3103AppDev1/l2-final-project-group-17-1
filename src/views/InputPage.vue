@@ -4,14 +4,10 @@
       <div id="page" class="container py-5 d-flex flex-row align-items-center">
 
           <div class="container d-flex flex-column align-items-center">
-            <!-- <div class="container py-5"></div> -->
-            <!-- <div class="text-center d-flex flex-column"> -->
               <h1 style="text-shadow:2px 2px 8px grey; ;">Record your Spendings!</h1>
               <img src="src/assets/images/money.avif" style="height: 220px; margin-top: 20px; margin-bottom: 20px;">
               <p>Just fill in your spending details and it will be saved!</p>
-            <!-- </div> -->
           </div>
-
 
           <div class="container">
             <div class="card shadow-2-strong" style="border-radius: 1rem; background-color: rgb(179, 214, 214);">
@@ -258,10 +254,13 @@
 
 
 
-<style>
+<style scoped>
   .page {
     background-color: floralwhite;
-    min-height: 100vh;
+    height: 93vh;
+    display:flex;
+    justify-content: center;
+    align-items: center;
 
     /* background-image: url('picture/input1.jpg'); */
     /* bottom: 0; */

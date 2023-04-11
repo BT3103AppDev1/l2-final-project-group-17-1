@@ -25,7 +25,7 @@
         <div id = "group" style="width:500px; margin-left: 5%;"><GroupPage v-on:update="refresh"/> </div> -->
     </div>
     </template>
-    
+
     <script>
         import db from '../firebase.js';
         import PersonalPage  from '@/components/PersonalPage.vue'
@@ -35,10 +35,10 @@
         import {getAuth, onAuthStateChanged} from 'firebase/auth'
         import { arrayRemove, collection, doc, getDoc, getDocs, query, where, deleteDoc, updateDoc} from "firebase/firestore";
         import moment from 'moment'
-        
+
         export default {
         name: "Dashboard",
-        
+
         data() {
             return {
                 tripCode: this.$route.query.tripCode,
@@ -101,6 +101,11 @@
     </script>
 
     <style scoped>
+        .page {
+            background-color: floralwhite;
+            font-family: 'Roboto', sans-serif;
+        }
+
         .inputbtn[type=checkbox]{
                 height: 0;
                 width: 0;
