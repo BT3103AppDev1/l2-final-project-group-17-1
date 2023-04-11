@@ -56,18 +56,6 @@
                   </div>
                 </div>
 
-                <!-- <div class="form-outline mb-4" v-if="isGroupTrip">Spending type:
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Individual" v-model="spendingType">
-                    <label class="form-check-label" for="inlineRadio1">Individual</label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="Group" v-model="spendingType">
-                    <label class="form-check-label" for="inlineRadio2">Group</label>
-                  </div>
-                </div> -->
-
-
                 <div class="form-outline mb-4" v-if="isGroupTrip">
                   <p class="mb-0">Who ELSE needs to pay?</p>
                   <div v-for="user in usersArray">
@@ -93,9 +81,7 @@
 
 <script>
   import db from '../firebase.js';
-  import { collection, doc, getDoc, getDocs, addDoc, updateDoc, arrayUnion } from "firebase/firestore";
-  //import Logout from '@/components/Logout.vue'
-  import firebaseApp from '@/firebase.js'
+  import { collection, doc, getDoc, addDoc, updateDoc, arrayUnion } from "firebase/firestore";
   import {getAuth, onAuthStateChanged} from 'firebase/auth'
 
   export default {
@@ -141,9 +127,6 @@
 
 
     computed: {
-      // isGroup() {
-      //   return this.spendingType == "Group"; //CHECK EQUALITY SYMBOL
-      // },
       allFieldsFilled() {
         return !!this.description && !!this.amount && !!this.category && !!this.date && !!this.trip;
       },
@@ -157,7 +140,6 @@
         }
 
         alert("Saving your data for Spending")
-        // const isoString = new Date(this.date).toISOString();
         try{
           //add expense, get expenseDocRef
           this.selectedUsersArray.push(this.uid)
@@ -172,7 +154,7 @@
           //add expenseDocRef into array in Trip doc
           const tripDocRef = doc(db, "Trip", this.trip.id);
           await updateDoc(tripDocRef, {
-            Expenses : arrayUnion(expenseDocRef.id) //CHANGED
+            Expenses : arrayUnion(expenseDocRef.id)
           });
           // document.getElementById('myform').reset();
         }
@@ -206,7 +188,7 @@
                   name: doc.data().Name,
                   startDate: doc.data().Start_Date,
                   endDate: doc.data().End_Date,
-                  usersRefArray: doc.data().Users}); //CHANGED
+                  usersRefArray: doc.data().Users});
               } else {
                 console.log("No such document!");
               }
@@ -246,12 +228,12 @@
         this.date = new Date().toISOString().substr(0, 10);
         this.spendingType = "Individual";
         this.trip = "";
-        // this.tripsArray = [];
         this.minDate = "";
         this.maxDate = "";
-        // this.usersArray = [];
         this.selectedUsersArray = [];
         this.isGroupTrip = false;
+        // this.tripsArray = [];
+        // this.usersArray = [];
         // this.uid = "";
       }
 
