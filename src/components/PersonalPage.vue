@@ -17,8 +17,8 @@
     <div class="p-4 text-dark" id="topBar" style="background-color: floralwhite; top:0px;">
         <div class="container">
             <!-- Water tank -->
-            <div class="container text-center card py-3" style="border-color: #55608f;">
-                <div style="display: flex; flex-direction: row; margin-bottom: 10px;">
+            <div class="container text-center card py-3" style="border-color: #55608f; justify-content: space-between; ">
+                <div style="display: flex; flex-direction: row; margin-bottom: 10px; justify-content: space-between; ">
                     <h1 style="margin-left: 500px;">Status of Budget <h5>Currency: {{ this.currency }}</h5> </h1> 
                     <button @click = "this.showPopup = true" style=" width: 120px; border-radius: 15px; margin-left:380px; height: 55px;">Edit Budget</button>
                     <div v-if="showPopup" class="modal">

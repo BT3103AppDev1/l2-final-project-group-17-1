@@ -1,14 +1,15 @@
 <template>
   <div :key="componentKey">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h1 style = "text-shadow: 2px 2px 7px grey; margin-left: 5%; margin-top: 0px; padding-top: 70px; display: inline-block">
+        Your Trips
+        <img src="src/assets/images/planecropped.PNG" style="object-position: right; margin-left: 20px; height: 100px;">
 
-    <h1 style = "text-shadow: 2px 2px 7px grey; margin-left: 5%; margin-top: 0px; padding-top: 70px;">
-      Your Trips
-      <img src="src/assets/images/planecropped.PNG" style="object-position: right; margin-left: 20px; height: 100px;">
-
-      <select id="sort" v-model="selectedSort" @change.prevent="sortTable" style="margin-left:800px; font-size:17px">
-        <option v-for="option in sortOptions" :key="option.value" :value="option.value" >{{ option.name }}</option>
+      </h1>
+      <select id="sort" v-model="selectedSort" @change.prevent="sortTable" style=" font-size:13px display: inline-block; margin-right:80px; margin-top:90px; ">
+          <option v-for="option in sortOptions" :key="option.value" :value="option.value" >{{ option.name }}</option>
       </select>
-    </h1>
+    </div>
 
     <div class="scrollable">
         <table id="fullTable" class="table table-bordered  table-scroll text-center" v-if="haveTrips">
@@ -230,16 +231,7 @@
                       //router.push('/PersonalPage')
                       try {
                         router.push({name:'Dashboard',
-                          // params:{
-                          // tripCode:tripCode,
-                          // budget:budget,
-                          // tripName:tripName,
-                          // startDate:startDate,
-                          // endDate:endDate,
-                          // tripExpenses: JSON.stringify(tripExpenses),
-                          // people: JSON.stringify(people),
-                          // currency:currency,
-                          query: {
+                        query: {
                             tripCode: tripCode, tripName: tripName, currency: currency
                           }})
                         //showTrip(tripCode)
@@ -318,25 +310,6 @@
                             console.log("removed user from trip doc")
                           }
                         })
-
-                        // await getDoc(userRef).then((doc) => {
-                        //   if (doc.exists()) {
-                        //     doc.data().Trips.forEach(trip => {
-                        //       if (trip.Trip_Code == tripCode) {
-                        //         var idx = doc.data().Trips.indexOf(trip)
-                        //         doc.data().Trips = doc.data().Trips.splice(idx, 1)
-                        //         var triptodelete = trip
-                        //         deletefromdatabase(userRef, tripCode)
-                        //         console.log("In trip in user ")
-                        //       }
-                        //     })
-                        //   } else {
-                        //     console.log('no such user');
-                        //   }
-                        // })
-                        // .catch((error) => {
-                        //   console.log('Error getting document:', error);
-                        // });
                       }
                     
                     }
@@ -345,33 +318,6 @@
               })
             })
             },
-            // async deleteRow(index) {
-            //   this.rows.splice(index, 1)
-            // },
-            
-            //NOT IN USE 
-            // deleteTrip(tripCode){
-            //   alert("You are going to delete " + tripCode)
-            //     await deleteDoc(doc(db, "Trip", tripCode))
-            //     // await db.collection("Trip").doc(tripNme).delete()
-
-            //   console.log("Trip successfully deleted!", tripCode)
-            //   let tb = document.getElementById("fullTable")
-            //   for (var i = 0; i < tb.rows.length; i++) {
-            //     var row = tb.rows[i];
-            //     var value = row.cells[7].innerHTML;
-            //     if (value == tripCode) {
-            //       tb.deleteRow(i);
-            //     }
-            //   }
-
-
-
-              // while (tb.rows.length>1){
-              //   //tb.deleteRow(1)
-              // }
-              //displayTrips()
-            //},
             refresh() {
               this.componentKey += 1;
               this.displayTrips()
