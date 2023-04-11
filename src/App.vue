@@ -1,6 +1,6 @@
 <template>
   <div id ="app">
-    <Navbar />
+    <Navbar  />
     <router-view/>
   </div>
 </template>
@@ -11,11 +11,15 @@
   // import Trips from '@/views/Trips.vue'
   //import InputPage from '@/views/InputPage.vue'
 
-  export default{
-   name: 'App',
-   components: {
-      Navbar
-   }
+  export default {
+    name: 'App',
+    components: {
+        Navbar
+    },
+    data() {
+      return {
+      }
+    },
   }
 </script>
 
