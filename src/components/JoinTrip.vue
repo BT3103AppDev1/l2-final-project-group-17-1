@@ -69,8 +69,7 @@
                     this.budget = '';
                     return;
                 }
-
-                if (this.budget < 0) {
+                if (this.budget <= 0) {
                     alert("Please enter a valid budget")
                     this.budget = '';
                     return;

@@ -61,13 +61,15 @@
               { name: 'Name (descending)', value: 'Name-desc' },
               { name: 'Date (oldest first)', value: 'Start_Date-asc' },
               { name: 'Date (newest first)', value: 'Start_Date-desc' }
-            ]
+            ],
+            numTrips: 0
           }
         },
         computed: {
-          haveTrips() {
-            const collectionRef = getDocs(collection(db, "Trip"));
-            return collectionRef.size != 0;
+          async haveTrips() {
+            return this.numTrips != 0;
+            // const collectionRef = getDocs(collection(db, "Trip"));
+            // return collectionRef.size != 0;
           }
         },
         updated() {
@@ -126,7 +128,7 @@
                   console.log('Error getting document:', error);
                 });
               // let currUser = await getDoc(doc(db, "User", this.userid))
-
+              this.numTrips = tripsArray.length
               Promise.all([allTrips, allUsers, allExpenses]).then(results => {
                 let currentUser = this.userid
                 let index = 1

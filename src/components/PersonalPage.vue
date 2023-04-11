@@ -558,7 +558,7 @@
         },
 
         async saveBudget() {
-            if (Number.isInteger(this.newBudget) && this.newBudget >= 0) {
+            if (Number.isInteger(this.newBudget) && this.newBudget > 0) {
                 const userRef = doc(db, "User", this.userid);
                 const docSnap = await getDoc(userRef);
                 if (docSnap.exists()) {
