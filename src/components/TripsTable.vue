@@ -1,16 +1,16 @@
 <template>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
   <div :key="componentKey">
     <div style="display: flex; justify-content: space-between; align-items: center;">
       <h1 style = "text-shadow: 2px 2px 7px grey; margin-left: 5%; margin-top: 0px; padding-top: 70px; display: inline-block">
         Your Trips
         <img src="src/assets/images/planecropped.PNG" style="object-position: right; margin-left: 20px; height: 100px;">
-
       </h1>
       <select id="sort" v-model="selectedSort" @change.prevent="sortTable" style=" font-size:13px display: inline-block; margin-right:80px; margin-top:90px; ">
           <option v-for="option in sortOptions" :key="option.value" :value="option.value" >{{ option.name }}</option>
       </select>
     </div>
-
     <div class="scrollable">
         <table id="fullTable" class="table table-bordered  table-scroll text-center" v-if="haveTrips">
         <thead>
@@ -43,6 +43,9 @@
     // const db = getFirestore(app);
     import router from "../router"
     import {getAuth, onAuthStateChanged} from 'firebase/auth'
+    import '@fortawesome/fontawesome-free/css/all.css'
+    import { faClone } from '@fortawesome/free-solid-svg-icons'
+
 
 
     export default {
@@ -171,6 +174,7 @@
                     let row = tripsTable.insertRow(index)
                     row.style.height = "70px"; 
                     row.style.lineHeight = "1.15";
+                    // row.style.maxHeight = "50px"
                     //row.style.overflow = "auto"
                     
                     let cell1 = row.insertCell(0);
@@ -206,22 +210,45 @@
                     // code.textContent = tripCode;
                     // // code.style.content = "fit"
                     // cell8.appendChild(code)
-                    cell8.innerHTML = tripCode;
-                    cell8.title = "Copy"
-                    cell8.addEventListener("click", function() {
+
+                    //cell8.innerHTML = tripCode;
+
+                    let container = document.createElement("div");
+                    container.innerHTML = tripCode + "   "
+                    const copyButton = document.createElement('button');
+                    copyButton.type = 'button';
+                    const icon = document.createElement('span');
+                    icon.className = 'material-icons';
+                    icon.textContent = 'content_copy';
+                    icon.style.fontSize = "20px"
+                    copyButton.style.backgroundColor = "white"
+                    copyButton.style.border = "1px solid rgba(128, 128, 128, 0.2)";
+                    copyButton.style.float = "right"
+                    copyButton.appendChild(icon);
+                    copyButton.style.float = "right"
+                    copyButton.style.marginBottom = "1px"
+                    copyButton.style.marginLeft = "5px"
+                    copyButton.appendChild(icon);
+
+                    container.appendChild(copyButton);
+                    cell8.appendChild(container)
+
+                    copyButton.title = "Copy"
+                    copyButton.addEventListener("click", function() {
                       //let text = this.textContent.trim();
                       navigator.clipboard.writeText(tripCode);
+                      cell8.style.textDecoration = "underline";
                       // alert("Trip Code copied to Clipboard!")
                     });
-                    cell8.addEventListener("mouseover", function() {
-                      cell8.style.textDecoration = "underline";
-                      cell8.innerText = "Click to copy code"
-                    });
+                    // cell8.addEventListener("mouseover", function() {
+                    //   cell8.style.textDecoration = "underline";
+                    //   cell8.innerText = "Click to copy code"
+                    // });
                     cell8.addEventListener("mouseout", function() {
                       cell8.style.textDecoration = "none";
-                      cell8.innerText = tripCode
+                      // cell8.innerText = tripCode
                     });
-                    cell8.style.cursor = "pointer";     
+                    // cell8.style.cursor = "pointer";     
 
                     let tripButton = document.createElement("button")
                     // tripButton.id  = String(tripName)
@@ -432,4 +459,5 @@
         max-width: 20px;
         overflow-x: auto;
       }
+
 </style>
