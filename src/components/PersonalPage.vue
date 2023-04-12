@@ -131,11 +131,11 @@
                 </div>
 
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-                  <span style= "background-color:black" class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span style= "background-color:rgb(156, 201, 215)" class="carousel-control-prev-icon" aria-hidden="true"></span>
                   <span class="visually-hidden">Previous</span>
                 </button>
                 <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-                  <span style= "background-color:black" class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span style= "background-color:rgb(156, 201, 215)" class="carousel-control-next-icon" aria-hidden="true"></span>
                   <span class="visually-hidden">Next</span>
                 </button>
         </div>
@@ -349,9 +349,10 @@
             this.spent = totalCost
             if (totalCost > budget) {
                 waterTank.style.backgroundColor = "red"
-                waterTankNum = ((totalCost - budget)/budget) * 100
+                waterTankNum = totalCost -budget
+                // waterTankNum = ((totalCost - budget)/budget) * 100
                 console.log("EXCEED BUDGET")
-                waterTank.innerHTML = "EXCEED BY " + Math.ceil(waterTankNum) + "%"
+                waterTank.innerHTML = "EXCEEDED BY $" + Math.ceil(waterTankNum) 
                 if (waterTankNum>100) {
                     waterTank.style.width = 100 + "%"
                 }
@@ -650,7 +651,11 @@
 
     .graph-background {
       background-color: rgba(255, 255, 255, 0.6);
-      border-radius: 20px;
+      border-radius: 100px;
+      width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+
     }
 
     .modal {
