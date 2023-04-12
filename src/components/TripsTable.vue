@@ -215,22 +215,22 @@
                     let container = document.createElement("div");
                     // container.style.display = 'inline-block';
                     container.innerHTML = tripCode + "   "
-                    container.style.fontSize = "11px"
+                    container.style.fontSize = "11.5px"
                     const copyButton = document.createElement('button');
                     copyButton.type = 'button';
                     copyButton.style.marginLeft = "5px"; 
                     const icon = document.createElement('span');
                     icon.className = 'material-icons';
                     icon.textContent = 'content_copy';
-                    icon.style.fontSize = "12px"
+                    icon.style.fontSize = "12.5px"
                     copyButton.style.width = "18px"
                     copyButton.style.backgroundColor = "white"
                     copyButton.style.border = "0.75px solid rgba(128, 128, 128, 0.2)";
                     copyButton.style.float = "right"
                     
                     copyButton.style.marginBottom = "1px"
-                    copyButton.style.paddingLeft = "5px"; 
-                    copyButton.style.marginLeft = "5px"
+                    copyButton.style.paddingLeft = "2.5px"; 
+                    copyButton.style.marginLeft = "0.25px"
                     copyButton.appendChild(icon);
 
                     container.appendChild(copyButton);

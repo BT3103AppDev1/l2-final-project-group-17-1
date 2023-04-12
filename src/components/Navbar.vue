@@ -27,14 +27,12 @@
 
       <div class = "rightSide">
 
-        <button @click="toggleDropdown" id = "userCard">
+        <button @click="toggleDropdown" id = "userCard" >
           <div class="circular-icon mr-2">
-            <img src="src/assets/images/snowy.png" alt="Your Image">
+            <img src="src/assets/images/snowy.png" alt="Your Image" style="display: block;">
           </div>
           <div id="userName">{{ this.displayName }}</div>
-        </button>
-
-        <ul class = "dropdown" v-if="showMenu">
+          <ul class = "dropdown" v-if="showMenu">
           <router-link to="/Profile">
             <button style="width:100%; color:white; background-color: black;" @click="showMenu = !showMenu;" >Edit Profile</button>
           </router-link>
@@ -42,6 +40,16 @@
             <button style="width:100%; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; color:white; background-color: black;"  @click="signOut()">Log Out</button>
           </router-link>
         </ul>
+        </button>
+
+        <!-- <ul class = "dropdown" v-if="showMenu">
+          <router-link to="/Profile">
+            <button style="width:100%; color:white; background-color: black;" @click="showMenu = !showMenu;" >Edit Profile</button>
+          </router-link>
+          <router-link to="/" id = "signoutRouter">
+            <button style="width:100%; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; color:white; background-color: black;"  @click="signOut()">Log Out</button>
+          </router-link>
+        </ul> -->
       </div>
 
       <!-- <router-link to="/" id = "signoutRouter">
@@ -107,11 +115,11 @@
               //window.history.back();
               window.location.href = "/InputPage";
             }
-        },
-        async getName() {
-          const userRef = await getDoc(doc(db, "User", this.userid))
-          this.displayName = userRef.data().Name
-        },
+      },
+      async getName() {
+        const userRef = await getDoc(doc(db, "User", this.userid))
+        this.displayName = userRef.data().Name
+      },
 
       }
   }
@@ -182,6 +190,7 @@
 
     display: flex;
     align-items: center;
+    position: relative;
   }
 
   #userName {
@@ -199,8 +208,8 @@
   }
 
   .circular-icon {
-    width: 35px;
-    height: 35px;
+    width: 37px;
+    height: 37px;
     border-radius: 50%;
     background-color: #ddd;
     display: flex;
@@ -213,6 +222,7 @@
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
+    object-position: center;
   }
 
   .dropdown {
@@ -224,11 +234,14 @@
     padding: 0;
     margin: 0;
     /* box-shadow: 0 2px 2px black; */
-    width: 78%;
+    width: 95%;
     text-align: center;
     color: white;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    
   }
 
   .rightSide {
