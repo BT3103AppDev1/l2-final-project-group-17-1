@@ -184,7 +184,7 @@
                     let cell5 = row.insertCell(4); cell5.style.textAlign = "center"; cell5.style.verticalAlign = "middle";
                     let cell6 = row.insertCell(5); cell6.style.textAlign = "center"; cell6.style.verticalAlign = "middle";
                     let cell7 = row.insertCell(6); cell7.style.textAlign = "center"; cell7.style.verticalAlign = "middle";
-                    let cell8 = row.insertCell(7); cell8.style.textAlign = "center"; cell8.style.verticalAlign = "middle"; cell8.style.width = "250px";
+                    let cell8 = row.insertCell(7); cell8.style.textAlign = "center"; cell8.style.verticalAlign = "middle"; cell8.style.width = "195px";
                     let cell9 = row.insertCell(8); cell9.style.textAlign = "center"; cell9.style.verticalAlign = "middle";
 
                     let cell3Content = document.createElement('div');
@@ -213,12 +213,11 @@
                     container.style.justifyContent = "center"
                     container.style.alignItems = "center"
                     let text = document.createElement("div");
-                    text.innerHTML = tripCode + "   "
+                    text.innerHTML = tripCode
                     container.style.fontSize = "11.5px"
                     const copyButton = document.createElement('button');
                     copyButton.type = 'button';
-                    copyButton.style.display = "inline-block"
-                    copyButton.style.marginLeft = "5px"
+                    copyButton.style.marginLeft = "40px"
                     const icon = document.createElement('span');
                     icon.className = 'material-icons';
                     icon.textContent = 'content_copy';
@@ -226,12 +225,13 @@
 
                     //hover effect for copy icon
                     icon.addEventListener("mouseover", function() {
-                      icon.style.fontSize = "12.5px"
-                    copyButton.style.width = "18px"
+                      icon.style.fontSize = "20px"
+                      copyButton.style.width = "27px"
                       cell8.style.textDecoration = "underline";
                     });
                     icon.addEventListener("mouseout", function() {
                       icon.style.fontSize = "18px"
+                      copyButton.style.width = "25px"
                       cell8.style.textDecoration = "none";
                     });
 
