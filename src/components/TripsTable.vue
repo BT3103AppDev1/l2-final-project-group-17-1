@@ -1,15 +1,16 @@
 <template>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
   <div :key="componentKey">
-
-    <h1 style = "text-shadow: 2px 2px 7px grey; margin-left: 5%; margin-top: 0px; padding-top: 70px;">
-      Your Trips
-      <img src="src/assets/images/planecropped.PNG" style="object-position: right; margin-left: 20px; height: 100px;">
-
-      <select id="sort" v-model="selectedSort" @change.prevent="sortTable" style="margin-left:800px; font-size:17px">
-        <option v-for="option in sortOptions" :key="option.value" :value="option.value" >{{ option.name }}</option>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h1 style = "text-shadow: 2px 2px 7px grey; margin-left: 5%; margin-top: 0px; padding-top: 70px; display: inline-block">
+        Your Trips
+        <img src="src/assets/images/planecropped.PNG" style="object-position: right; margin-left: 20px; height: 100px;">
+      </h1>
+      <select id="sort" v-model="selectedSort" @change.prevent="sortTable" style=" font-size:13px display: inline-block; margin-right:80px; margin-top:90px; ">
+          <option v-for="option in sortOptions" :key="option.value" :value="option.value" >{{ option.name }}</option>
       </select>
-    </h1>
-
+    </div>
     <div class="scrollable">
         <table id="fullTable" class="table table-bordered  table-scroll text-center" v-if="haveTrips">
         <thead>
@@ -42,6 +43,9 @@
     // const db = getFirestore(app);
     import router from "../router"
     import {getAuth, onAuthStateChanged} from 'firebase/auth'
+    import '@fortawesome/fontawesome-free/css/all.css'
+    import { faClone } from '@fortawesome/free-solid-svg-icons'
+
 
 
     export default {
@@ -61,13 +65,15 @@
               { name: 'Name (descending)', value: 'Name-desc' },
               { name: 'Date (oldest first)', value: 'Start_Date-asc' },
               { name: 'Date (newest first)', value: 'Start_Date-desc' }
-            ]
+            ],
+            numTrips: 0
           }
         },
         computed: {
-          haveTrips() {
-            const collectionRef = getDocs(collection(db, "Trip"));
-            return collectionRef.size != 0;
+          async haveTrips() {
+            return this.numTrips != 0;
+            // const collectionRef = getDocs(collection(db, "Trip"));
+            // return collectionRef.size != 0;
           }
         },
         updated() {
@@ -92,11 +98,11 @@
               [this.sorter, this.order] = this.selectedSort.split("-");
               // window.location.reload();
               //this.displayTrips(sorter, order)
-       
+
               let tripsTable = document.getElementById("fullTable")
               let rows = tripsTable.rows;
               for (let i = rows.length - 1; i > 0; i--) {
-                tripsTable.deleteRow(i);  
+                tripsTable.deleteRow(i);
                 console.log(rows)
               }
               this.displayTrips()
@@ -126,7 +132,7 @@
                   console.log('Error getting document:', error);
                 });
               // let currUser = await getDoc(doc(db, "User", this.userid))
-
+              this.numTrips = tripsArray.length
               Promise.all([allTrips, allUsers, allExpenses]).then(results => {
                 let currentUser = this.userid
                 let index = 1
@@ -168,6 +174,7 @@
                     let row = tripsTable.insertRow(index)
                     row.style.height = "70px";
                     row.style.lineHeight = "1.15";
+                    // row.style.maxHeight = "50px"
                     //row.style.overflow = "auto"
 
                     let cell1 = row.insertCell(0); cell1.style.textAlign = "center"; cell1.style.verticalAlign = "middle";
@@ -202,22 +209,45 @@
                     // code.textContent = tripCode;
                     // // code.style.content = "fit"
                     // cell8.appendChild(code)
-                    cell8.innerHTML = tripCode;
-                    cell8.title = "Copy"
-                    cell8.addEventListener("click", function() {
+
+                    //cell8.innerHTML = tripCode;
+
+                    let container = document.createElement("div");
+                    container.innerHTML = tripCode + "   "
+                    const copyButton = document.createElement('button');
+                    copyButton.type = 'button';
+                    const icon = document.createElement('span');
+                    icon.className = 'material-icons';
+                    icon.textContent = 'content_copy';
+                    icon.style.fontSize = "20px"
+                    copyButton.style.backgroundColor = "white"
+                    copyButton.style.border = "1px solid rgba(128, 128, 128, 0.2)";
+                    copyButton.style.float = "right"
+                    copyButton.appendChild(icon);
+                    copyButton.style.float = "right"
+                    copyButton.style.marginBottom = "1px"
+                    copyButton.style.marginLeft = "5px"
+                    copyButton.appendChild(icon);
+
+                    container.appendChild(copyButton);
+                    cell8.appendChild(container)
+
+                    copyButton.title = "Copy"
+                    copyButton.addEventListener("click", function() {
                       //let text = this.textContent.trim();
                       navigator.clipboard.writeText(tripCode);
+                      cell8.style.textDecoration = "underline";
                       // alert("Trip Code copied to Clipboard!")
                     });
-                    cell8.addEventListener("mouseover", function() {
-                      cell8.style.textDecoration = "underline";
-                      cell8.innerText = "Click to copy code"
-                    });
+                    // cell8.addEventListener("mouseover", function() {
+                    //   cell8.style.textDecoration = "underline";
+                    //   cell8.innerText = "Click to copy code"
+                    // });
                     cell8.addEventListener("mouseout", function() {
                       cell8.style.textDecoration = "none";
-                      cell8.innerText = tripCode
+                      // cell8.innerText = tripCode
                     });
-                    cell8.style.cursor = "pointer";
+                    // cell8.style.cursor = "pointer";
 
                     let tripButton = document.createElement("button")
                     // tripButton.id  = String(tripName)
@@ -227,16 +257,7 @@
                       //router.push('/PersonalPage')
                       try {
                         router.push({name:'Dashboard',
-                          // params:{
-                          // tripCode:tripCode,
-                          // budget:budget,
-                          // tripName:tripName,
-                          // startDate:startDate,
-                          // endDate:endDate,
-                          // tripExpenses: JSON.stringify(tripExpenses),
-                          // people: JSON.stringify(people),
-                          // currency:currency,
-                          query: {
+                        query: {
                             tripCode: tripCode, tripName: tripName, currency: currency
                           }})
                         //showTrip(tripCode)
@@ -313,25 +334,6 @@
                             console.log("removed user from trip doc")
                           }
                         })
-
-                        // await getDoc(userRef).then((doc) => {
-                        //   if (doc.exists()) {
-                        //     doc.data().Trips.forEach(trip => {
-                        //       if (trip.Trip_Code == tripCode) {
-                        //         var idx = doc.data().Trips.indexOf(trip)
-                        //         doc.data().Trips = doc.data().Trips.splice(idx, 1)
-                        //         var triptodelete = trip
-                        //         deletefromdatabase(userRef, tripCode)
-                        //         console.log("In trip in user ")
-                        //       }
-                        //     })
-                        //   } else {
-                        //     console.log('no such user');
-                        //   }
-                        // })
-                        // .catch((error) => {
-                        //   console.log('Error getting document:', error);
-                        // });
                       }
 
                     }
@@ -340,33 +342,6 @@
               })
             })
             },
-            // async deleteRow(index) {
-            //   this.rows.splice(index, 1)
-            // },
-
-            //NOT IN USE
-            // deleteTrip(tripCode){
-            //   alert("You are going to delete " + tripCode)
-            //     await deleteDoc(doc(db, "Trip", tripCode))
-            //     // await db.collection("Trip").doc(tripNme).delete()
-
-            //   console.log("Trip successfully deleted!", tripCode)
-            //   let tb = document.getElementById("fullTable")
-            //   for (var i = 0; i < tb.rows.length; i++) {
-            //     var row = tb.rows[i];
-            //     var value = row.cells[7].innerHTML;
-            //     if (value == tripCode) {
-            //       tb.deleteRow(i);
-            //     }
-            //   }
-
-
-
-              // while (tb.rows.length>1){
-              //   //tb.deleteRow(1)
-              // }
-              //displayTrips()
-            //},
             refresh() {
               this.componentKey += 1;
               this.displayTrips()
@@ -481,4 +456,5 @@
         max-width: 20px;
         overflow-x: auto;
       }
+
 </style>
