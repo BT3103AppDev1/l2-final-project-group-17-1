@@ -114,8 +114,99 @@ export default {
     },
 
     methods: {
+        async deleteExpense(expenseID, tripCode, currentTripExpenses) {
+            alert("You are going to delete " + expenseID)
+            await deleteDoc(doc(db, "Expense", expenseID))
+            await updateDoc(doc(db, "Trip",tripCode), {
+                Expenses: arrayRemove(expenseID)
+            })
+            let tb = document.getElementById("fullTable")
+            while (tb.rows.length>1){
+                tb.deleteRow(1)
+            }
+            let currentT = await getDoc(doc(db,"Trip",tripCode))
+            let currentTripE = currentT.data().Expenses
+
+            const com = this
+            await com.displayGroupExpenses(tripCode)
+            // await com.loadExpenses(currentTripExpenses)
+            this.oweDict = {}
+            await com.loadExpenses(currentTripE)
+            
+            // displayGroupExpenses(tripCode)
+        },
+
+        async displayGroupExpenses(tripCode){
+            let index = 1
+            let index2 = 1
+            const auth=getAuth()
+            //const uid = auth.currentUser.uid
+            let currentTrip = await getDoc(doc(db, "Trip", tripCode))
+            let currentTripExpenses = currentTrip.data().Expenses //all expenses of this specific trip
+            let allExpenses = await getDocs(collection(db, "Expense")) //all expenses
+            let allUsers = await getDocs(collection(db, "User"))
+
+            var totalCost = 0
+            var spendingPerDayDict = {}
+            var categoryDict = {
+                "Shopping":0,
+                "Food": 0,
+                "Leisure":0,
+                "Travel":0,
+                "Accomodation":0
+            }
+            console.log(currentTripExpenses)
+            // this.loadExpenses(currentTripExpenses)
+            currentTripExpenses.forEach((expenseID) => { //for each expenseID in trip, get expense data
+                let userNames = ""
+                allExpenses.forEach((expense)=> {
+                    if (expenseID == expense.id) {
+                        let users = expense.data().Users; //array of user ids (string)
+                        //console.log(expense.id)
+                        if (users.length > 1) {
+                            let expenseTable = document.getElementById("fullTable")
+                            let row = expenseTable.insertRow(index)
+                            row.style.backgroundColor = "white";
+                            let cell1 = row.insertCell(0);
+                            let cell2 = row.insertCell(1);
+                            let cell3 = row.insertCell(2);
+                            let cell4 = row.insertCell(3);
+                            let cell5 = row.insertCell(4);
+                            let cell6 = row.insertCell(5);
+
+                            var date = expense.data().Date
+                            var amount = expense.data().Amount
+                            var cat = expense.data().Category
+                            cell1.innerHTML = date
+                            cell2.innerHTML = expense.data().Description
+                            cell3.innerHTML = cat
+                            cell4.innerHTML = amount
+                            users.forEach((userID)=> { //for each userid in expense
+                                allUsers.forEach((user)=> {
+                                    if (user.id == userID) {
+                                        userNames = userNames + ", " + user.data().Name
+                                        // userNames = userNames.substring(1,)
+                                    }
+                                })
+                            })
+                            cell5.innerHTML = userNames.substring(1,)
+                            let deleteExpenseButton = document.createElement("button")
+                            deleteExpenseButton.id = expense.id
+                            deleteExpenseButton.innerHTML = "Delete"
+                            cell6.appendChild(deleteExpenseButton)
+                            deleteExpenseButton.onclick =() => {
+                                this.deleteExpense(expense.id, tripCode, currentTripExpenses);
+                            }
+                            index +=1
+                        }
+                    }
+                })
+
+            })
+            },
+
         async loadExpenses(expRefs) {
-            console.log(expRefs)
+            console.log("expRefs",expRefs)
             let allUsers = await getDocs(collection(db, "User"))
               try {
                 for (const expRef of expRefs) {
@@ -135,7 +226,9 @@ export default {
                                             if (!(username in this.oweDict)) {
                                                 this.oweDict[username] = 0
                                             }
+                                            
                                             this.oweDict[username] += exp.Amount / people.length
+                                            console.log("oweDict", this.oweDict)
                                         }
                                     })
                                 }
@@ -197,87 +290,9 @@ export default {
             //console.log(this.oweDict)
         })
 
-        async function displayGroupExpenses(tripCode){
-            let index = 1
-            let index2 = 1
-            const auth=getAuth()
-            //const uid = auth.currentUser.uid
-            let currentTrip = await getDoc(doc(db, "Trip", tripCode))
-            let currentTripExpenses = currentTrip.data().Expenses //all expenses of this specific trip
-            let allExpenses = await getDocs(collection(db, "Expense")) //all expenses
-            let allUsers = await getDocs(collection(db, "User"))
 
-            var totalCost = 0
-            var spendingPerDayDict = {}
-            var categoryDict = {
-                "Shopping":0,
-                "Food": 0,
-                "Leisure":0,
-                "Travel":0,
-                "Accomodation":0
-            }
-            console.log(currentTripExpenses)
-            // this.loadExpenses(currentTripExpenses)
-            currentTripExpenses.forEach((expenseID) => { //for each expenseID in trip, get expense data
-                let userNames = ""
-                allExpenses.forEach((expense)=> {
-                    if (expenseID == expense.id) {
-                        let users = expense.data().Users; //array of user ids (string)
-                        //console.log(expense.id)
-                        if (users.length > 1) {
-                            let expenseTable = document.getElementById("fullTable")
-                            let row = expenseTable.insertRow(index)
-                            row.style.backgroundColor = "white";
-                            let cell1 = row.insertCell(0);
-                            let cell2 = row.insertCell(1);
-                            let cell3 = row.insertCell(2);
-                            let cell4 = row.insertCell(3);
-                            let cell5 = row.insertCell(4);
-                            let cell6 = row.insertCell(5);
-
-                            var date = expense.data().Date
-                            var amount = expense.data().Amount
-                            var cat = expense.data().Category
-                            cell1.innerHTML = date
-                            cell2.innerHTML = expense.data().Description
-                            cell3.innerHTML = cat
-                            cell4.innerHTML = amount
-                            users.forEach((userID)=> { //for each userid in expense
-                                allUsers.forEach((user)=> {
-                                    if (user.id == userID) {
-                                        userNames = userNames + ", " + user.data().Name
-                                        // userNames = userNames.substring(1,)
-                                    }
-                                })
-                            })
-                            cell5.innerHTML = userNames.substring(1,)
-                            let deleteExpenseButton = document.createElement("button")
-                            deleteExpenseButton.id = expense.id
-                            deleteExpenseButton.innerHTML = "Delete"
-                            cell6.appendChild(deleteExpenseButton)
-                            deleteExpenseButton.onclick = function() {
-                                deleteExpense(expense.id, tripCode);
-                            }
-                            index +=1
-                        }
-                    }
-                })
-
-            })
-            }
-        displayGroupExpenses(this.tripCode)
-        async function deleteExpense(expenseID, tripCode) {
-            alert("You are going to delete " + expenseID)
-            await deleteDoc(doc(db, "Expense", expenseID))
-            await updateDoc(doc(db, "Trip",tripCode), {
-                Expenses: arrayRemove(expenseID)
-            })
-            let tb = document.getElementById("fullTable")
-            while (tb.rows.length>1){
-                tb.deleteRow(1)
-            }
-            displayGroupExpenses(tripCode)
-        }
+        this.displayGroupExpenses(this.tripCode)
+   
     },
     // methods: {
     //     async getUserNames(users) {
