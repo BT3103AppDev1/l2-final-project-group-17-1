@@ -1,7 +1,7 @@
 <template style="">
 <div class = "page">
   <TripsTable ref="table"/>
-  <div style="display: flex; flex-direction: row; justify-content: center; margin-top: 150px; padding-bottom:150px;">
+  <div style="display: flex; flex-direction: row; justify-content: center; margin-top: 120px; padding-bottom:150px;">
     <div id = "create" style="width:500px; margin-right: 4%;"><CreateTrip v-on:update="refresh"/> </div>
     <div id = "join" style="width:500px; margin-left: 4%;"><JoinTrip v-on:update="refresh"/> </div>
   </div>

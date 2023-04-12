@@ -44,8 +44,8 @@
     <!-- <section class="py-5"> -->
     <div class="container p-3" id="fullTableSection">
 
-        <div class="d-flex justify-content-between px-3">
-            <h2 class="py-3 d-flex justify-content-start">Personal Expenses</h2>
+        <div class="px-3">
+            <h2 class="py-3">Personal Expenses</h2>
 
             <div class="d-flex flex-row" style="padding:0px;">
               <!-- <div class = "dropdown px-3">
@@ -104,51 +104,44 @@
 
     <!-- </section> -->
 
-    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <div class="container p-5">
-                        <div class="justify-content-center">
-                            <div class="container text-center graph-background justify-content-center">
-                                <h1>Proportion of Spending By Category</h1>
-                                <pie-chart class ="user" :data="pieChartData" ></pie-chart >
-                            </div>
-                        </div>
-                    </div>
+    <div class="container p-3" style="margin-top: 100px;">
+
+      <h2 class="py-3" style="margin-left: 30px;">Analytics</h2>
+
+      <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" style="margin-bottom:150px;">
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                      <div class="d-flex flex-column align-items-center justify-content-center graph-background">
+                          <h3>Spending By Category</h3>
+                          <pie-chart style="width:700px;" class ="user" :data="pieChartData" ></pie-chart >
+                      </div>
+                  </div>
+                  <div class="carousel-item active">
+                      <div class="d-flex flex-column align-items-center justify-content-center graph-background">
+                          <h3>Spending By Category</h3>
+                          <bar-chart style="width:700px;" class="user" :data="categoryDict"></bar-chart>
+                      </div>
+                  </div>
+                  <div class="carousel-item active">
+                      <div class="d-flex flex-column align-items-center justify-content-center graph-background">
+                          <h3>Spending By Day</h3>
+                          <line-chart style="width:700px;" class ="user" :data="spendingPerDayDict"></line-chart>
+                      </div>
+                  </div>
                 </div>
-                <div class="carousel-item">
-                     <div class="container p-5">
-                        <div class="justify-content-center">
-                            <div class="container text-center graph-background justify-content-center">
-                                <h1>Overall Spending By Category</h1>
-                                <bar-chart class="user" :data="categoryDict"></bar-chart>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="container p-5">
-                        <div class="justify-content-center">
-                            <div class="container text-center graph-background justify-content-center">
-                                <h1>Spending Insights By Day</h1>
-                                <line-chart class ="user" :data="spendingPerDayDict"></line-chart>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                  <span style= "background-color:black" class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                  <span style= "background-color:black" class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
         </div>
-
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-    <span style= "background-color:black" class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-    <span style= "background-color:black" class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </button>
-</div>
-
     </div>
+
+  </div>
 </template>
 
 <script>
@@ -317,9 +310,9 @@
                 cell4.innerHTML = amount
 
                 totalCost += (Number(amount)/users.length)
-                
+
                 var x = Number((amount/users.length).toFixed(2))
-                
+
                 //DATA FOR DAILY SPENDINGS
 
                 if (date in spendingPerDayDict===false) {
@@ -608,89 +601,89 @@
     }
 </script>
 
-    <style scoped>
 
-        .page {
-            background-color: floralwhite;
-            min-height: 100vh;
-        }
-           table {
-              width: 1300px;
-              /* width:1000px; */
-              border-collapse: collapse;
-              overflow: hidden;
-              box-shadow: 0 0 20px rgba(0,0,0,0.1);
-              border-top-right-radius: 25px;
-              border-top-left-radius: 25px;
-              border-bottom-right-radius: 25px;
-              border-bottom-left-radius: 25px;
-              text-align: center;
-          }
+<style scoped>
+    .page {
+        background-color: floralwhite;
+        min-height: 100vh;
+    }
+        table {
+          width: 1300px;
+          /* width:1000px; */
+          border-collapse: collapse;
+          overflow: hidden;
+          box-shadow: 0 0 20px rgba(0,0,0,0.1);
+          border-top-right-radius: 25px;
+          border-top-left-radius: 25px;
+          border-bottom-right-radius: 25px;
+          border-bottom-left-radius: 25px;
+          text-align: center;
+      }
 
-          th,
-          td {
-              padding: 15px;
-              background-color: rgba(255,255,255,0.2);
-              color: black;
-          }
+      th,
+      td {
+          padding: 15px;
+          background-color: rgba(255,255,255,0.2);
+          color: black;
+      }
 
-          thead th {
-              /* background-color: #55608f; */
-              background-color: rgb(156, 201, 215);
+      thead th {
+          /* background-color: #55608f; */
+          background-color: rgb(156, 201, 215);
 
-          }
+      }
 
-          #fullTableSection h1 {
-                color: #111;
-                font-family: 'Helvetica Neue', sans-serif;
-                font-size: 50px;
-                font-weight: bold;
-                letter-spacing: -1px;
-                line-height: 1;
-                text-align: center;
-          }
-
-          th {
-              text-align: center;
-              color:white;
-          }
-
-        .graph-background {
-          background-color: rgba(255, 255, 255, 0.6);
-          border-radius: 20px;
-        }
-
-        .modal {
-            display: block;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
-
-        .modal-content {
-            background-color: white;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 30%;
-        }
-
-        .close {
-            color: #aaaaaa;
-            float: right;
-            font-size: 28px;
+      #fullTableSection h1 {
+            color: #111;
+            font-family: 'Helvetica Neue', sans-serif;
+            font-size: 50px;
             font-weight: bold;
-        }
+            letter-spacing: -1px;
+            line-height: 1;
+            text-align: center;
+      }
 
-        .close:hover,
-        .close:focus, .save {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
-        }
-    </style>
+      th {
+          text-align: center;
+          color:white;
+      }
+
+    .graph-background {
+      background-color: rgba(255, 255, 255, 0.6);
+      border-radius: 20px;
+    }
+
+    .modal {
+        display: block;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+        background-color: white;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 30%;
+    }
+
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus, .save {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>

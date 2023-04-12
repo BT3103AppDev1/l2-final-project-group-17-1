@@ -25,21 +25,20 @@
       </router-link>
 
 
-      <div class = "rightSide">
 
-        <button @click="toggleDropdown" id = "userCard" >
+        <button @click="toggleDropdown" class = "rightSide" id = "userCard" >
           <div class="circular-icon mr-2">
-            <img src="src/assets/images/snowy.png" alt="Your Image" style="display: block;">
+            <img src="src/assets/images/snowy.png" alt="Your Image" style="">
           </div>
           <div id="userName">{{ this.displayName }}</div>
           <ul class = "dropdown" v-if="showMenu">
-          <router-link to="/Profile">
-            <button style="width:100%; color:white; background-color: black;" @click="showMenu = !showMenu;" >Edit Profile</button>
-          </router-link>
-          <router-link to="/" id = "signoutRouter">
-            <button style="width:100%; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; color:white; background-color: black;"  @click="signOut()">Log Out</button>
-          </router-link>
-        </ul>
+            <router-link to="/Profile">
+              <button style="width:100%; color:white; background-color: black;" @click="showMenu = !showMenu;" >Edit Profile</button>
+            </router-link>
+            <router-link to="/" id = "signoutRouter">
+              <button style="width:100%; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; color:white; background-color: black;"  @click="signOut()">Log Out</button>
+            </router-link>
+          </ul>
         </button>
 
         <!-- <ul class = "dropdown" v-if="showMenu">
@@ -50,7 +49,7 @@
             <button style="width:100%; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; color:white; background-color: black;"  @click="signOut()">Log Out</button>
           </router-link>
         </ul> -->
-      </div>
+
 
       <!-- <router-link to="/" id = "signoutRouter">
         <button id="signoutBtn" class="btn btn-dark border-0" @click="signOut()" v-if="user">Sign Out</button>
@@ -187,6 +186,7 @@
     border-radius: 10px;
     padding: 5px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    min-width: 120px;
 
     display: flex;
     align-items: center;
@@ -219,29 +219,21 @@
   }
 
   .circular-icon img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    object-position: center;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   .dropdown {
     position: absolute;
     top: 100%;
-    left: 0;
-    z-index: 3;
-    list-style: none;
     padding: 0;
     margin: 0;
     /* box-shadow: 0 2px 2px black; */
-    width: 95%;
+    width: 98%;
     text-align: center;
-    color: white;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
     left: 50%;
     transform: translateX(-50%);
-    
   }
 
   .rightSide {

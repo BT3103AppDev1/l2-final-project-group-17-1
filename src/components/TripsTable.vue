@@ -11,6 +11,7 @@
           <option v-for="option in sortOptions" :key="option.value" :value="option.value" >{{ option.name }}</option>
       </select>
     </div>
+
     <div class="scrollable">
         <table id="fullTable" class="table table-bordered  table-scroll text-center" v-if="haveTrips">
         <thead>
@@ -416,7 +417,7 @@
         position: auto;
         background-color: white;
         margin-left: 70px;
-        margin-top: 50px;
+        margin-top: 30px;
         z-index: 0;
         position: relative;
       }
