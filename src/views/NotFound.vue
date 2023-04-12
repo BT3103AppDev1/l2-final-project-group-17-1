@@ -1,7 +1,7 @@
 <template>
-    <div style="text-align:center;" v-if="user">
+    <div style="text-align:center; margin-top: 10%;">
         <h3>Page Not Found!!</h3>
-        <h4>Please click on the above available options</h4>
+        <p>Sorry, the page you are looking for does not exist.</p>
     </div>
 </template>
 
@@ -22,7 +22,7 @@ export default {
         }
     },
     mounted() {
-        const auth = getAuth() 
+        const auth = getAuth()
         onAuthStateChanged(auth, (user)=> {
             if (user) {
                 this.user = user

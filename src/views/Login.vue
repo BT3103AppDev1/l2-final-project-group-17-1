@@ -98,7 +98,6 @@
          created() { //sign user out everytime they go to login page
             firebase.auth().signOut().then(() => {
               // Sign-out successful.
-              alert('Please log in to continue');
             }).catch((error) => {
             });
          },

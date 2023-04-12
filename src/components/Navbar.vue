@@ -78,9 +78,9 @@
           if (user) {
             console.log("logged")
             this.userid = user.uid
+            this.getName()
           }
           this.user = user
-          this.getName()
         })
       document.addEventListener("click", this.closeDropdown);
     },

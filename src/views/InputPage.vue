@@ -134,8 +134,10 @@
           alert("Please fill all required fields!\nDescription, Amount, Trip, Category, Date")
           return
         }
+        if (!this.passDateValidation()) {
+          return
+        }
 
-        alert("Saving your data for Spending")
         try{
           //add expense, get expenseDocRef
           this.selectedUsersArray.push(this.uid)
@@ -152,7 +154,8 @@
           await updateDoc(tripDocRef, {
             Expenses : arrayUnion(expenseDocRef.id)
           });
-          // document.getElementById('myform').reset();
+
+          alert("Successfully saved your spending!")
         }
         catch(error) {
           console.error("Error adding document: ", error);
@@ -231,6 +234,19 @@
         // this.tripsArray = [];
         // this.usersArray = [];
         // this.uid = "";
+      },
+
+      //this.date should be within trip duration cannot be in the future
+      passDateValidation() {
+        if (this.date < this.minDate || this.date > this.maxDate) {
+          alert("Please enter a date within the trip duration!\n[" + this.minDate + " to " + this.maxDate + "]")
+          return false
+        }
+        if (this.date > new Date().toISOString().substr(0, 10)) {
+          alert("Please enter a date not in the future!")
+          return false
+        }
+        return true
       }
 
     },
