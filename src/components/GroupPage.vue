@@ -115,23 +115,32 @@ export default {
 
     methods: {
         async deleteExpense(expenseID, tripCode, currentTripExpenses) {
-            alert("You are going to delete " + expenseID)
-            await deleteDoc(doc(db, "Expense", expenseID))
-            await updateDoc(doc(db, "Trip",tripCode), {
-                Expenses: arrayRemove(expenseID)
-            })
-            let tb = document.getElementById("fullTable")
-            while (tb.rows.length>1){
-                tb.deleteRow(1)
-            }
-            let currentT = await getDoc(doc(db,"Trip",tripCode))
-            let currentTripE = currentT.data().Expenses
+            let exp = await getDoc(doc(db, "Expense", expenseID))
+            let spenders = exp.data().Users
+            if (spenders.includes(this.userid)) {
+                console.log("you are part of this group spending")
+                alert("You are going to delete " + expenseID)
+                await deleteDoc(doc(db, "Expense", expenseID))
+                await updateDoc(doc(db, "Trip",tripCode), {
+                    Expenses: arrayRemove(expenseID)
+                })
+                let tb = document.getElementById("fullTable")
+                while (tb.rows.length>1){
+                    tb.deleteRow(1)
+                }
+                let currentT = await getDoc(doc(db,"Trip",tripCode))
+                let currentTripE = currentT.data().Expenses
 
-            const com = this
-            await com.displayGroupExpenses(tripCode)
-            // await com.loadExpenses(currentTripExpenses)
-            this.oweDict = {}
-            await com.loadExpenses(currentTripE)
+                const com = this
+                await com.displayGroupExpenses(tripCode)
+                // await com.loadExpenses(currentTripExpenses)
+                this.oweDict = {}
+                await com.loadExpenses(currentTripE)
+                
+            } else {
+                alert("You cannot delete a group expense that you are not part of!")
+            }
+
             
             // displayGroupExpenses(tripCode)
         },

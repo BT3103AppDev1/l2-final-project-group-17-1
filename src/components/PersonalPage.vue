@@ -328,13 +328,17 @@
                 cell4.innerHTML = amount
 
                 totalCost += (Number(amount)/users.length)
-
+                
+                var x = Number((amount/users.length).toFixed(2))
+                
                 //DATA FOR DAILY SPENDINGS
 
                 if (date in spendingPerDayDict===false) {
-                    spendingPerDayDict[date] = amount
+                    console.log(typeof(x))
+                    spendingPerDayDict[date] = x
                 } else {
-                    spendingPerDayDict[date] += amount
+                    console.log(typeof(x))
+                    spendingPerDayDict[date] += x
                 }
 
                 // categoryDict[cat] += amount
@@ -417,6 +421,7 @@
 
             // this.updatePieChart(categoryDict)
             // this.updateCharts()
+            this.spendingPerDayDict = spendingPerDayDict
             return totalCost
         } ,
 
@@ -464,7 +469,7 @@
                     amt = amt/users.length
                 }
                 totalAmountPersonal += amt
-                categoryDict[cat] += amt
+                categoryDict[cat] += amt.toFixed(2)
                 for (let c in categoryPercentageDict) {
                     if (c == cat) {
                         categoryPercentageDict[cat] = (categoryDict[cat]/totalAmountPersonal)*100
@@ -546,9 +551,9 @@
 
                     //DATA FOR DAILY SPENDINGS
                     if (date in spendingPerDayDict===false) {
-                        spendingPerDayDict[date] = amount
+                        spendingPerDayDict[date] = (amount/users.length).toFixed(2)
                     } else {
-                        spendingPerDayDict[date] += amount
+                        spendingPerDayDict[date] += (amount/users.length).toFixed(2)
                     }
                 }
             })
