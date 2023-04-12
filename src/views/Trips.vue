@@ -11,9 +11,7 @@
 <script>
 import TripsTable  from '@/components/TripsTable.vue'
 import CreateTrip from '@/components/CreateTrip.vue'
-import Navbar from '@/components/Navbar.vue'
 import JoinTrip from '@/components/JoinTrip.vue'
-import firebaseApp from '@/firebase.js'
 import {getAuth, onAuthStateChanged} from 'firebase/auth'
 
 export default {

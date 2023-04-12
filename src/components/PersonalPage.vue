@@ -18,11 +18,13 @@
         <div class="container">
             <!-- Water tank -->
             <div class="container text-center card py-3" style="border-color: #55608f; justify-content: space-between; ">
-                <div style="display: flex; flex-direction: row; margin-bottom: 10px; justify-content: space-between; ">
-                    <h1 style="margin-left: 500px;">Status of Budget <h5>Currency: {{ this.currency }}</h5> </h1> 
-                    <button @click = "this.showPopup = true" style=" width: 120px; border-radius: 15px; margin-left:380px; height: 55px;">Edit Budget</button>
+                <div style="display: flex; flex-direction: row; margin-bottom: 10px; justify-content: center; align-items: center; position: relative;">
+                    <h1 style="">Status of Budget <h5>Currency: {{ this.currency }}</h5> </h1>
+                    <button @click = "this.showPopup = true" style=" width: 100px; border-radius: 15px;  height: 45px; position: absolute; top: 0; right: 0;"
+                            onmouseover="this.style.transform = 'scale(1.02)';"
+                            onmouseout="this.style.transform = 'scale(1)';">Edit Budget</button>
                     <div v-if="showPopup" class="modal">
-                        <div class="modal-content">
+                        <div class="modal-content" style="background-color: floralwhite;">
                             <input id="budgetInput" type="number" class="form-control form-control-lg" v-model="newBudget"/>
                             <label class="form-label" for="budgetInput">Edit Budget</label>
                             <button class="btn btn-lg btn-block shadow text-light" @click="showPopup = false" style="background-color: red; margin-top:40px">Cancel</button>
@@ -71,19 +73,6 @@
                   </tr>
               </thead>
             </table>
-        </div>
-    </div>
-    <div class="p-5" id="totalSumTable" style="background-color:floralwhite;">
-        <div class = "container" style="background-color: floralwhite;">
-        <MyComponent :key="componentKey" />
-        <table id="dayExpenseTable" class="table table-bordered" style="background-color: white;">
-            <thead style="background-color: white; font-family:Arial, Helvetica, sans-serif;">
-            <tr>
-                <th scope="col" style="color:black">Day</th>
-                <th scope="col" style="color:black">Total Spent For Each Day</th>
-            </tr>
-            </thead>
-        </table>
         </div>
     </div>
 
@@ -257,14 +246,14 @@
         },
         async fetchAndUpdateData(tripCode){
             //console.log(this.spendingPerDayDict)
-        
+
             let index = 1
             // let index2 = 1
             //const auth=getAuth()
-    
+
             //const uid = auth.currentUser.uid
             const uid = this.userid
-            
+
             //tripExpenses = JSON.parse(tripExpenses)
             var budget = 0;
             let currentUser = await getDoc(doc(db, "User", uid))
@@ -378,25 +367,7 @@
                 waterTank.style.width = waterTankNum + "%"
 
             }
-        
-            let dayExpenseTable = document.getElementById("dayExpenseTable")
-            let index2 = 1
-            while (dayExpenseTable.rows.length > 1) {
-                dayExpenseTable.deleteRow(1);
-            }
-            for (var day in spendingPerDayDict) {
-                // console.log(dayExpenseTable.rows.length)
-                var dayExpense = spendingPerDayDict[day]
-                if (dayExpense == 0) {
-                    continue;
-                }
-                let dayRow = dayExpenseTable.insertRow(index2)
-                let dayCell1 = dayRow.insertCell(0);
-                let dayCell2 = dayRow.insertCell(1);
-                dayCell1.innerHTML = day
-                dayCell2.innerHTML = dayExpense
-                index2 += 1
-            }
+
             // for (var cat in categoryDict) {
             //     var catExpense = categoryDict[cat]
             //     this.pieChartData = {
@@ -413,7 +384,7 @@
             //     "Accomodation": categoryDict["Accomodation"]
             // }
 
-         
+
 
             // this.updatePieChart(categoryDict)
             // this.updateCharts()
@@ -580,7 +551,7 @@
                 alert("Please enter a valid budget!")
             }
             var waterTankNum = 0
-            var waterTank = document.getElementById("waterTank")  
+            var waterTank = document.getElementById("waterTank")
             let totalCost =  this.spent
             if (totalCost > this.newBudget) {
                 waterTank.style.backgroundColor = "red"
@@ -622,16 +593,16 @@
         }
         // console.log(this.userid===undefined)
         // console.log(this.userid)
-       
+
         // this.updatePieChart(this.categoryDict)
-        //this.spent = await fetchAndUpdateData(this.tripCode) 
+        //this.spent = await fetchAndUpdateData(this.tripCode)
         // var input = document.getElementById("budgetInput")
         // input.value = this.budget
 
-    } 
-    } 
-</script> 
-    
+    }
+    }
+</script>
+
     <style scoped>
 
         .page {

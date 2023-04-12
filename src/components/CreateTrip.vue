@@ -50,17 +50,11 @@
 <script>
 import db from '../firebase.js';
 import { collection, doc, setDoc, getDocs, addDoc, updateDoc, arrayUnion, Timestamp, deleteDoc, getFirestore } from "firebase/firestore";
-import Navbar from '@/components/Navbar.vue';
-import TripsTable from '@/components/TripsTable.vue'
 import firebaseApp from '@/firebase.js'
 import {getAuth, onAuthStateChanged} from 'firebase/auth'
 
 export default {
       name: 'Trips',
-      components: {
-          Navbar,
-          TripsTable
-      },
 
       data() {
         return {
@@ -122,7 +116,7 @@ export default {
           catch(error) {
             console.error("Error creating trip: ", error);
           }
-          
+
         },
       },
 }

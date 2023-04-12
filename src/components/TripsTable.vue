@@ -184,7 +184,7 @@
                     let cell5 = row.insertCell(4); cell5.style.textAlign = "center"; cell5.style.verticalAlign = "middle";
                     let cell6 = row.insertCell(5); cell6.style.textAlign = "center"; cell6.style.verticalAlign = "middle";
                     let cell7 = row.insertCell(6); cell7.style.textAlign = "center"; cell7.style.verticalAlign = "middle";
-                    let cell8 = row.insertCell(7); cell8.style.textAlign = "center"; cell8.style.verticalAlign = "middle"; cell8.style.width = "200px";
+                    let cell8 = row.insertCell(7); cell8.style.textAlign = "center"; cell8.style.verticalAlign = "middle"; cell8.style.width = "250px";
                     let cell9 = row.insertCell(8); cell9.style.textAlign = "center"; cell9.style.verticalAlign = "middle";
 
                     let cell3Content = document.createElement('div');
@@ -205,49 +205,48 @@
                     cell4.innerHTML = currency;
                     cell7.innerHTML = budget;
 
-                    // let code = document.createElement("p")
-                    // code.textContent = tripCode;
-                    // // code.style.content = "fit"
-                    // cell8.appendChild(code)
-
-                    //cell8.innerHTML = tripCode;
 
                     let container = document.createElement("div");
-                    container.innerHTML = tripCode + "   "
+                    //make container display flex row, elements in container display inline in a row
+                    container.style.display = "flex"
+                    container.style.flexDirection = "row"
+                    container.style.justifyContent = "center"
+                    container.style.alignItems = "center"
+                    let text = document.createElement("div");
+                    text.innerHTML = tripCode + "   "
                     const copyButton = document.createElement('button');
                     copyButton.type = 'button';
+                    copyButton.style.display = "inline-block"
+                    copyButton.style.marginLeft = "5px"
                     const icon = document.createElement('span');
                     icon.className = 'material-icons';
                     icon.textContent = 'content_copy';
-                    icon.style.fontSize = "20px"
+                    icon.style.fontSize = "18px"
+
+                    //hover effect for copy icon
+                    icon.addEventListener("mouseover", function() {
+                      icon.style.fontSize = "20px"
+                      cell8.style.textDecoration = "underline";
+                    });
+                    icon.addEventListener("mouseout", function() {
+                      icon.style.fontSize = "18px"
+                      cell8.style.textDecoration = "none";
+                    });
+
                     copyButton.style.backgroundColor = "white"
+                    copyButton.style.borderRadius = "5px"
                     copyButton.style.border = "1px solid rgba(128, 128, 128, 0.2)";
-                    copyButton.style.float = "right"
-                    copyButton.appendChild(icon);
-                    copyButton.style.float = "right"
-                    copyButton.style.marginBottom = "1px"
-                    copyButton.style.marginLeft = "5px"
                     copyButton.appendChild(icon);
 
+                    container.appendChild(text);
                     container.appendChild(copyButton);
                     cell8.appendChild(container)
 
                     copyButton.title = "Copy"
                     copyButton.addEventListener("click", function() {
-                      //let text = this.textContent.trim();
                       navigator.clipboard.writeText(tripCode);
                       cell8.style.textDecoration = "underline";
-                      // alert("Trip Code copied to Clipboard!")
                     });
-                    // cell8.addEventListener("mouseover", function() {
-                    //   cell8.style.textDecoration = "underline";
-                    //   cell8.innerText = "Click to copy code"
-                    // });
-                    cell8.addEventListener("mouseout", function() {
-                      cell8.style.textDecoration = "none";
-                      // cell8.innerText = tripCode
-                    });
-                    // cell8.style.cursor = "pointer";
 
                     let tripButton = document.createElement("button")
                     // tripButton.id  = String(tripName)
@@ -290,6 +289,12 @@
                     deleteTripButton.style.padding = "6px";
                     deleteTripButton.style.borderRadius = "20px";
                     deleteTripButton.innerHTML = "Leave"
+                    //grey out delete button if trip has already commenced
+                    let date = new Date().getTime(); let parts = startDate.split("-"); let startdate = new Date(parts[0], parts[1]-1, parts[2]).getTime()
+                    if (date >= startdate) {
+                      deleteTripButton.style.backgroundColor = "grey"
+                    }
+
 
                     cell9.appendChild(deleteTripButton)
                     deleteTripButton.onclick = async function() {
