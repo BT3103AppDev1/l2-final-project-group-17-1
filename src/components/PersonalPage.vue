@@ -19,7 +19,7 @@
             <!-- Water tank -->
             <div class="container text-center card py-3" style="border-color: #55608f; justify-content: space-between; ">
                 <div style="display: flex; flex-direction: row; margin-bottom: 10px; justify-content: center; align-items: center; position: relative;">
-                    <h1 style="">Status of Budget <h5>Currency: {{ this.currency }}</h5> </h1>
+                    <h2 style="">Status of Budget <h5>Currency: {{ this.currency }}</h5> </h2>
                     <button @click = "this.showPopup = true" style=" width: 100px; border-radius: 15px;  height: 45px; position: absolute; top: 0; right: 0;"
                             onmouseover="this.style.transform = 'scale(1.02)';"
                             onmouseout="this.style.transform = 'scale(1)';">Edit Budget</button>
@@ -42,7 +42,7 @@
     </div>
         <!-- Table with all personal expenses -->
     <!-- <section class="py-5"> -->
-    <div class="container p-3" id="fullTableSection">
+    <div class="container p-3 mt-5" id="fullTableSection">
 
         <div class="px-3">
             <h2 class="py-3">Personal Expenses</h2>
@@ -104,28 +104,29 @@
 
     <!-- </section> -->
 
-    <div class="container p-3" style="margin-top: 100px;">
+    <div class="container p-3" style="margin-top: 150px;">
 
-      <h2 class="py-3" style="margin-left: 30px;">Analytics</h2>
+      <h2 class="py-3" style="margin-left: 20px;">Analytics</h2>
 
       <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" style="margin-bottom:150px;">
                 <div class="carousel-inner">
                   <div class="carousel-item active">
                       <div class="d-flex flex-column align-items-center justify-content-center graph-background">
                           <h3>Spending By Category</h3>
-                          <pie-chart style="width:700px;" class ="user" :data="pieChartData" ></pie-chart >
-                      </div>
-                  </div>
-                  <div class="carousel-item active">
-                      <div class="d-flex flex-column align-items-center justify-content-center graph-background">
-                          <h3>Spending By Category</h3>
                           <bar-chart style="width:700px;" class="user" :data="categoryDict"></bar-chart>
+
                       </div>
                   </div>
-                  <div class="carousel-item active">
+                  <div class="carousel-item">
                       <div class="d-flex flex-column align-items-center justify-content-center graph-background">
                           <h3>Spending By Day</h3>
                           <line-chart style="width:700px;" class ="user" :data="spendingPerDayDict"></line-chart>
+                      </div>
+                  </div>
+                  <div class="carousel-item">
+                      <div class="d-flex flex-column align-items-center justify-content-center graph-background">
+                          <h3>Spending By Category</h3>
+                          <pie-chart style="width:700px;" class ="user" :data="pieChartData" ></pie-chart>
                       </div>
                   </div>
                 </div>
@@ -138,7 +139,8 @@
                   <span style= "background-color:rgb(156, 201, 215)" class="carousel-control-next-icon" aria-hidden="true"></span>
                   <span class="visually-hidden">Next</span>
                 </button>
-        </div>
+      </div>
+
     </div>
 
   </div>
@@ -352,7 +354,7 @@
                 waterTankNum = totalCost -budget
                 // waterTankNum = ((totalCost - budget)/budget) * 100
                 console.log("EXCEED BUDGET")
-                waterTank.innerHTML = "EXCEEDED BY $" + Math.ceil(waterTankNum) 
+                waterTank.innerHTML = "EXCEEDED BY $" + Math.ceil(waterTankNum)
                 if (waterTankNum>100) {
                     waterTank.style.width = 100 + "%"
                 }
@@ -651,10 +653,11 @@
 
     .graph-background {
       background-color: rgba(255, 255, 255, 0.6);
-      border-radius: 100px;
-      width: 80%;
+      border-radius: 50px;
+      width: 750px;
       margin-left: auto;
       margin-right: auto;
+      padding-bottom: 20px;
 
     }
 

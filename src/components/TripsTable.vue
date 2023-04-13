@@ -7,9 +7,13 @@
         Your Trips
         <img src="src/assets/images/planecropped.PNG" style="object-position: right; margin-left: 20px; height: 100px;">
       </h1>
-      <select id="sort" v-model="selectedSort" @change.prevent="sortTable" style=" font-size:13px display: inline-block; margin-right:80px; margin-top:90px; ">
-          <option v-for="option in sortOptions" :key="option.value" :value="option.value" >{{ option.name }}</option>
-      </select>
+
+      <div>
+        <img src="src/assets/images/filter-icon.png" style="object-position: right; margin-right: 3px; height: 18px;">
+        <select id="sort" v-model="selectedSort" @change.prevent="sortTable" style=" font-size:13px display: inline-block; margin-right:80px; margin-top:90px; ">
+            <option v-for="option in sortOptions" :key="option.value" :value="option.value" >{{ option.name }}</option>
+        </select>
+      </div>
     </div>
 
     <div class="scrollable">
@@ -185,7 +189,7 @@
                     let cell5 = row.insertCell(4); cell5.style.textAlign = "center"; cell5.style.verticalAlign = "middle";
                     let cell6 = row.insertCell(5); cell6.style.textAlign = "center"; cell6.style.verticalAlign = "middle";
                     let cell7 = row.insertCell(6); cell7.style.textAlign = "center"; cell7.style.verticalAlign = "middle";
-                    let cell8 = row.insertCell(7); cell8.style.textAlign = "center"; cell8.style.verticalAlign = "middle"; cell8.style.width = "195px";
+                    let cell8 = row.insertCell(7); cell8.style.textAlign = "center"; cell8.style.verticalAlign = "middle"; cell8.style.width = "210px";
                     let cell9 = row.insertCell(8); cell9.style.textAlign = "center"; cell9.style.verticalAlign = "middle";
 
                     let cell3Content = document.createElement('div');
@@ -218,7 +222,8 @@
                     container.style.fontSize = "11.5px"
                     const copyButton = document.createElement('button');
                     copyButton.type = 'button';
-                    copyButton.style.marginLeft = "40px"
+                    copyButton.style.marginLeft = "5px"
+                    copyButton.style.borderRadius = "5px"
                     const icon = document.createElement('span');
                     icon.className = 'material-icons';
                     icon.textContent = 'content_copy';
@@ -226,24 +231,23 @@
 
                     //hover effect for copy icon
                     icon.addEventListener("mouseover", function() {
-                      icon.style.fontSize = "20px"
-                      copyButton.style.width = "27px"
-                      cell8.style.textDecoration = "underline";
+                      icon.style.fontSize = "19px"
+                      text.style.textDecoration = "underline";
                     });
                     icon.addEventListener("mouseout", function() {
                       icon.style.fontSize = "18px"
-                      copyButton.style.width = "25px"
-                      cell8.style.textDecoration = "none";
+                      text.style.textDecoration = "none";
                     });
 
                     copyButton.style.backgroundColor = "white"
                     copyButton.style.border = "0.75px solid rgba(128, 128, 128, 0.2)";
-                    copyButton.style.float = "right"
 
-                    copyButton.style.marginBottom = "1px"
-                    copyButton.style.paddingLeft = "2.5px";
-                    copyButton.style.marginLeft = "0.25px"
+
                     copyButton.appendChild(icon);
+                    //make icon be in center of copyButton
+                    copyButton.style.display = "flex"
+                    copyButton.style.justifyContent = "center"
+                    copyButton.style.alignItems = "center"
 
                     container.appendChild(text);
                     container.appendChild(copyButton);
@@ -279,7 +283,7 @@
                     // tripButton.style.padding = "10px"
                     // tripButton.style.margin = "0 auto";
                     tripButton.addEventListener('mouseover', function() {
-                      //tripButton.style.fontWeight = 'bold';
+                      // tripButton.style.fontWeight = 'bold';
                       tripButton.style.backgroundColor = '#62b57d';
                     });
                     tripButton.addEventListener('mouseout', function() {
@@ -451,12 +455,6 @@
               text-align: left;
       }
 
-      #dropdownMenuButton {
-        /* margin: 0;
-        padding: 0; */
-        bottom: 30px;
-        left: 70px;
-      }
 
       #topBar {
         margin-bottom: 0;
