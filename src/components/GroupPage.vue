@@ -62,6 +62,8 @@
                 </th>
                 <th class="th-sm" style="color:#111;">Cost
                 </th>
+                <th class="th-sm" style="color:#111;">Paid By
+                </th>
                 <th class="th-sm" style="color:#111;">People Involved
                 </th>
                 <th class="th-sm" style="color:#111;">Option
@@ -182,27 +184,35 @@ export default {
                             let cell4 = row.insertCell(3);
                             let cell5 = row.insertCell(4);
                             let cell6 = row.insertCell(5);
+                            let cell7 = row.insertCell(6);
 
                             var date = expense.data().Date
                             var amount = expense.data().Amount
                             var cat = expense.data().Category
+                            var paidby = expense.data().Paid_By
+
                             cell1.innerHTML = date
                             cell2.innerHTML = expense.data().Description
                             cell3.innerHTML = cat
                             cell4.innerHTML = amount
+                            // cell5.innerHTML = paidby
+                            let paidby_name = ""
                             users.forEach((userID)=> { //for each userid in expense
                                 allUsers.forEach((user)=> {
                                     if (user.id == userID) {
                                         userNames = userNames + ", " + user.data().Name
                                         // userNames = userNames.substring(1,)
+                                    } if (user.id == paidby) {
+                                        paidby_name = user.data().Name
                                     }
                                 })
                             })
-                            cell5.innerHTML = userNames.substring(1,)
+                            cell5.innerHTML = paidby_name
+                            cell6.innerHTML = userNames.substring(1,)
                             let deleteExpenseButton = document.createElement("button")
                             deleteExpenseButton.id = expense.id
                             deleteExpenseButton.innerHTML = "Delete"
-                            cell6.appendChild(deleteExpenseButton)
+                            cell7.appendChild(deleteExpenseButton)
                             deleteExpenseButton.onclick =() => {
                                 this.deleteExpense(expense.id, tripCode, currentTripExpenses);
                             }
