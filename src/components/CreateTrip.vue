@@ -81,10 +81,17 @@ export default {
       methods: {
         async createTrip(){
           console.log('inside create trip')
-          if (this.budget < 0) {
-                    alert("Please enter a valid budget")
-                    this.budget = '';
-                    return;
+          if (this.budget < 0 || this.budget == '' || isNaN(this.budget)) {
+            alert("Please enter a valid budget")
+            this.budget = '';
+            return;
+          }
+          //ensure startdate is before enddate
+          if (this.startDate > this.endDate) {
+            alert("Please enter a valid date range")
+            this.startDate = '';
+            this.endDate = '';
+            return;
           }
           try {
             const docRef = await addDoc(collection(db, "Trip"), {
