@@ -108,7 +108,7 @@
 
       <h2 class="py-3" style="margin-left: 20px;">Analytics</h2>
 
-      <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" style="margin-bottom:150px;">
+      <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" style="margin-bottom:100px;">
                 <div class="carousel-inner">
                   <div class="carousel-item active">
                       <div class="d-flex flex-column align-items-center justify-content-center graph-background">
@@ -652,7 +652,7 @@
       }
 
     .graph-background {
-      background-color: rgba(255, 255, 255, 0.6);
+      background-color: rgba(255, 255, 255, 0.5);
       border-radius: 50px;
       width: 750px;
       margin-left: auto;
