@@ -113,20 +113,20 @@
                   <div class="carousel-item active">
                       <div class="d-flex flex-column align-items-center justify-content-center graph-background">
                           <h3>Spending By Category</h3>
-                          <bar-chart style="width:700px;" class="user" :data="categoryDict"></bar-chart>
+                          <bar-chart style="width:700px;" class="user" :data="categoryDict" :colors="['#9cc9d7']"></bar-chart>
 
                       </div>
                   </div>
                   <div class="carousel-item">
                       <div class="d-flex flex-column align-items-center justify-content-center graph-background">
                           <h3>Spending By Day</h3>
-                          <line-chart style="width:700px;" class ="user" :data="spendingPerDayDict"></line-chart>
+                          <line-chart style="width:700px;" class ="user" :data="spendingPerDayDict" :colors="['#9cc9d7']"></line-chart>
                       </div>
                   </div>
                   <div class="carousel-item">
                       <div class="d-flex flex-column align-items-center justify-content-center graph-background">
                           <h3>Spending By Category</h3>
-                          <pie-chart style="width:700px;" class ="user" :data="pieChartData" ></pie-chart>
+                          <pie-chart style="width:700px;" class ="user" :data="pieChartData"></pie-chart>
                       </div>
                   </div>
                 </div>
@@ -663,6 +663,7 @@
       margin-left: auto;
       margin-right: auto;
       padding-bottom: 20px;
+      borderColor: red;
 
     }
 
