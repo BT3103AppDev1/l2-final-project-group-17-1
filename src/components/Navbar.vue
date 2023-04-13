@@ -203,7 +203,7 @@
     justify-content: center;
     align-items: center;
     height: 20px;
-    margin-left: 5px;
+    margin-left: 9px;
     margin-right: 5px;
   }
 

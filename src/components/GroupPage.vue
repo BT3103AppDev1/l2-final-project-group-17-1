@@ -138,12 +138,12 @@ export default {
                 // await com.loadExpenses(currentTripExpenses)
                 this.oweDict = {}
                 await com.loadExpenses(currentTripE)
-                
+
             } else {
                 alert("You cannot delete a group expense that you are not part of!")
             }
 
-            
+
             // displayGroupExpenses(tripCode)
         },
 
@@ -245,7 +245,7 @@ export default {
                                             if (!(username in this.oweDict)) {
                                                 this.oweDict[username] = 0
                                             }
-                                            
+
                                             this.oweDict[username] += exp.Amount / people.length
                                             console.log("oweDict", this.oweDict)
                                         }
@@ -311,7 +311,7 @@ export default {
 
 
         this.displayGroupExpenses(this.tripCode)
-   
+
     },
     // methods: {
     //     async getUserNames(users) {
@@ -334,6 +334,10 @@ export default {
 
 
 <style>
+  h1, h2, h3, h4 {
+    color: darkslategrey;
+  }
+
   table {
             width: 1000px;
             border-collapse: collapse;

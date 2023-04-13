@@ -467,4 +467,9 @@
         overflow-x: auto;
       }
 
+  select:hover {
+    transform: scale(1.02); /* increase the size by 10% */
+    transition: all 0.2s ease-in-out; /* add a smooth transition effect */
+  }
+
 </style>

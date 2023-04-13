@@ -606,6 +606,10 @@
 
 
 <style scoped>
+
+    h1, h2, h3, h4 {
+      color: darkslategrey;
+    }
     .page {
         background-color: floralwhite;
         min-height: 100vh;
@@ -653,6 +657,7 @@
 
     .graph-background {
       background-color: rgba(255, 255, 255, 0.5);
+      /* background-color: rgba(245, 252, 254, 0.898); */
       border-radius: 50px;
       width: 750px;
       margin-left: auto;

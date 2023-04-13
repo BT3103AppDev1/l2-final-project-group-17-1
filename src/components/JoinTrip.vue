@@ -114,3 +114,15 @@
         }
     }
 </script>
+
+<style scoped>
+  input:hover {
+    transform: scale(1.015); /* increase the size by 10% */
+    transition: all 0.2s ease-in-out; /* add a smooth transition effect */
+  }
+
+  button:hover {
+    transform: scale(1.05); /* increase the size by 10% */
+    transition: all 0.2s ease-in-out; /* add a smooth transition effect */
+  }
+</style>

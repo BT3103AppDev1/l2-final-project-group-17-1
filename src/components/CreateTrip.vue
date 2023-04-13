@@ -88,7 +88,7 @@ export default {
           }
           //ensure startdate is before enddate
           if (this.startDate > this.endDate) {
-            alert("Please enter a valid date range")
+            alert("Please enter a valid start and end date")
             this.startDate = '';
             this.endDate = '';
             return;
@@ -132,3 +132,18 @@ export default {
 <!-- "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
   integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
   crossorigin="anonymous" -->
+
+<style scoped>
+  input:hover {
+    transform: scale(1.015); /* increase the size by 10% */
+    transition: all 0.2s ease-in-out; /* add a smooth transition effect */
+  }
+  select:hover {
+    transform: scale(1.02); /* increase the size by 10% */
+    transition: all 0.2s ease-in-out; /* add a smooth transition effect */
+  }
+  button:hover {
+    transform: scale(1.05); /* increase the size by 10% */
+    transition: all 0.2s ease-in-out; /* add a smooth transition effect */
+  }
+</style>

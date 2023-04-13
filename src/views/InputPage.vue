@@ -277,14 +277,20 @@
     display:flex;
     justify-content: center;
     align-items: center;
-
-    /* background-image: url('picture/input1.jpg'); */
-    /* bottom: 0; */
-    /* position: fixed; */
-    /* top: 0; */
-    /* left: 0;  */
-    /* right:0; */
-    /* height: 100%; */
-    /* width: 100%; */
       }
+
+  select:hover {
+    transform: scale(1.02); /* increase the size by 10% */
+    transition: all 0.2s ease-in-out; /* add a smooth transition effect */
+  }
+
+  input:hover {
+    transform: scale(1.015); /* increase the size by 10% */
+    transition: all 0.2s ease-in-out; /* add a smooth transition effect */
+  }
+
+  button:hover {
+    transform: scale(1.05); /* increase the size by 10% */
+    transition: all 0.2s ease-in-out; /* add a smooth transition effect */
+  }
 </style>
