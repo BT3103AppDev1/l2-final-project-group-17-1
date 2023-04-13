@@ -18,7 +18,7 @@
                     <td v-for="(value, user) in oweDict" :key="user">{{ value.toFixed(2) }}</td>
                 </tr>
             </table>
-            <h1 v-show="noDebts" style = "text-align: center;">No Outstanding Debts! </h1>
+            <h2 v-show="noDebts" style = "text-align: center;">No Outstanding Debts! </h2>
         </div>
       </div>
     <!-- <div>
