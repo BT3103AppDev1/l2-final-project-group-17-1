@@ -59,10 +59,11 @@
                 </div> -->
               </div>
           </div>
-        <div class="scrollable" style="background-color: white;">
+        <div class="scrollable" >
+            <!-- <h1 v-if = "noExpenses" style=" background-color: floralwhite; text-align: center; font-family:Arial, Helvetica, sans-serif;">No Expenses Added!</h1> -->
             <table id="fullTable" class="table table-striped table-bordered table-sm table-scroll text-center" cellspacing="0"
-            width="100%">
-              <thead style="background-color: white; font-family:Arial, Helvetica, sans-serif;">
+            width="100%" style="background-color: white;">
+              <thead  style="background-color: white; font-family:Arial, Helvetica, sans-serif;">
                   <tr>
                   <th class="th-sm" style="color:#111;">Day</th>
                   <th class="th-sm" style="color:#111;">Description</th>
@@ -73,6 +74,7 @@
                   </tr>
               </thead>
             </table>
+            <h1 v-if = "noExpenses" style=" background-color: floralwhite; text-align: center; font-family:Arial, Helvetica, sans-serif; margin-top: 35px;">No Expenses Added!</h1>
         </div>
     </div>
 
@@ -104,7 +106,7 @@
 
     <!-- </section> -->
 
-    <div class="container p-3" style="margin-top: 150px;">
+    <div class="container p-3" style="margin-top: 50px;">
 
       <h2 class="py-3" style="margin-left: 20px;">Analytics</h2>
 
@@ -125,8 +127,8 @@
                   </div>
                   <div class="carousel-item">
                       <div class="d-flex flex-column align-items-center justify-content-center graph-background">
-                          <h3>Spending By Category</h3>
-                          <pie-chart style="width:700px;" class ="user" :data="pieChartData"></pie-chart>
+                          <h3>% Spending By Category</h3>
+                          <pie-chart style="width:700px;" class ="user" :data="pieChartData" ></pie-chart>
                       </div>
                   </div>
                 </div>
@@ -191,11 +193,11 @@
             componentKey: 0,
             spendingPerDayDict:{},
             pieChartData: {
-            "Shopping": "",
-            "Food": "",
-            "Leisure": "",
-            "Travel": "",
-            "Accomodation":"",
+            "Shopping": 0,
+            "Food": 0,
+            "Leisure": 0,
+            "Travel": 0,
+            "Accomodation":0,
             },
             categoryDict: {
             "Shopping": 0,
@@ -213,7 +215,8 @@
             },
             showPopup: false,
             newBudget: "",
-            spent: 0
+            spent: 0,
+            noExpenses: false,
         }
     },
     created() {
@@ -343,6 +346,11 @@
                 index +=1
             }
             })
+
+            if (index == 1) {
+                this.noExpenses = true
+            }
+           
             var waterTankNum = 0
             var waterTank = document.getElementById("waterTank")
             // console.log('TOTALCOST', totalCost)
@@ -431,12 +439,13 @@
                 let users = expense.data().Users;
             if (users.includes(this.userid) && currentTripExpenses.includes(expense.id)) {
                 let cat = expense.data().Category
-                let amt = expense.data().Amount
+                let amt = parseFloat(expense.data().Amount)
                 if (users.length>1) {
                     amt = amt/users.length
                 }
                 totalAmountPersonal += amt
-                categoryDict[cat] += amt.toFixed(2)
+                categoryDict[cat] += amt
+                // console.log(categoryDict)
                 for (let c in categoryPercentageDict) {
                     if (c == cat) {
                         categoryPercentageDict[cat] = (categoryDict[cat]/totalAmountPersonal)*100
@@ -448,9 +457,14 @@
                 }
                 //categoryPercentageDict[cat] = (categoryDict[cat]/totalAmount)*100
                 //formattedForPieChart[cat] = String(categoryPercentageDict[cat].toFixed(2)) + "%"
+                // console.log(totalAmountPersonal)
+                // console.log(categoryPercentageDict)
                 // console.log(formattedForPieChart)
                 }
             })
+            for (let c in categoryDict) {
+                categoryDict[c] = categoryDict[c].toFixed(2)
+            }
             this.categoryDict = categoryDict
             this.categoryPercentageDict = categoryPercentageDict
             this.pieChartData = formattedForPieChart
