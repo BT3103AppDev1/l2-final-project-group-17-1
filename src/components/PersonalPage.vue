@@ -104,7 +104,7 @@
 
     <!-- </section> -->
 
-    <div class="container p-3" style="margin-top: 150px;">
+    <div class="container p-3" style="margin-top: 50px;">
 
       <h2 class="py-3" style="margin-left: 20px;">Analytics</h2>
 
@@ -125,7 +125,7 @@
                   </div>
                   <div class="carousel-item">
                       <div class="d-flex flex-column align-items-center justify-content-center graph-background">
-                          <h3>Spending By Category</h3>
+                          <h3>% Spending By Category</h3>
                           <pie-chart style="width:700px;" class ="user" :data="pieChartData" ></pie-chart>
                       </div>
                   </div>
@@ -191,11 +191,11 @@
             componentKey: 0,
             spendingPerDayDict:{},
             pieChartData: {
-            "Shopping": "",
-            "Food": "",
-            "Leisure": "",
-            "Travel": "",
-            "Accomodation":"",
+            "Shopping": 0,
+            "Food": 0,
+            "Leisure": 0,
+            "Travel": 0,
+            "Accomodation":0,
             },
             categoryDict: {
             "Shopping": 0,
@@ -431,12 +431,13 @@
                 let users = expense.data().Users;
             if (users.includes(this.userid) && currentTripExpenses.includes(expense.id)) {
                 let cat = expense.data().Category
-                let amt = expense.data().Amount
+                let amt = parseFloat(expense.data().Amount)
                 if (users.length>1) {
                     amt = amt/users.length
                 }
                 totalAmountPersonal += amt
-                categoryDict[cat] += amt.toFixed(2)
+                categoryDict[cat] += amt
+                // console.log(categoryDict)
                 for (let c in categoryPercentageDict) {
                     if (c == cat) {
                         categoryPercentageDict[cat] = (categoryDict[cat]/totalAmountPersonal)*100
@@ -448,9 +449,14 @@
                 }
                 //categoryPercentageDict[cat] = (categoryDict[cat]/totalAmount)*100
                 //formattedForPieChart[cat] = String(categoryPercentageDict[cat].toFixed(2)) + "%"
+                // console.log(totalAmountPersonal)
+                // console.log(categoryPercentageDict)
                 // console.log(formattedForPieChart)
                 }
             })
+            for (let c in categoryDict) {
+                categoryDict[c] = categoryDict[c].toFixed(2)
+            }
             this.categoryDict = categoryDict
             this.categoryPercentageDict = categoryPercentageDict
             this.pieChartData = formattedForPieChart
