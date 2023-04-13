@@ -663,7 +663,6 @@
       margin-left: auto;
       margin-right: auto;
       padding-bottom: 20px;
-      borderColor: red;
 
     }
 
