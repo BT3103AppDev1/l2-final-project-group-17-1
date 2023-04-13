@@ -59,10 +59,11 @@
                 </div> -->
               </div>
           </div>
-        <div class="scrollable" style="background-color: white;">
+        <div class="scrollable" >
+            <!-- <h1 v-if = "noExpenses" style=" background-color: floralwhite; text-align: center; font-family:Arial, Helvetica, sans-serif;">No Expenses Added!</h1> -->
             <table id="fullTable" class="table table-striped table-bordered table-sm table-scroll text-center" cellspacing="0"
-            width="100%">
-              <thead style="background-color: white; font-family:Arial, Helvetica, sans-serif;">
+            width="100%" style="background-color: white;">
+              <thead  style="background-color: white; font-family:Arial, Helvetica, sans-serif;">
                   <tr>
                   <th class="th-sm" style="color:#111;">Day</th>
                   <th class="th-sm" style="color:#111;">Description</th>
@@ -73,6 +74,7 @@
                   </tr>
               </thead>
             </table>
+            <h1 v-if = "noExpenses" style=" background-color: floralwhite; text-align: center; font-family:Arial, Helvetica, sans-serif; margin-top: 35px;">No Expenses Added!</h1>
         </div>
     </div>
 
@@ -213,7 +215,8 @@
             },
             showPopup: false,
             newBudget: "",
-            spent: 0
+            spent: 0,
+            noExpenses: false,
         }
     },
     created() {
@@ -343,6 +346,11 @@
                 index +=1
             }
             })
+
+            if (index == 1) {
+                this.noExpenses = true
+            }
+           
             var waterTankNum = 0
             var waterTank = document.getElementById("waterTank")
             // console.log('TOTALCOST', totalCost)

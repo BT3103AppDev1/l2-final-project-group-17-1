@@ -49,7 +49,7 @@
                 </div>
               </div>
           </div>
-        <div class="scrollable" style="background-color: white;">
+        <div class="scrollable">
             <table id="fullTable" class="table table-striped table-bordered table-sm table-scroll text-center" cellspacing="0"
             width="100%" style="background-color: white; color:#111; margin-top: 20px;">
             <thead style="background-color: rgb(156, 201, 215); font-family:Arial, Helvetica, sans-serif;">
@@ -70,8 +70,8 @@
                 </th>
                 </tr>
             </thead>
-
             </table>
+            <h1 v-if = "noExpenses" style=" background-color: floralwhite; text-align: center; font-family:Arial, Helvetica, sans-serif; margin-top: 35px;">No Expenses Added!</h1>
         </div>
       </div>
             </div>
@@ -97,7 +97,8 @@ export default {
             tripExpenses: "",
             people: "",
             oweDict: {},
-            name: ""
+            name: "",
+            noExpenses: false
           }
     },
 
@@ -149,7 +150,6 @@ export default {
 
         async displayGroupExpenses(tripCode){
             let index = 1
-            let index2 = 1
             const auth=getAuth()
             //const uid = auth.currentUser.uid
             let currentTrip = await getDoc(doc(db, "Trip", tripCode))
@@ -220,9 +220,11 @@ export default {
                         }
                     }
                 })
-
             })
-            },
+            if (index == 1) {
+                    this.noExpenses = true;
+                }
+        },
 
         async loadExpenses(expRefs) {
             console.log("expRefs",expRefs)
