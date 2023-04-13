@@ -81,7 +81,16 @@ export default {
       methods: {
         async createTrip(){
           console.log('inside create trip')
-          if (this.budget < 0 || this.budget == '' || isNaN(this.budget)) {
+          if (this.tripName == "" || this.budget == "" || this.startDate == "" || this.endDate == "" || this.currency == "") {
+            alert("Please fill up all fields")
+            this.tripName ='';
+            this.budget = '';
+            this.currency = '';
+            this.startDate = '';
+            this.endDate = '';
+            return;
+          }
+          if (this.budget < 0 || isNaN(this.budget)) {
             alert("Please enter a valid budget")
             this.budget = '';
             return;
