@@ -256,7 +256,10 @@
                     copyButton.title = "Copy"
                     copyButton.addEventListener("click", function() {
                       navigator.clipboard.writeText(tripCode);
-                      cell8.style.textDecoration = "underline";
+                      cell8.textContent.style.textDecoration = "underline";
+                      setTimeout(function() {
+                        cell8.style.textDecoration = "none";
+                      }, 1000);
                     });
 
                     let tripButton = document.createElement("button")
@@ -325,7 +328,8 @@
                         for (var i = 0; i < tb.rows.length; i++) {
                           var row = tb.rows[i];
                           var value = row.cells[7].textContent.trim();
-                          if (value.split(" ")[0] == tripCode) {
+                          console.log(value.slice(0, -12))
+                          if (value.slice(0, -12) == tripCode) {
                             tb.deleteRow(i);
                           }
                         }
