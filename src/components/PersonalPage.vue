@@ -45,7 +45,7 @@
     <div class="container p-3 mt-5" id="fullTableSection">
 
         <div class="px-3">
-            <h2 class="py-3">Personal Expenses</h2>
+            <h2 class="py-3 mb-4">Personal Expenses</h2>
 
             <div class="d-flex flex-row" style="padding:0px;">
               <!-- <div class = "dropdown px-3">
