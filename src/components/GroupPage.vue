@@ -34,21 +34,9 @@
             <!-- Table with all group expenses -->
     <div class="container p-5" id="fullTableSection" style="background-color: floralwhite;">
 
-        <div class="d-flex justify-content-between px-3">
-            <h2 class="py-3 d-flex justify-content-start">Group Expenses</h2>
 
-            <div class="d-flex flex-row" style="padding:0px;">
-              <div class = "dropdown px-3">
-                  <!-- <button class = "btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                      Currency
-                  </button> -->
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <a class="dropdown-item" href="#">SGD</a>
-                      <a class="dropdown-item" href="#">Original</a>
-                  </div>
-                </div>
-              </div>
-          </div>
+        <h2 class="py-3 d-flex justify-content-start">Group Expenses</h2>
+
         <div class="scrollable">
             <table id="fullTable" class="table table-striped table-bordered table-sm table-scroll text-center" cellspacing="0"
             width="100%" style="background-color: white; color:#111; margin-top: 20px;">
@@ -71,7 +59,7 @@
                 </tr>
             </thead>
             </table>
-            <h1 v-if = "noExpenses" style=" background-color: floralwhite; text-align: center; font-family:Arial, Helvetica, sans-serif; margin-top: 35px;">No Expenses Added!</h1>
+            <h2 v-if = "noExpenses" style=" background-color: floralwhite; text-align: center; font-family:Arial, Helvetica, sans-serif; margin-top: 35px;">No Expenses Added!</h2>
         </div>
       </div>
             </div>
