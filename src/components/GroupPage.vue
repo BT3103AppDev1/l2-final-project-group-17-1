@@ -71,7 +71,7 @@
                 </tr>
             </thead>
             </table>
-            <h1 v-if = "noExpenses" style=" background-color: floralwhite; text-align: center; font-family:Arial, Helvetica, sans-serif; margin-top: 35px;">No Expenses Added!</h1>
+            <h2 v-if = "noExpenses" style=" background-color: floralwhite; text-align: center; font-family:Arial, Helvetica, sans-serif; margin-top: 35px;">No Expenses Added!</h2>
         </div>
       </div>
             </div>
