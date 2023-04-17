@@ -108,7 +108,6 @@
               let rows = tripsTable.rows;
               for (let i = rows.length - 1; i > 0; i--) {
                 tripsTable.deleteRow(i);
-                console.log(rows)
               }
               this.displayTrips()
             },
@@ -363,7 +362,12 @@
             })
             },
             refresh() {
-              this.componentKey += 1;
+              let tripsTable = document.getElementById("fullTable")
+              let rows = tripsTable.rows;
+              for (let i = rows.length - 1; i > 0; i--) {
+                tripsTable.deleteRow(i);
+                console.log(rows)
+              }
               this.displayTrips()
             },
             async loadExpenses(expRefs) {
